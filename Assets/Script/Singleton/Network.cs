@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using Boomlagoon.JSON;
 using UnityEngine ;
-namespace  Client
-{
-
 public class EventMsg : EventArg
 {
     public eMsgType msgID ;
@@ -19,7 +16,7 @@ public enum eNetworkState
     eNet_Disconnect,
     eNet_Max,
 }
-public class Network : MonoBehaviour,WebSocketUnityDelegate
+public class Network : SingetongBehaviour<Network>,WebSocketUnityDelegate
 {
     public delegate bool IOneMsgCallback( JSONObject jsMsg ) ;
     static string EVENT_OPEN = "open";
@@ -59,18 +56,6 @@ public class Network : MonoBehaviour,WebSocketUnityDelegate
         } 
     }
     protected bool isUseBackUpIP = false ;
-    static private Network s_instnce = null ;
-    private void Awake() {
-        if ( s_instnce == null )
-        {
-            s_instnce = this ;
-        }    
-    }
-
-    public static Network getInstance()
-    {
-        return s_instnce ;
-    }
     void Start()
     {
         connect("127.0.0.1:40008");
@@ -375,6 +360,26 @@ public class Network : MonoBehaviour,WebSocketUnityDelegate
         this.isStartReconnect = true ;
         //this.Invoke("tryReconnect",3);
     }
-}
 
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if ( pauseStatus )
+        {
+            Debug.LogWarning("network app background , close socket  pause = true");
+            StopAllCoroutines();
+            this.mNetState = eNetworkState.eNet_Uninit ;  // assign befor close , to forbid websocketError or websocketClose logic from excuting ;
+            if ( null != this.mWebSocket )
+            {
+                this.mWebSocket.Close();
+            }
+            this.mWebSocket = null ;
+            
+        }
+        else
+        {
+            Debug.LogWarning("network app reactive agian , do connnect  pause = false");
+            this.isUseBackUpIP = false ;
+            this.doConnect();
+        }
+    }
 }

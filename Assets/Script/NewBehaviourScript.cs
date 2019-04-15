@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Client;
- using Boomlagoon.JSON;
- using System ;
+using Boomlagoon.JSON;
+using System ;
 internal class Test
 {
     static public string Event = "adc" ; 
