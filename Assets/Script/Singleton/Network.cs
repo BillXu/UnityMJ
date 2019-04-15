@@ -373,7 +373,7 @@ public class Network : SingetongBehaviour<Network>,WebSocketUnityDelegate
                 this.mWebSocket.Close();
             }
             this.mWebSocket = null ;
-            
+            EventDispatcher.getInstance().dispatch( Network.EVENT_DISCONNECTED ) ;
         }
         else
         {
