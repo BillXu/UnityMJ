@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingetongBehaviour<T> : MonoBehaviour where T : Object
+public class SingletonBehaviour<T> : MonoBehaviour where T : Object
 {
     // Start is called before the first frame update
     static private T s_instance = null ;

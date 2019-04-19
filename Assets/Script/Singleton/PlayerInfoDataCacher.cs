@@ -39,6 +39,11 @@ public class PlayerInfoData {
         {
             return this.playerBrifeDataMsg["headIcon"].Str;
         }
+
+        set 
+        {
+            this.playerBrifeDataMsg["headIcon"] = value ;
+        }
     }
 
     public int gender
@@ -46,6 +51,11 @@ public class PlayerInfoData {
         get
         {
             return (int)this.playerBrifeDataMsg["sex"].Number ;
+        }
+
+        set 
+        {
+            this.playerBrifeDataMsg["sex"] = value;
         }
     }
 
@@ -56,6 +66,10 @@ public class PlayerInfoData {
             return this.playerBrifeDataMsg["ip"].Str ;
         }
        
+        set 
+        {
+            this.playerBrifeDataMsg["ip"] = value ;
+        }
     }
 
     public double GPS_J
@@ -63,6 +77,11 @@ public class PlayerInfoData {
         get
         {
             return this.playerBrifeDataMsg["J"].Number ;
+        }
+
+        set 
+        {
+            this.playerBrifeDataMsg["J"] = value ;
         }
         
     }
@@ -73,10 +92,14 @@ public class PlayerInfoData {
             return this.playerBrifeDataMsg["W"].Number ;
         }
         
+        set 
+        {
+            this.playerBrifeDataMsg["W"] = value ;
+        }
     }
 }
 
-public class PlayerInfoDataCacher : SingetongBehaviour<PlayerInfoDataCacher>
+public class PlayerInfoDataCacher : SingletonBehaviour<PlayerInfoDataCacher>
 {
     public static string EVENT_RECIEVED_PLAYER_INFO_DATA = "RECEIVED_player_info_data" ;
 

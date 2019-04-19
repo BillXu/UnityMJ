@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Boomlagoon.JSON;
-public class UserSetting : SingetongBehaviour<UserSetting>
+public class UserSetting : SingletonBehaviour<UserSetting>
 {
     JSONObject mJsContent = null;
     // Start is called before the first frame update

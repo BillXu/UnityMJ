@@ -16,15 +16,15 @@ public enum eNetworkState
     eNet_Disconnect,
     eNet_Max,
 }
-public class Network : SingetongBehaviour<Network>,WebSocketUnityDelegate
+public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 {
     public delegate bool IOneMsgCallback( JSONObject jsMsg ) ;
-    static string EVENT_OPEN = "open";
-    static string EVENT_FAILED = "failed";
-    static string EVENT_MSG = "msg";
-    static string EVENT_DISCONNECTED = "close";
-    static string EVENT_RECONNECT = "reconnect";
-    static string EVENT_RECONNECTED_FAILED = "reconnectFailed" ;
+    public static string EVENT_OPEN = "open";
+    public static string EVENT_FAILED = "failed";
+    public static string EVENT_MSG = "msg";
+    public static string EVENT_DISCONNECTED = "close";
+    public static string EVENT_RECONNECT = "reconnect";
+    public static string EVENT_RECONNECTED_FAILED = "reconnectFailed" ;
 
     static int TIME_HEAT_BEAT = 3 ; 
     static string MSG_ID = "msgID" ;

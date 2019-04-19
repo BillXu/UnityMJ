@@ -1,4 +1,4 @@
- enum ePayChannel
+ public enum ePayChannel
 {
 	ePay_AppStore,
 	ePay_WeChat,
@@ -9,7 +9,7 @@
 	ePay_Max,
 };
 
-enum eClubPrivilige
+public enum eClubPrivilige
 {
 	eClubPrivilige_Forbid, // can not enter room 
 	eClubPrivilige_Normal,
@@ -18,7 +18,7 @@ enum eClubPrivilige
 	eClubPrivilige_Max,
 };
 
-enum eClubEvent
+public enum eClubEvent
 {
 	eClubEvent_ApplyJoin,// some body apply to join club , { uid : 23, respUID : 11, isAgree : 0  }, when processed , contain key : respUID : 11, isAgree 
 	eClubEvent_Kick, // { uid : 23 , mgrUID : 23 }
@@ -30,7 +30,7 @@ enum eClubEvent
 	eClubEvent_Max,
 };
 
-enum eEventState
+public enum eEventState
 {
 	eEventState_WaitProcesse,
 	eEventState_Processed,
@@ -38,7 +38,7 @@ enum eEventState
 	eEventState_Max,
 };
 
-enum ePayRoomCardType
+public enum ePayRoomCardType
 {
 	ePayType_None,
 	ePayType_RoomOwner = ePayType_None,
@@ -47,7 +47,7 @@ enum ePayRoomCardType
 	ePayType_Max,
 };
 
-enum eGameType
+public enum eGameType
 {
 	eGame_None,
 	eGame_NiuNiu,
@@ -60,7 +60,7 @@ enum eGameType
 	eGame_Max,
 };
 
-enum eRoomState
+public enum eRoomState
 {
 	// new state 
 	eRoomSate_WaitReady,
@@ -136,7 +136,7 @@ enum eRoomState
 };
 
 
-enum eMJActType
+public enum eMJActType
 {
 	eMJAct_None,
 	eMJAct_Mo = eMJAct_None, // ����
@@ -159,7 +159,7 @@ enum eMJActType
 	eMJAct_Max,
 };
 
-enum eFanxingType
+public enum eFanxingType
 {
 	eFanxing_PingHu, // ƽ��
 
@@ -193,7 +193,7 @@ enum eFanxingType
 	eFanxing_Max, // û�к�
 };
 
-enum eSettleType    // ���ö�ٶ����ֻ��һ���������¼������ڷ����¼���˫�����з���һ�������磺 Ӯ���˽б����ڣ������ �� ���ڡ�
+public enum eSettleType    // ���ö�ٶ����ֻ��һ���������¼������ڷ����¼���˫�����з���һ�������磺 Ӯ���˽б����ڣ������ �� ���ڡ�
 {
 	eSettle_DianPao,  // ����
 	eSettle_MingGang, // ����
@@ -205,7 +205,7 @@ enum eSettleType    // ���ö�ٶ����ֻ��һ�������
 	eSettle_Max,
 };
 
-enum eTime
+public enum eTime
 {
 	eTime_WaitPlayerReady = 15,
 	eTime_WaitRobotBanker = 5,
@@ -227,7 +227,7 @@ enum eTime
 };
 
 // player State 
-enum eRoomPeerState
+public enum eRoomPeerState
 {
 	eRoomPeer_None,
 	// peer state for taxas poker peer
@@ -253,14 +253,14 @@ enum eRoomPeerState
 };
 
 
-enum eSex
+public enum eSex
 {
 	eSex_Male,
 	eSex_Female,
 	eSex_Max,
 };
 
-enum eRoomPeerAction
+public enum eRoomPeerAction
 {
 	eRoomPeerAction_None,
 	eRoomPeerAction_EnterRoom,
@@ -283,7 +283,7 @@ enum eRoomPeerAction
 	eRoomPeerAction_Max
 };
 
-enum eRoomFlag
+public enum eRoomFlag
 {
 	eRoomFlag_None ,
 	eRoomFlag_ShowCard  ,
@@ -292,7 +292,7 @@ enum eRoomFlag
 	eRoomFlag_Max,
 };
 // mail Module 
-enum eMailType
+public enum eMailType
 {
 	eMail_Wechat_Pay, // { ret : 0 , diamondCnt : 23 }  // ret : 1 means verify error 
 	eMail_AppleStore_Pay, // { ret : 0 , diamondCnt : 23 }   // ret : 1 means verify error 
@@ -320,7 +320,7 @@ enum eMailType
 	eMail_Max,
 };
 
-enum eMailState
+public enum eMailState
 {
 	eMailState_Unread,
 	eMailState_WaitSysAct,

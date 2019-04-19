@@ -36,13 +36,31 @@ internal class Test
         EventDispatcher.getInstance().dispatch("a");
     }
 }
+
 public class NewBehaviourScript : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        var t = new Test();
-        t.testEvent();
+        //var t = new Test();
+        //t.testEvent();
+        JSONArray js = new JSONArray();
+        js.Add(1);
+        js.Add(2);
+        string str = js.ToString();
+        str = "{ \"a\" : " + str + "}" ;
+        Debug.Log(str);
+        var v = JSONObject.Parse(str);
+        if ( v == null )
+        {
+            Debug.LogError("parse error ");
+        }
+        else
+        {
+            var ss2 = v.ToString();
+            Debug.LogWarning("---ss2 = " + ss2);
+        }
+        
     }
 
     // Update is called once per frame
