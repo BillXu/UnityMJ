@@ -46,16 +46,16 @@ public class PlayerInfoData {
         }
     }
 
-    public int gender
+    public eSex gender
     {
         get
         {
-            return (int)this.playerBrifeDataMsg["sex"].Number ;
+            return (eSex)this.playerBrifeDataMsg["sex"].Number ;
         }
 
         set 
         {
-            this.playerBrifeDataMsg["sex"] = value;
+            this.playerBrifeDataMsg["sex"] = (int)value;
         }
     }
 

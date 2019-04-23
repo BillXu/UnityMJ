@@ -54,7 +54,7 @@ public class RecorderRoomEntry : IRecorderEntry
         this.opts = jsData["opts"].Obj;
         this.sieralNum = (int)jsData["sieralNum"].Number;
         var t = jsData["time"].Number ;
-        this.strTime = getLocalTimeString(t);
+        this.strTime = Utility.getTimeString((int)t);
         
         var vOffset = jsData["offsets"].Array ;
         foreach ( var item in vOffset )
@@ -67,15 +67,15 @@ public class RecorderRoomEntry : IRecorderEntry
         }
     }
 
-    string getLocalTimeString( double timeStamp )
-    {
-        DateTime dtStart = new DateTime(1970, 1, 1);
-        dtStart = dtStart.ToLocalTime();
-        long lTime = ((long)timeStamp * 10000000);
-        TimeSpan toNow = new TimeSpan(lTime);
-        DateTime targetDt = dtStart.Add(toNow);
-        return targetDt.ToString();
-    }
+    // string getLocalTimeString( double timeStamp )
+    // {
+    //     DateTime dtStart = new DateTime(1970, 1, 1);
+    //     dtStart = dtStart.ToLocalTime();
+    //     long lTime = ((long)timeStamp * 10000000);
+    //     TimeSpan toNow = new TimeSpan(lTime);
+    //     DateTime targetDt = dtStart.Add(toNow);
+    //     return targetDt.ToString();
+    // }
 
     public void fetchSingleRoundRecorders( singleResultCallBack pResultCallBack )
     {

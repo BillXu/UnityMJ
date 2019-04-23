@@ -1,33 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System ;
 public class Utility : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public static void showTip( string tip )
     {
 
     }
 
-    public static eMsgPort getMsgPortByRoomID( int roomID )
+    // public static eMsgPort getMsgPortByGameType( eGameType game   ) 
+    // {
+    //     switch( game )
+    //     {
+    //         case eGameType.eGame_CFMJ:
+    //         {
+    //             return eMsgPort.ID_MSG_PORT_CFMJ;
+    //         }
+    //         break;
+    //         case eGameType.eGame_NCMJ:
+    //         {
+    //             return eMsgPort.ID_MSG_PORT_NCMJ;
+    //         }
+    //         break ;
+    //         case eGameType.eGame_AHMJ:
+    //         {
+    //             return eMsgPort.ID_MSG_PORT_AHMJ;
+    //         }
+    //         break ;
+    //     }
+    //     return null ;
+    // }
+
+    public static eMsgPort getMsgPortByRoomID( int nRoomID )
     {
-        return eMsgPort.ID_MSG_PORT_MJ;
+        var nComNum = nRoomID % 100;
+        var portTypeCrypt = (Math.Floor(nRoomID / 100.0)) % 100;
+        if (nComNum >= 50) {
+            portTypeCrypt = portTypeCrypt + 100 - nComNum;
+        } else {
+            portTypeCrypt = portTypeCrypt + 100 + nComNum;
+        }
+        return (eMsgPort)(portTypeCrypt %= 100);
     }
 
-    public static string getTimeString( int utcSeconds )
+    public static string getTimeString( int timeStamp )
     {
-        return "time" ;
+        DateTime dtStart = new DateTime(1970, 1, 1);
+        dtStart = dtStart.ToLocalTime();
+        long lTime = ((long)timeStamp * 10000000);
+        TimeSpan toNow = new TimeSpan(lTime);
+        DateTime targetDt = dtStart.Add(toNow);
+        return targetDt.ToString();
     }
 }
