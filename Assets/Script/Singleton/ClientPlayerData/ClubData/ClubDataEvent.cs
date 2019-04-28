@@ -178,7 +178,7 @@ public class ClubDataEvent : ClubDataCompoent {
             var clubID = msgData["clubID"] ;
             if ( null == clubID )
             {
-                Utility.showTip("eMsgType.MSG_CLUB_REQ_EVENTS lack of clubID key , please add");
+                Prompt.promptDlg("eMsgType.MSG_CLUB_REQ_EVENTS lack of clubID key , please add");
                 return true ;
             }
 

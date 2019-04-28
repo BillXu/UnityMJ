@@ -32,7 +32,7 @@ public class ClubDataMembers : ClubDataCompoent {
             var clubID = msgData["clubID"] ;
             if ( clubID == null )
             {
-                Utility.showTip("MSG_CLUB_REQ_PLAYERS msg must have clubID key , inform server add it") ;
+                Prompt.promptDlg("MSG_CLUB_REQ_PLAYERS msg must have clubID key , inform server add it") ;
                 return true;
             }
 

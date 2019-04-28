@@ -14,7 +14,7 @@ public class DlgBase : MonoBehaviour
     public bool isClickOutSideClose = false ;
     public bool isMaskBg = false ;
 
-    public delegate void ResultCallBack ( JSONObject jsResult ) ;
+    public delegate void ResultCallBack ( DlgBase dlg , JSONObject jsResult ) ;
     public delegate void CloseCallBack( DlgBase pTargetDlg );
     protected ResultCallBack pFuncResult = null ;
     protected CloseCallBack  pOnCloseCallBack = null ;
@@ -65,7 +65,7 @@ public class DlgBase : MonoBehaviour
         }
 
     }
-    public virtual void showDlg( ResultCallBack pfResult, Object jsUserData, CloseCallBack pfOnClose )
+    public virtual void showDlg<T>( ResultCallBack pfResult, T jsUserData, CloseCallBack pfOnClose )
     {
         this.pFuncResult = pfResult ;
         this.pOnCloseCallBack = pfOnClose ;
@@ -84,5 +84,7 @@ public class DlgBase : MonoBehaviour
         {
             this.pOnCloseCallBack(this);
         }
+        this.pFuncResult = null ;
+        this.pOnCloseCallBack = null ;
     }
 }

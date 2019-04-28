@@ -42,9 +42,6 @@ internal class Test
 public class NewBehaviourScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    public RawImage img ;
-    public Button img2;
-    public DlgBase dlg ;
     void Start()
     {
         //var t = new Test();
@@ -76,7 +73,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     public void doClick()
     {
-        dlg.showDlg(null,null,null);
+        Prompt.promptText("this si st alsdjg alsdjfhgl asldg lf");
     }
 }
 

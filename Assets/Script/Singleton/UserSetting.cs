@@ -85,11 +85,16 @@ public class UserSetting : SingletonBehaviour<UserSetting>
 
     private void doSave()
     {
+        if ( this.mJsContent == null )
+        {
+            PlayerPrefs.DeleteKey("userSetting") ;
+            return ;
+        }
         var str = this.mJsContent.ToString();
         if ( str.Length < 10 )
         {
             // means empty almost
-            PlayerPrefs.DeleteKey("userSetting") ;
+            
         }
         else
         {

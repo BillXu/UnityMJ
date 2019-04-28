@@ -4,11 +4,6 @@ using UnityEngine;
 using System ;
 public class Utility : MonoBehaviour
 {
-    public static void showTip( string tip )
-    {
-
-    }
-
     // public static eMsgPort getMsgPortByGameType( eGameType game   ) 
     // {
     //     switch( game )

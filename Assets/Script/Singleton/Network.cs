@@ -44,6 +44,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 
     private string defaultIP = "" ;
     private string backUpIP = null ;
+    protected bool isUseBackUpIP = false ;
     protected string mDstIP
     { 
         get
@@ -55,13 +56,19 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             return defaultIP ;
         } 
     }
-    protected bool isUseBackUpIP = false ;
+    private bool isSetedUp
+    {
+        get 
+        {
+            return string.IsNullOrEmpty(this.defaultIP) == false ;
+        }
+    }
     void Start()
     {
-        connect("127.0.0.1:40008");
+        setUpAndConnect("127.0.0.1:40008");
     }
     // can ony invoke in init method , only invoke one time , connect other ip ,please use function : tryNewDstIP()
-    public void connect( string dstIPPort,string backUpIPPort = null ) 
+    public void setUpAndConnect( string dstIPPort,string backUpIPPort = null ) 
     {
        this.defaultIP = "ws://" + dstIPPort ;
        if ( backUpIPPort != null )
@@ -148,7 +155,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 
         byte[] h = { (byte)'H'} ;
         this.mWebSocket.Send(h);
-        Debug.Log("do send heat beat ");
+        //Debug.Log("do send heat beat ");
         this.isRecievedHeatBet = false ;
         yield return new WaitForSeconds (Network.TIME_HEAT_BEAT);
 
@@ -377,6 +384,11 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
         }
         else
         {
+            if ( this.isSetedUp == false )
+            {
+                Debug.LogWarning("net work not set up , so do nothing");
+                return ;
+            }
             Debug.LogWarning("network app reactive agian , do connnect  pause = false");
             this.isUseBackUpIP = false ;
             this.doConnect();
