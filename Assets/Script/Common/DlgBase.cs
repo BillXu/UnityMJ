@@ -32,11 +32,22 @@ public class DlgBase : MonoBehaviour
 
         if ( this.pBgImgArea != null )
         {
-           var trigger = this.pBgImgArea.GetComponent<EventTrigger>();
-           if ( trigger == null )
+           var img = this.pBgImgArea.GetComponent<Image>();
+           if ( null != img )
            {
-                trigger = this.pBgImgArea.AddComponent<EventTrigger>();
+               img.raycastTarget = true ;
            }
+
+           var imgR = this.pBgImgArea.GetComponent<RawImage>();
+           if ( null != imgR )
+           {
+               imgR.raycastTarget = true ;
+           }
+        //    var trigger = this.pBgImgArea.GetComponent<EventTrigger>();
+        //    if ( trigger == null )
+        //    {
+        //         trigger = this.pBgImgArea.AddComponent<EventTrigger>();
+        //    }
         }
     
         if ( this.isClickOutSideClose || this.isMaskBg )

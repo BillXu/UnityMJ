@@ -175,4 +175,8 @@ public class PlayerInfoDataCacher : SingletonBehaviour<PlayerInfoDataCacher>
             return true ;
         } ) ;
     }
+
+    private void OnDestroy() {
+        Debug.LogWarning("INFO DESTROYED");
+    }
 }

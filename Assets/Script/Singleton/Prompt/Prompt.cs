@@ -8,8 +8,8 @@ public class Prompt : SingletonBehaviour<Prompt>
 
     public GameObject pPromptTextPrefab = null;
 
-    public List<GameObject> vDisplayingPromptText = new List<GameObject>();
-    public List<GameObject> vReserve = new List<GameObject>();
+    private List<GameObject> vDisplayingPromptText = new List<GameObject>();
+    private List<GameObject> vReserve = new List<GameObject>();
     // LIFE-CYCLE CALLBACKS:
     public void showPromptText( string text, float nDisplayTime = 3 )
     {
@@ -94,5 +94,9 @@ public class Prompt : SingletonBehaviour<Prompt>
     public static void promptDlg( string dlgText, bool isOneBtn = true, DlgBase.ResultCallBack pfResult = null , DlgBase.CloseCallBack pfOnClose = null )
     {
         Prompt.getInstance().showDlg(dlgText,isOneBtn,pfResult,pfOnClose);
+    }
+
+    private void OnDestroy() {
+        Debug.LogWarning("PROMPT DESTROYED");
     }
 }
