@@ -19,12 +19,12 @@ public enum eNetworkState
 public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 {
     public delegate bool IOneMsgCallback( JSONObject jsMsg ) ;
-    public static string EVENT_OPEN = "open";
-    public static string EVENT_FAILED = "failed";
-    public static string EVENT_MSG = "msg";
-    public static string EVENT_DISCONNECTED = "close";
-    public static string EVENT_RECONNECT = "reconnect";
-    public static string EVENT_RECONNECTED_FAILED = "reconnectFailed" ;
+    public static string EVENT_OPEN = "open"; // 首次建立网络链接成功，如果非首次，系统会直接逻辑重连，而不会发出次事件。
+    public static string EVENT_FAILED = "failed"; // 建立网络链接失败
+    public static string EVENT_MSG = "msg";  // 收到网络消息
+    public static string EVENT_DISCONNECTED = "close"; // 网络断开
+    public static string EVENT_RECONNECT = "reconnect"; // 逻辑重连成功
+    public static string EVENT_RECONNECTED_FAILED = "reconnectFailed" ;  // 逻辑重连失败，网络链接是成功的。逻辑需要重新登录。
 
     static int TIME_HEAT_BEAT = 3 ; 
     static string MSG_ID = "msgID" ;
@@ -40,7 +40,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
     protected eNetworkState mNetState = eNetworkState.eNet_Uninit;
     protected bool isStartHeadBet = false ;
     protected bool isStartReconnect = false ;
-    protected int SessionID { get ; set ;} = 0 ;
+    public int SessionID { get ; set ;} = 0 ;
 
     private string defaultIP = "" ;
     private string backUpIP = null ;
@@ -63,10 +63,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             return string.IsNullOrEmpty(this.defaultIP) == false ;
         }
     }
-    void Start()
-    {
-        setUpAndConnect("127.0.0.1:40008");
-    }
+
     // can ony invoke in init method , only invoke one time , connect other ip ,please use function : tryNewDstIP()
     public void setUpAndConnect( string dstIPPort,string backUpIPPort = null ) 
     {

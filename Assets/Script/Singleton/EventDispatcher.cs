@@ -16,9 +16,19 @@ public class EventDispatcher : Singleton<EventDispatcher>
     public delegate bool EventHanlde( EventArg hevent );
 
     private Dictionary<string,List<EventHanlde>> m_vHandles = null;
+    string mLockEventTypeName = null ; // 锁住事件类型，主要用于防止在事件函数内存在增减同类事件从而导致遍历的迭代器失效，出现bug。
+    List<EventHanlde> mLockAddCacher = new List<EventHanlde>();
+    List<EventHanlde> mLockRemoveCacher = new List<EventHanlde>();
+
 
     public bool registerEventHandle( string str , EventHanlde handle )
     {
+        if ( str == this.mLockEventTypeName )
+        {
+            this.mLockAddCacher.Add(handle);
+            return true;
+        }
+
         if ( null == m_vHandles )
         {
             m_vHandles = new Dictionary<string,List<EventHanlde>>();
@@ -35,6 +45,12 @@ public class EventDispatcher : Singleton<EventDispatcher>
 
     public bool removeEventHandle( string eventName , EventHanlde handle )
     {
+        if ( eventName == this.mLockEventTypeName )
+        {
+            this.mLockRemoveCacher.Add(handle);
+            return true;
+        }
+
         if ( null == m_vHandles || false == m_vHandles.ContainsKey(eventName) )
         {
             return false ;
@@ -103,6 +119,7 @@ public class EventDispatcher : Singleton<EventDispatcher>
             return ;
         }
 
+        this.mLockEventTypeName = arg.type ;
         var vHandleList = m_vHandles[arg.type];
         foreach ( var handle in vHandleList )
         {
@@ -112,6 +129,19 @@ public class EventDispatcher : Singleton<EventDispatcher>
                 return ;
             }
         }
+
+        foreach ( var itemA in this.mLockAddCacher )
+        {
+            this.registerEventHandle(arg.type,itemA) ;
+        }
+        this.mLockAddCacher.Clear();
+
+        foreach (var itemR in this.mLockRemoveCacher )
+        {
+            this.removeEventHandle(arg.type,itemR) ;
+        }
+        this.mLockRemoveCacher.Clear();
+        this.mLockEventTypeName = null;
     }
     public void dispatch<T>(string eventName , T eventArgObj )
     {
