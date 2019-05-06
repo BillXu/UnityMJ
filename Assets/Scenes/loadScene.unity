@@ -491,11 +491,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_RECORDER_CACHER: 20
-  SVR_IP: 127.0.0.1:40008
+  SVR_IP: 192.168.1.56:40012
   SVR_BACK_UP_IP: 
-  SCENE_NAME_LOGIN: logic
-  SCENE_NAME_MAIN: main
-  SCENE_NAME_ROOM: room
+  SCENE_NAME_LOGIN: loginScene
+  SCENE_NAME_MAIN: mainScene
+  SCENE_NAME_ROOM: roomScene
 --- !u!1 &867021042
 GameObject:
   m_ObjectHideFlags: 0

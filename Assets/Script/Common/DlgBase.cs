@@ -50,29 +50,27 @@ public class DlgBase : MonoBehaviour
         //    }
         }
     
-        if ( this.isClickOutSideClose || this.isMaskBg )
-        {
-            var g = new GameObject();
-            var tract= g.AddComponent<RectTransform>();
-            var rawImg = g.AddComponent<RawImage>();
-            tract.SetParent(this.pRootNode.transform) ;
-            tract.SetAsFirstSibling();
-            tract.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,1700);
-            tract.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,1700);
-            tract.localPosition = new Vector3(0,0);
-            rawImg.color = this.isMaskBg ? ( new Color(0f,0f,0f,0.5f)) : Color.clear;
+        var g = new GameObject();
+        var tract= g.AddComponent<RectTransform>();
+        var rawImg = g.AddComponent<RawImage>();
+        rawImg.raycastTarget = true ;
+        tract.SetParent(this.pRootNode.transform) ;
+        tract.SetAsFirstSibling();
+        tract.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,1700);
+        tract.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,1700);
+        tract.localPosition = new Vector3(0,0);
+        rawImg.color = this.isMaskBg ? ( new Color(0f,0f,0f,0.5f)) : Color.clear;
 
-            if ( this.isClickOutSideClose )
-            {
-                var trige = g.AddComponent<EventTrigger>();
-                trige.triggers = new List<EventTrigger.Entry>();
-                var eng = new EventTrigger.Entry();
-                eng.eventID = EventTriggerType.PointerClick;
-                var evntAct = new EventTrigger.TriggerEvent();
-                evntAct.AddListener((BaseEventData a)=>{this.closeDlg();});
-                eng.callback = evntAct;
-                trige.triggers.Add(eng);
-            }
+        if ( this.isClickOutSideClose )
+        {
+            var trige = g.AddComponent<EventTrigger>();
+            trige.triggers = new List<EventTrigger.Entry>();
+            var eng = new EventTrigger.Entry();
+            eng.eventID = EventTriggerType.PointerClick;
+            var evntAct = new EventTrigger.TriggerEvent();
+            evntAct.AddListener((BaseEventData a)=>{this.closeDlg();});
+            eng.callback = evntAct;
+            trige.triggers.Add(eng);
         }
 
     }

@@ -49,7 +49,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
     { 
         get
         {
-            if ( this.isUseBackUpIP && this.backUpIP != null && this.backUpIP.Length > 0 )
+            if ( this.isUseBackUpIP && false == string.IsNullOrEmpty(this.backUpIP) && this.backUpIP.Length > 10 )
             {
                 return this.backUpIP ;
             }
@@ -64,11 +64,14 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
         }
     }
 
+    /// net event can not process must dispatch in update 
+    List<JSONObject> vMessageCacher = new List<JSONObject>() ;
+    bool isInvokeNetFailedFunct = false ;
     // can ony invoke in init method , only invoke one time , connect other ip ,please use function : tryNewDstIP()
     public void setUpAndConnect( string dstIPPort,string backUpIPPort = null ) 
     {
        this.defaultIP = "ws://" + dstIPPort ;
-       if ( backUpIPPort != null )
+       if ( string.IsNullOrEmpty( backUpIPPort ) == false )
        {
             this.backUpIP = "ws://" + backUpIPPort ;
        }
@@ -121,11 +124,12 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 
         Debug.Log( "do connecting..." );
         this.mNetState = eNetworkState.eNet_Connecting;
-        this.mWebSocket = new WebSocketUnity(this.mDstIP,this) ;
-        this.mWebSocket.Open();
 #if UNITY_EDITOR
         Debug.Log("connecting ip = " + this.mDstIP);
 #endif
+        this.mWebSocket = new WebSocketUnity(this.mDstIP,this) ;
+        this.mWebSocket.Open();
+
     }
 
     protected void close()
@@ -197,6 +201,18 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             this.isStartReconnect = false ;
             this.Invoke("tryReconnect",2.5f);
         }
+
+        if ( this.isInvokeNetFailedFunct )
+        {
+            this.isInvokeNetFailedFunct = false ;
+            this.onNetworkFailed();
+        }
+
+        foreach (var item in this.vMessageCacher )
+        {
+            this.doProcessMsg(item) ;
+        }
+        this.vMessageCacher.Clear();
     }
 
     private bool processInternalMsg( eMsgType msgID , JSONObject jsm )
@@ -262,7 +278,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 	public void OnWebSocketUnityClose(string reason)
     {
         Debug.Log( "OnWebSocketUnityClose: " + reason );
-        this.onNetworkFailed();
+        this.isInvokeNetFailedFunct = true ;
     }
 	
 	// Event when the websocket receive a message
@@ -284,6 +300,11 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             return ;
         }
 
+        this.vMessageCacher.Add(msg);
+    }
+
+    void doProcessMsg( JSONObject msg )
+    {
         eMsgType nMsgID = (eMsgType)(msg[Network.MSG_ID].Number);
         if ( this.processInternalMsg(nMsgID,msg) )
         {
@@ -306,14 +327,18 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             vWillDeleter.Add(item);
             if ( item.Value(msg) )
             {
-                return ;
+                break ;
             }
         } 
         // do remove ;
-        foreach (var delItem in vWillDeleter )
+        if ( null != vWillDeleter )
         {
-            this.vMsgCallBack.Remove(delItem);
+            foreach (var delItem in vWillDeleter )
+            {
+                this.vMsgCallBack.Remove(delItem);
+            }
         }
+
         vWillDeleter = null ;
         //console.log("dispath msg id " + msg );
         /// dispatch event ;
@@ -340,7 +365,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 	public void OnWebSocketUnityError(string error)
     {
         Debug.LogWarning("OnWebSocketUnityError: " + error );
-        this.onNetworkFailed();
+        this.isInvokeNetFailedFunct = true ;
     }
 
     void onNetworkFailed()

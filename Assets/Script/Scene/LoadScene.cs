@@ -7,7 +7,9 @@ public class LoadScene : NetBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Network.getInstance().setUpAndConnect(GameConfig.getInstance().SVR_IP,GameConfig.getInstance().SVR_BACK_UP_IP);    
+        var ip = GameConfig.getInstance().SVR_IP ;
+        Debug.Log("load scene ip = " + ip );
+        Network.getInstance().setUpAndConnect(ip,GameConfig.getInstance().SVR_BACK_UP_IP);    
     }
 
     protected override void onConnectResult( bool isScucess )
@@ -18,6 +20,12 @@ public class LoadScene : NetBehaviour
             return ;
         }
         // wait player data , oN destroy will auto to remove handle , in base ;
+        Debug.Log("change scene = " + GameConfig.getInstance().SCENE_NAME_LOGIN );
+        SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_LOGIN) ;
+    }
+
+    public void clickTest()
+    {
         SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_LOGIN) ;
     }
 }

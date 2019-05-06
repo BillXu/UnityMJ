@@ -14,7 +14,7 @@ public class ClientPlayerData : SingletonBehaviour<ClientPlayerData>
         base.Awake();
         this.vPlayerDatas[typeof(ClubDataMgr).Name] = new ClubDataMgr();
         this.vPlayerDatas[typeof(PlayerBaseData).Name] = new PlayerBaseData();
-        this.vPlayerDatas[typeof(RecorderData).Name] = new PlayerRecorder();
+        this.vPlayerDatas[typeof(PlayerRecorder).Name] = new PlayerRecorder();
         EventDispatcher.getInstance().registerEventHandle(Network.EVENT_MSG,this.onMsgEvent);
     }
 
@@ -72,6 +72,7 @@ public class ClientPlayerData : SingletonBehaviour<ClientPlayerData>
         var t = typeof(T);
         if ( this.vPlayerDatas.ContainsKey( t.Name ) == false )
         {
+            Debug.LogError("compoent is null : " + t.Name);
             return null ;
         }
 
