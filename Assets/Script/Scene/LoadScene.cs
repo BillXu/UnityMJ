@@ -23,9 +23,4 @@ public class LoadScene : NetBehaviour
         Debug.Log("change scene = " + GameConfig.getInstance().SCENE_NAME_LOGIN );
         SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_LOGIN) ;
     }
-
-    public void clickTest()
-    {
-        SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_LOGIN) ;
-    }
 }

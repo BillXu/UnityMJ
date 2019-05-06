@@ -48,4 +48,9 @@ public class Utility : MonoBehaviour
         DateTime targetDt = dtStart.Add(toNow);
         return targetDt.ToString();
     }
+
+    public static eMsgPort getMsgPortByGameType( eGameType game  )
+    {
+        return eMsgPort.ID_MSG_PORT_DAWOER ;
+    }
 }

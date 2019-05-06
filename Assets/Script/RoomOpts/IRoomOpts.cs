@@ -5,12 +5,13 @@ using Boomlagoon.JSON ;
 public interface IRoomOpts
 {
     int round { get ; set ;}
-    int playerCnt { get ; set ; }
+    int seatCnt { get ; set ; }
 
-    int payType { get ; set ;}
+    ePayRoomCardType payType { get ; set ;}
 
     int fee { get ; set ; }
 
+    eGameType gameType{ get ; set ;}
     void parseOpts( JSONObject jsOpts );
     JSONObject toJsOpts();
 }

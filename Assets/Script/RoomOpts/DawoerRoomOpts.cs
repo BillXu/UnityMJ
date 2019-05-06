@@ -9,6 +9,8 @@ public class DawoerRoomOpts : IRoomOpts
     public DawoerRoomOpts()
     {
         mOpts = new JSONObject();
+        this.mOpts["circle"] = 0 ;
+        this.gameType = eGameType.eGame_DaWoEr;
     }
 
     public DawoerRoomOpts( JSONObject jsOpts )
@@ -16,31 +18,42 @@ public class DawoerRoomOpts : IRoomOpts
         mOpts = jsOpts ;
     }
 
+    public eGameType gameType
+    {
+        get
+        {
+            return (eGameType)mOpts["gameType"].Number;
+        }
+        set
+        {
+            mOpts["gameType"] = (int)value ;
+        }
+    }
     public int round 
     { 
         get
         {
-            if ( this.mOpts["round"] != null )
+            if ( this.mOpts["level"] != null )
             {
-                this.mOpts["round"] = 8 ;
+                this.mOpts["level"] = 0 ;
                 Debug.LogError("round key is null");
             }
-            return (int)this.mOpts["round"].Number ; 
+            return (int)this.mOpts["level"].Number ; 
         } 
 
         set
         {
-            this.mOpts["round"] = value ;
+            this.mOpts["level"] = value == 8 ? 0 : 1 ;
         }
         
     }
-    public int playerCnt 
+    public int seatCnt 
     { 
         get
         {
             if ( this.mOpts["seatCnt"] != null )
             {
-                this.mOpts["seatCnt"] = 8 ;
+                this.mOpts["seatCnt"] = 4 ;
                 Debug.LogError("seatCnt key is null");
             }
             return (int)this.mOpts["seatCnt"].Number ; 
@@ -51,7 +64,7 @@ public class DawoerRoomOpts : IRoomOpts
             this.mOpts["seatCnt"] = value ;
         }
     }
-    public int payType
+    public ePayRoomCardType payType
     { 
         get
         {
@@ -60,12 +73,12 @@ public class DawoerRoomOpts : IRoomOpts
                 this.mOpts["payType"] = 8 ;
                 Debug.LogError("payType key is null");
             }
-            return (int)this.mOpts["payType"].Number ; 
+            return (ePayRoomCardType)this.mOpts["payType"].Number ; 
         } 
 
         set
         {
-            this.mOpts["payType"] = value ;
+            this.mOpts["payType"] = (int)value ;
         }
     }
     public int fee 
@@ -101,7 +114,6 @@ public class DawoerRoomOpts : IRoomOpts
             mOpts["pao"] = value ;
         }
     }
-
     public int limitFen
     {
         get 
@@ -113,7 +125,6 @@ public class DawoerRoomOpts : IRoomOpts
             mOpts["limitFen"] = value ;
         }
     }
-
     public bool isRandSeat
     {
         get
@@ -125,7 +136,6 @@ public class DawoerRoomOpts : IRoomOpts
             mOpts["isRandSeat"] = value ? 1 : 0 ;
         }
     }
-
     public bool isEnableIPAndGps
     {
         get
@@ -137,7 +147,6 @@ public class DawoerRoomOpts : IRoomOpts
             mOpts["isEnableIPAndGps"] = value ? 1 : 0 ;
         }
     }
-
     public bool isForceGPS
     {
          get
@@ -149,7 +158,6 @@ public class DawoerRoomOpts : IRoomOpts
             mOpts["isForceGPS"] = value ? 1 : 0 ;
         }       
     }
-
     public void parseOpts( JSONObject jsOpts )
     {
         this.mOpts = jsOpts ;

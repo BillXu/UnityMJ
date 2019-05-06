@@ -1392,7 +1392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pRootNode: {fileID: 1910455646}
   pBgImgArea: {fileID: 263656359}
-  isPopout: 0
+  isPopout: 1
   isClickOutSideClose: 0
   isMaskBg: 1
   pLabel: {fileID: 925380828}

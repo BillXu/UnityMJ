@@ -73,7 +73,7 @@ public class LayerDawoerOpts : MonoBehaviour,ILayerOpts
 
     void buildOpts()
     {
-        this.mOpts.round = 1 ;
+        this.mOpts.round = 8 ;
         if ( this.mRound8.isOn )
         {
             this.mOpts.round = 8 ;
@@ -85,20 +85,20 @@ public class LayerDawoerOpts : MonoBehaviour,ILayerOpts
 
         if ( this.mSeat3.isOn )
         {
-            this.mOpts.playerCnt = 3 ;
+            this.mOpts.seatCnt = 3 ;
         }
         else if ( this.mSeat4.isOn )
         {
-            this.mOpts.playerCnt = 4 ;
+            this.mOpts.seatCnt = 4 ;
         }
 
         if ( this.mPayTypeAA.isOn )
         {
-            this.mOpts.payType = 1 ;
+            this.mOpts.payType = ePayRoomCardType.ePayType_AA ;
         }
         else if ( this.mPayTypeOwner.isOn )
         {
-            this.mOpts.payType = 0 ;
+            this.mOpts.payType = ePayRoomCardType.ePayType_RoomOwner ;
         }
 
         if ( this.mRuleOnePao.isOn )

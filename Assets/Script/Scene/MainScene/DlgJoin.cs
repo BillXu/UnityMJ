@@ -70,6 +70,12 @@ public class DlgJoin : DlgBase
     }
     public void click_OK()
     {
+        if ( this.mCurIdx != this.mInputedNumbers.Count )
+        {
+            Prompt.promptText("数字不合法，请输6个数字") ;
+            return ;
+        }
+
         if ( this.pFuncResult != null )
         {
             this.pFuncResult(this,null) ;
