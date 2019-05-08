@@ -1,4 +1,4 @@
-public enum eMsgPort
+﻿public enum eMsgPort
 {
 	ID_MSG_PORT_NONE, // client to game server 
 	ID_MSG_PORT_CLIENT = ID_MSG_PORT_NONE,
@@ -15,12 +15,18 @@ public enum eMsgPort
 	ID_MSG_PORT_DOU_DI_ZHU,
 	ID_MSG_PORT_GOLDEN,
 	ID_MSG_PORT_SCMJ,
-	ID_MSG_PORT_DAWOER = 16,
+	ID_MSG_PORT_MQMJ,
+	ID_MSG_PORT_LUOMJ,
+	ID_MSG_PORT_FXMJ,
+	ID_MSG_PORT_CFMJ,
+	ID_MSG_PORT_DAWOER = ID_MSG_PORT_CFMJ,
+	ID_MSG_PORT_AHMJ,
+	ID_MSG_PORT_NCMJ,
 	ID_MSG_PORT_ALL_SERVER,
 	ID_MSG_PORT_MAX,
 };
 
-public enum eMsgType 
+public enum eMsgType
 {
 	MSG_NONE,
 	//--new define begin---
@@ -189,6 +195,9 @@ public enum eMsgType
 	MSG_ROOM_TEMP_OWNER_UPDATED,
 	// svr : { uid : 23 }
 
+	MSG_ROOM_KICK_PLAYER,
+	// svr : { uid : 23 , targetUID : 123 }
+
 	MSG_PLAYER_SET_READY = 600,   	// player do ready
 	// client : { dstRoomID : 2345 } ;
 	// svr : { ret : 1 , curState : 23 } // 1 you are not in room , 2 you are not state waitNextGame, tell curState ;
@@ -330,6 +339,10 @@ public enum eMsgType
 	MSG_DDZ_ROOM_TI_LA_CHUAI,
 	// svr: { idx : 0 , isTiLaChuai : 0 }
 
+	MSG_DDZ_PLAYER_DOUBLE,
+	// svr : {ret : 0} if 0 add {idx : 0} send all
+	// svr : {state : 1} //��ʼ�ӱ�������Ϣ
+
 	MSG_DDZ_MAX = 1500,
 
 	    // club msg 
@@ -429,6 +442,10 @@ public enum eMsgType
 	// svr : { ret : 0 ,clubID : 23 , uid : 23 }
 	// ret : 0 success , 1 privilige is invalid , 2 player is not in club ;
 
+	MSG_CLUB_CREATE_PRIVATE_ROOM, //�����齫���ֲ�����Խ�����
+
+	MSG_CLUB_PLAYER_APPLY_LEAVE, //�����齫��������뿪���ֲ�
+
 	MSG_CLUB_MSG_END = 2900,
 
 	// mj specail msg ;
@@ -453,7 +470,7 @@ public enum eMsgType
 	// huType : �������ͣ�ֻ���Ǻ��Ķ�����������ֶΣ�
 	// fanShu :  ���Ƶ�ʱ��ķ�����ֻ�к��ƵĶ�����������ֶ�
 
-	MSG_REQ_ACT_LIST,   //����������ߣ��������� �յ�roomInfo �󣬷��ʹ���Ϣ������Ҳ����б���
+	MSG_REQ_ACT_LIST,   //����������ߣ��������� �յ�roomInfo �󣬷��ʹ���Ϣ������Ҳ����б�
 	// client : { dstRoomID : 356 } ,
 	// svr : { ret : 0 } ;
 	// ret : 0 �ȴ�����ƣ�ֻ�ܳ��ƣ�1 �˿̲�����ò�����ʱ��
@@ -485,7 +502,7 @@ public enum eMsgType
 	// idx : ��ҵ�������
 	// bills : ��ҵ��˵����飬ֱ�ӿ���������ʾ�� �˵��ж�����
 	// �˵��ڽ��ͣ� type �� ȡֵ�ο�ö�� eSettleType �� offset �� ����˵�����Ӯ��������ʾ���ˣ� ���type �ó����������磺Type Ϊ���ڣ��������Ǳ����ڣ��������ǵ��ڣ�
-	// ͬ����type ��������ʱ�����offset Ϊ��������ô���Ǳ������������������������������������͡�
+	// ͬ��type ��������ʱ�����offset Ϊ��������ô���Ǳ������������������������������������͡�
 	// huType : ֻ�е���������ʱ����Ч����ʾ�����ĺ����ͣ����߱����� ����ֶ�Ҳ����Ч�ġ�beiShu �����Ǻ��Ƶı�������Ч����ͬ������ԣ���塣 
 	// target : �����Լ�����˵� ��Ե�һ���� ����Ӯ����Щ�˵�Ǯ���������˭�ˡ���˭�����ˣ���˭�����ˣ�������˭�����嵽�ͻ��˱��֣��������ұ��Ǹ� �ϼ��¼ң�֮�����һ�С�
 
@@ -644,7 +661,42 @@ public enum eMsgType
 	MSG_ROOM_SICHUAN_MAJIANG_END = 2100, //�Ĵ��齫����Ž�����ʶ
 
 
+	MSG_ROOM_MOQI_MAJIANG_BEGIN = 2200, //Ī���齫����ſ�ʼ���
 
+	MSG_ROOM_MQMJ_GAME_START, //Ī���齫��Ϸ��ʼ��Ϣ
+
+	MSG_ROOM_MQMJ_PLAYER_HU, //Ī���齫��
+
+	MSG_ROOM_MQMJ_WAIT_ACT_AFTER_CP, //Ī���齫������ȴ���Ҳ���
+
+	MSG_ROOM_FXMJ_PLAYER_TING,
+
+	MSG_ROOM_FXMJ_WAIT_GANG_TING, //�����齫�ȴ���Ҹܺ��Ƿ�����
+
+	MSG_ROOM_FXMJ_DO_GANG_TING, //�����齫���ѡ������������
+
+	MSGNU_CLUB_CREATE_PRIVATE_ROOM, //�����齫���ֲ�����Խ�����
+
+	MSG_ROOM_FXMJ_PLAYER_ONFOLLOW, //�����齫��Ҵ��Ƹ�ׯ
+
+	MSG_ROOM_FXMJ_REAL_TIME_CELL, //�����齫ʵʱ����
+
+	MSG_ROOM_PLAYER_EXCHANGE_SEAT, //�齫������·���λ��
+
+	MSG_ROOM_PLAYER_WAIT_IDX, //�齫���͵ȴ��������
+
+	MSGNU_CLUB_PLAYER_APPLY_LEAVE, //�����齫��������뿪���ֲ�
+
+	MSG_GET_SHARE_PRIZE, //��������
+	// sur : {diamond : 0, sharetimes : 0}
+
+	MSG_PLAYER_REFRESH_GATE_IP, //ˢ��gateIP
+
+	MSG_ROOM_CHIFENG_MAJIANG_BEGIN = 2300, //����齫����ſ�ʼ��ʶ
+
+	MSG_ROOM_CF_GUA_PU, //����齫������Ϣ
+	MSG_PLAYER_DO_GUA_PU,
+	MSG_ROOM_CFMJ_GAME_WILL_START,
 
 
 

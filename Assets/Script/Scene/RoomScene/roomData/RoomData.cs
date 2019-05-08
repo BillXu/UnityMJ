@@ -1,0 +1,378 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Boomlagoon.JSON ;
+public class RoomData : NetBehaviour
+{
+    // Start is called before the first frame update
+    public IRoomDataDelegate mSceneDelegate ;
+    public RoomBaseData mBaseData = new RoomBaseData();
+    public List<RoomPlayerData> mPlayers = new List<RoomPlayerData>();
+    
+    private void Start() {
+        mPlayers.Add(null);
+        mPlayers.Add(null);
+        mPlayers.Add(null);
+        mPlayers.Add(null);
+        this.registerEvent(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA);
+        this.reqRoomInfo(ClientPlayerData.getInstance().getComponentData<PlayerBaseData>().stayInRoomID) ;
+    }
+
+    protected override bool onEvent(EventArg arg)
+    {
+        if ( PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA == arg.type )
+        {
+            var eventObj = (EventWithObject<PlayerInfoData>)arg ;
+            var info = eventObj.argObject ;
+            if ( this.mSceneDelegate != null )
+            {
+                this.mSceneDelegate.onRecivedPlayerBrifeData(info);
+            }
+            
+        }
+        return base.onEvent(arg);
+    }
+    protected override bool onMsg( eMsgType nMsgID , JSONObject msg )
+    {
+        switch ( nMsgID )
+        {
+            case eMsgType.MSG_ROOM_INFO:
+            {
+                this.mBaseData.parseInfo(msg) ;
+                this.mSceneDelegate.onRecivedRoomInfo(this.mBaseData);
+            }
+            break ;
+            case eMsgType.MSG_ROOM_PLAYER_INFO:
+            {
+                var vMsgPlayers = msg["players"].Array ;
+                foreach ( var item in vMsgPlayers )
+                {
+                    this.onPlayerSitDown(item.Obj);
+                }
+            }
+            break ;
+            case eMsgType.MSG_ROOM_SIT_DOWN:
+            {
+                this.onPlayerSitDown(msg);
+            }
+            break ;
+            case eMsgType.MSG_ROOM_STAND_UP:
+            {
+                var idx = (int)msg["idx"].Number ;
+                var uid = (int)msg["uid"].Number ;
+                if ( this.mPlayers[idx] == null || this.mPlayers[idx].nUID != uid )
+                {
+                    Debug.LogError( "idx and uid not match idx = " + idx + " uid = " + uid );
+                    return true ;
+                }
+                this.mPlayers[idx].clear() ;
+                this.mSceneDelegate.onPlayerStandUp(idx);
+            }
+            break ;
+            case eMsgType.MSG_ROOM_PLAYER_READY:
+            {
+                var idx = (int)msg["idx"].Number ;
+                if ( null == this.mPlayers[idx] )
+                {
+                    Debug.LogError( "idx player is null , how to set ready " + idx );
+                    return true;
+                } 
+                this.mPlayers[idx].isReady = true ;
+            }
+            break ;
+            case eMsgType.MSG_ROOM_DO_OPEN:
+            {
+                this.mBaseData.isRoomOpen = true ;
+            }
+            break ;
+            default:
+            return onMsgPart2(nMsgID,msg);
+        } 
+        return true ;
+    }
+    bool onMsgPart2( eMsgType nMsgID , JSONObject msg )
+    {
+        switch ( nMsgID )
+        {
+            case eMsgType.MSG_PLAYER_ACT:
+            {
+                var nret = (int)msg["ret"].Number;
+                if ( nret != 0  )
+                {
+                    Debug.LogError( "act error nret = " + nret );
+                }
+            }
+            break ;
+            case eMsgType.MSG_ROOM_ACT:
+            {
+                this.processRoomActMsg(msg);
+            } 
+            break ;
+            case eMsgType.MSG_PLAYER_WAIT_ACT_ABOUT_OTHER_CARD:
+            {
+                this.mBaseData.otherCanActCard = (int)msg["cardNum"].Number;
+                this.mSceneDelegate.showActOptsAboutOtherCard(msg["acts"].Array);
+            }
+            break;
+            case eMsgType.MSG_PLAYER_WAIT_ACT_AFTER_RECEIVED_CARD:
+            {
+                this.mSceneDelegate.showActOptsWhenRecivedCards(msg["acts"].Array) ;
+            }
+            break ;
+            case eMsgType.MSG_ROOM_MQMJ_PLAYER_HU:
+            {
+                var isZiMo = (int)msg["isZiMo"].Number == 1 ;
+                var huCard = (int)msg["huCard"].Number ;
+                if ( isZiMo )
+                {
+                    var huIdx = (int)(msg["detail"].Obj["huIdx"].Number) ;
+                    this.mSceneDelegate.onPlayerActHu(huIdx,huCard,huIdx );
+                }
+                else
+                {
+                    var vHuPlayers = msg["detail"].Obj["huPlayers"].Array ;
+                    foreach ( var v in vHuPlayers )
+                    {
+                        var idx = (int)v.Obj["idx"].Number ;
+                        this.mSceneDelegate.onPlayerActHu(idx,huCard,this.mBaseData.lastChuIdx ) ;
+                    }
+                }
+            }
+            break;
+            case eMsgType.MSG_ROOM_CFMJ_GAME_WILL_START:
+            {
+                this.willStartGame(msg);
+            }
+            break;
+            case eMsgType.MSG_ROOM_MQMJ_GAME_START:
+            {
+                this.startGame(msg);
+            }
+            break ;
+            case eMsgType.MSG_ROOM_SCMJ_GAME_END:
+            {
+                // this.pdlgDismiss.closeDlg();
+                // this.pdlgSingleReuslt.refresh(msg,this.pRoomData) ;
+                // this.pdlgSingleReuslt.showDlg();
+                // this.enterWaitReadyState();
+                this.mSceneDelegate.onGameEnd(msg) ;
+                this.endGame();
+            }
+            break ;
+            case eMsgType.MSG_ROOM_GAME_OVER:
+            {
+                // this.pdlgDismiss.closeDlg();
+                // this.pRoomData.isRoomOver = true ;
+                // this.pdlgRoomOver.refresh(msg,this.pRoomData) ;
+                // if ( false == this.pdlgSingleReuslt.node.active )
+                // {
+                //     this.pdlgRoomOver.showDlg();
+                // }
+                this.mSceneDelegate.onRoomOvered( msg ) ;
+            }
+            break ;
+            case eMsgType.MSG_ROOM_APPLY_DISMISS_VIP_ROOM:
+            {
+                this.mSceneDelegate.onApplyDismisRoom( (int)msg["applyerIdx"].Number );
+            }
+            break ;
+            case eMsgType.MSG_ROOM_REPLY_DISSMISS_VIP_ROOM_APPLY:
+            {
+                this.mSceneDelegate.onReplayDismissRoom( (int)msg["idx"].Number,(int)msg["reply"].Number == 1 ) ;
+            }
+            break;
+            case eMsgType.MSG_VIP_ROOM_DO_CLOSED:
+            {
+                this.mSceneDelegate.onRoomDoClosed();
+            }
+            break ;
+            case eMsgType.MSG_ROOM_REFRESH_NET_STATE:
+            {
+                var idx = (int)msg["idx"].Number;
+                var isOnline = msg["state"].Number == 0 ;
+                var p = this.mPlayers[idx] ;
+                if ( p == null || p.isEmpty() )
+                {
+                    Debug.LogError("refresh net state player is null or empty idx = " + idx );
+                    break ;
+                }
+                p.isOnline = isOnline ;
+                this.mSceneDelegate.onPlayerNetStateChanged(idx,isOnline) ;
+            }
+            break;
+            case eMsgType.MSG_ROOM_CHAT_MSG:
+            {
+                this.mSceneDelegate.onPlayerChatMsg((int)msg["playerIdx"].Number,(eChatMsgType)msg["type"].Number,msg["content"].Str) ;
+            }
+            break ;
+        }
+        return true ; 
+    }
+    void onPlayerSitDown( JSONObject jsInfo )
+    {
+        var idx = (int)jsInfo["idx"].Number;
+        if ( this.mPlayers[idx] == null )
+        {
+            this.mPlayers[idx] = new RoomPlayerData();
+            this.mPlayers[idx].clear();
+            Debug.LogWarning("find a null pos idx = " + idx);
+        } 
+
+        if ( this.mPlayers[idx].isEmpty() == false )
+        {
+            Debug.LogError("why the same pos , have two player ?");
+        }
+        this.mPlayers[idx].parseBaseInfo(jsInfo);
+        this.mPlayers[idx].isSelf = ClientPlayerData.getInstance().getSelfUID() == this.mPlayers[idx].nUID ;
+        this.mSceneDelegate.onPlayerSitDown(this.mPlayers[idx]);
+    }
+    void processRoomActMsg( JSONObject msg )
+    {
+        // svr : { idx : 0 , actType : 234, card : 23, gangCard : 12, eatWith : [22,33], huType : 23, fanShu : 23  }
+        var svrIdx = (int)msg["idx"].Number ;
+        eMJActType actType = (eMJActType)msg["actType"].Number;
+        var targetCard = (int)msg["card"].Number ;
+        var RoomPlayer = this.mPlayers[svrIdx];
+        int invokerIdx = -1;
+        if ( msg.ContainsKey("invokerIdx") )
+        {
+            invokerIdx = (int)msg["invokerIdx"].Number;
+        }
+        this.mBaseData.curActIdx = svrIdx ;
+        switch ( actType )
+        {
+            case eMJActType.eMJAct_Mo:
+            {
+                RoomPlayer.onMo(targetCard);
+                this.mBaseData.leftMJCnt -= 1 ;
+                this.mSceneDelegate.onPlayerActMo(svrIdx,targetCard);
+            }
+            break ;
+            case eMJActType.eMJAct_Chu:
+            {
+                this.mBaseData.lastChuIdx = svrIdx ;
+                this.mBaseData.otherCanActCard = targetCard ;
+                RoomPlayer.onChu(targetCard) ;
+                this.mSceneDelegate.onPlayerActChu(svrIdx,targetCard);
+            }
+            break ;
+            case eMJActType.eMJAct_Chi:
+            {
+                var with = msg["eatWith"].Array;
+                var withA = (int)with[0].Number;
+                var withB = (int)with[1].Number;
+                RoomPlayer.onChi(targetCard,withA,withB) ;
+                if ( invokerIdx == -1 )
+                {
+                    Debug.LogError("chi act do not have invoker idx key ");
+                    invokerIdx = (svrIdx - 1 + this.mBaseData.seatCnt) % this.mBaseData.seatCnt ;
+                }
+                this.mPlayers[invokerIdx].removeChu(targetCard);
+                this.mSceneDelegate.onPlayerActChi(svrIdx,targetCard,withA,withB, invokerIdx ) ;
+            }
+            break ;
+            case eMJActType.eMJAct_Peng:
+            {
+                RoomPlayer.onPeng(targetCard,invokerIdx) ;
+                if ( invokerIdx == -1 )
+                {
+                    Debug.LogError("peng act do not have invoker idx key ");
+                    break;
+                }
+                this.mPlayers[invokerIdx].removeChu(targetCard);
+                this.mSceneDelegate.onPlayerActPeng(svrIdx,targetCard,invokerIdx ) ;
+            }
+            break ;
+            case eMJActType.eMJAct_AnGang:
+            {
+                RoomPlayer.onAnGang(targetCard,(int)msg["gangCard"].Number);
+                this.mBaseData.leftMJCnt -= 1 ;
+                this.mSceneDelegate.onPlayerActAnGang(svrIdx,targetCard,(int)msg["gangCard"].Number );
+            }
+            break;
+            case eMJActType.eMJAct_BuGang_Done:
+            case eMJActType.eMJAct_BuGang:
+            {
+                this.mBaseData.leftMJCnt -= 1 ;
+                RoomPlayer.onBuGang(targetCard,(int)msg["gangCard"].Number) ;
+                this.mSceneDelegate.onPlayerActBuGang(svrIdx,targetCard,(int)msg["gangCard"].Number );
+            }
+            break;
+            case eMJActType.eMJAct_MingGang:
+            {
+                this.mBaseData.leftMJCnt -= 1 ;
+                RoomPlayer.onMingGang(targetCard,(int)msg["gangCard"].Number,invokerIdx) ;
+                if ( invokerIdx == -1 )
+                {
+                    Debug.LogError("mingGang act do not have invoker idx key ");
+                    break;
+                }
+                this.mPlayers[invokerIdx].removeChu(targetCard);
+                this.mSceneDelegate.onPlayerActMingGang(svrIdx,targetCard,invokerIdx,(int)msg["gangCard"].Number);
+            }
+            break;
+            case eMJActType.eMJAct_Hu:
+            {
+                RoomPlayer.onHu(targetCard);
+                if ( invokerIdx == -1 )
+                {
+                    Debug.LogError("mingGang act do not have invoker idx key ");
+                    break;
+                }
+
+                if ( invokerIdx != svrIdx )
+                {
+                    this.mPlayers[invokerIdx].removeChu(targetCard);
+                }
+                this.mSceneDelegate.onPlayerActHu(svrIdx,targetCard,invokerIdx ) ;
+            }
+            break ;
+            default:
+            Debug.LogError( "unknown act type = " + actType );
+            return ;
+        }
+    }
+    void willStartGame( JSONObject jsMsg )
+    {
+        this.mBaseData.onGameWillStart(jsMsg);
+        this.mSceneDelegate.onGameStart();
+    }
+    void startGame( JSONObject jsMsg )
+    {
+        foreach (var item in this.mPlayers )
+        {
+            if ( null == item || item.isEmpty() )
+            {
+                continue;
+            }
+
+            if ( item.isSelf )
+            {
+                var cards = jsMsg["cards"].Array ;
+                item.onRecivedHoldCard(cards,cards.Length) ;
+            }
+            else
+            {
+                item.onRecivedHoldCard(null,this.mBaseData.bankerIdx == item.idx ? 14 : 13 );
+            }
+        }
+        this.mSceneDelegate.onDistributedCards();
+    }
+    void endGame()
+    {
+        this.mBaseData.onEndGame();
+        foreach (var item in this.mPlayers )
+        {
+            if ( null != item && item.isEmpty() == false )
+            {
+                item.onEndGame();
+            }
+        }
+    }
+    public void reqRoomInfo( int nRoomID )
+    {
+        var msgReqRoomInfo = new JSONObject();
+        var port = Utility.getMsgPortByRoomID(nRoomID);
+        Network.getInstance().sendMsg(msgReqRoomInfo,eMsgType.MSG_REQUEST_ROOM_INFO,port,nRoomID) ;
+    }
+}

@@ -6,20 +6,24 @@ public class NetBehaviour : MonoBehaviour
 {
     // Start is called before the first frame update
     private void Awake() {
-        EventDispatcher.getInstance().registerEventHandle(Network.EVENT_DISCONNECTED,this.onNetEvent) ;
-        EventDispatcher.getInstance().registerEventHandle(Network.EVENT_MSG,this.onNetEvent) ;    
-        EventDispatcher.getInstance().registerEventHandle(Network.EVENT_RECONNECT,this.onNetEvent) ;   
-        EventDispatcher.getInstance().registerEventHandle(Network.EVENT_OPEN,this.onNetEvent) ;
-        EventDispatcher.getInstance().registerEventHandle(Network.EVENT_RECONNECTED_FAILED,this.onNetEvent) ;
-        EventDispatcher.getInstance().registerEventHandle(Network.EVENT_FAILED,this.onNetEvent) ;    
+        this.registerEvent(Network.EVENT_MSG); 
+        this.registerEvent(Network.EVENT_FAILED);
+        this.registerEvent(Network.EVENT_RECONNECTED_FAILED);   
+        this.registerEvent(Network.EVENT_OPEN);      
+        this.registerEvent(Network.EVENT_DISCONNECTED);   
+        this.registerEvent(Network.EVENT_RECONNECT);      
     }
 
+    protected void registerEvent( string eventName )
+    {
+        EventDispatcher.getInstance().registerEventHandle(eventName,this.onEvent) ; 
+    }
     private void OnDestroy() {
         EventDispatcher.getInstance().removeEventHandleByTarget(this);
     }
  
 
-    bool onNetEvent( EventArg arg )
+    protected virtual bool onEvent( EventArg arg )
     {
         if ( Network.EVENT_DISCONNECTED == arg.type )
         {

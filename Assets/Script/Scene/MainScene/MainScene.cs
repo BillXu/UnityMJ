@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Boomlagoon.JSON ;
+using UnityEngine.SceneManagement ;
 public class MainScene : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -70,7 +71,7 @@ public class MainScene : MonoBehaviour
             Debug.Log( "set join room id = " + nJoinRoomID );
             ClientPlayerData.getInstance().getComponentData<PlayerBaseData>().stayInRoomID = nJoinRoomID;
             this.mDlgJoin.closeDlg();
-            //cc.director.loadScene(SceneName.Scene_Room ) ;
+            SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_ROOM) ;
             return true ;
         } );
     }
