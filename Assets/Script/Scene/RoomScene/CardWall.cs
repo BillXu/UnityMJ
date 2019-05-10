@@ -62,6 +62,7 @@ public class CardWall : MonoBehaviour
         }
 
         var tran = this.transform.GetChild(this.mFrontWallCnt);
+        return tran.position;
     }
     public int getWallLeftCnt()
     {

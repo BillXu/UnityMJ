@@ -56,6 +56,7 @@ public class CardChu : MonoBehaviour
             return;
         }
         mj.curState = MJCard.state.FACE_UP;
+        mj.transform.position = holdWordPos; 
 
         var curIdx = this.transform.childCount ;
         int rowIdx = (curIdx + this.mCountPerRow - 1 ) / this.mCountPerRow;
@@ -84,6 +85,8 @@ public class CardChu : MonoBehaviour
     {
         if ( this.transform.childCount == 0 )
         {
+            return this.transform.position;
         }
+        return this.transform.GetChild(this.transform.childCount-1).transform.position ;
     }
 }
