@@ -90,34 +90,38 @@ public class MJFactory : MonoBehaviour
         }
         this.vChacerCards[num].Add(card);
         card.gameObject.SetActive(false);
+        card.transform.SetParent(this.transform);
     }
     
-    public MJCard getCard( int num )
+    public MJCard getCard( int num, Transform parent )
     {
         var v = this.vChacerCards[num] ;
         if ( v == null )
         {
             Debug.LogError("do not have card num = " + num );
-            return getUnknownCard();
+            return getUnknownCard(parent);
         }
 
         if ( v.Count == 0 )
         {
             Debug.LogError("why do not have this card ? , more than 4 = " + num);
-            return getUnknownCard();
+            return getUnknownCard(parent);
         }
 
         var tmp = v[0] ;
         v.RemoveAt(0);
+        tmp.transform.SetParent(parent);
+        tmp.gameObject.SetActive(true);
         return tmp ;
     }
 
     public void recycleUnknownCard( MJCard card )
     {
         card.gameObject.SetActive(false);
+        card.transform.SetParent(this.transform);
         this.vUnknownCards.Add(card);
     }
-    public MJCard getUnknownCard()
+    public MJCard getUnknownCard( Transform parent )
     {
         if ( this.vUnknownCards.Count == 0 )
         {
@@ -127,6 +131,8 @@ public class MJFactory : MonoBehaviour
 
         var tmp = this.vUnknownCards[0] ;
         this.vUnknownCards.RemoveAt(0);
+        tmp.transform.SetParent(parent);
+        tmp.gameObject.SetActive(true);
         return tmp ;
     }
     MJCard createMJCardObject(eMJCardType type , int value )

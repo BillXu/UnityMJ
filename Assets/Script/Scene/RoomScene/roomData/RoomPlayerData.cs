@@ -8,6 +8,7 @@ public class PlayerActedCard
     public int invokeIdx ;
     public int nTargetCard ; 
     public List<int> vChiFinalCards = null;
+    public eArrowDirect eDir ;
 } ;
 
 public class RoomPlayerData
