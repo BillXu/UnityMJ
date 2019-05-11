@@ -375,4 +375,15 @@ public class RoomData : NetBehaviour
         var port = Utility.getMsgPortByRoomID(nRoomID);
         Network.getInstance().sendMsg(msgReqRoomInfo,eMsgType.MSG_REQUEST_ROOM_INFO,port,nRoomID) ;
     }
+    public int getSelfIdx()
+    {
+        foreach (var item in this.mPlayers )
+        {
+            if ( item != null && item.isEmpty() == false && item.isSelf )
+            {
+                return item.idx ;
+            }
+        }
+        return -1 ;
+    }
 }

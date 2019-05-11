@@ -6,6 +6,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 {
     // Start is called before the first frame update
     public RoomData mRoomData = null ;
+    public LayerCards mLayerCard = null ;
     private void Awake() {
         mRoomData.mSceneDelegate = this ;
     }
@@ -120,5 +121,10 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void onRecivedPlayerBrifeData( PlayerInfoData infoData )
     {
 
-    }   
+    } 
+
+    public void requestChu( int nCard )
+    {
+        Debug.LogWarning("let room data send msg to chu pai");
+    }  
 }

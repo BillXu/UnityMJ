@@ -5,8 +5,10 @@ using UnityEngine;
 public interface ICardHoldAn
 {
     void clear();
-    void refresh( List<int> vCards , int nCnt ) ;
+    void refresh( List<int> vCards, int nCnt ) ;
     void onMo( int nCard, Vector3 ptWallCardWorldPos ); // when mo , we need keep space
+
+    void onHu( int nCard );
     void onDistribute( List<int> vCards , int nCnt );
     Vector3 doChu( int nCard );
     void removeCard( int nCard, int cnt );

@@ -68,6 +68,7 @@ public class RoomPlayerData
         this.removeHold(withB);
         var v = new PlayerActedCard();
         v.eAct = eMJActType.eMJAct_Chi ;
+        v.eDir = eArrowDirect.eDirect_Opposite ;
         v.invokeIdx = 0 ;
         v.nTargetCard = card ;
         v.vChiFinalCards = new List<int>();
@@ -95,6 +96,7 @@ public class RoomPlayerData
         var v = new PlayerActedCard();
         v.eAct = eMJActType.eMJAct_Peng ;
         v.invokeIdx = invokerIdx ;
+        v.eDir = this.getDirection(invokerIdx);
         v.nTargetCard = card ;
         this.vActedCards.Add(v);
     }
@@ -131,6 +133,7 @@ public class RoomPlayerData
         var v = new PlayerActedCard();
         v.eAct = eMJActType.eMJAct_MingGang ;
         v.invokeIdx = invokerIdx ;
+        v.eDir = this.getDirection(invokerIdx);
         v.nTargetCard = card ;
         this.vActedCards.Add(v);
     }
@@ -188,5 +191,19 @@ public class RoomPlayerData
                 this.vHoldCards.Pop();
             }
         }
+    }
+
+    eArrowDirect getDirection( int invokerIdx )
+    {
+        if ( this.idx ==  ( invokerIdx + 1 ) % 4 )
+        {
+            return eArrowDirect.eDirect_Righ ;
+        }
+
+        if ( this.idx ==  ( invokerIdx + 2 ) % 4 )
+        {
+            return eArrowDirect.eDirect_Opposite ;
+        }
+        return eArrowDirect.eDirect_Left ;
     }
 }

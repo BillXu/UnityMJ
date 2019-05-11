@@ -6,6 +6,7 @@ public class RoomBaseData
 {
     JSONObject jsMsgInfo = null ;
     public DawoerRoomOpts opts = null ;
+    public int diceValue{ get ;set; } = 1 ;
     public int bankerIdx
     {
         get

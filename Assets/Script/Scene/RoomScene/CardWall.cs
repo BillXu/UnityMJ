@@ -6,13 +6,26 @@ public class CardWall : MonoBehaviour
 {
     // Start is called before the first frame update
     public MJFactory mMJFactory ;
-    int mFrontWallCnt = 0 ;
+    public int mFrontWallCnt = 0 ;
     int mWallTotalCnt = 0 ;
     void Start()
     {
  
     }
 
+    public float wallHeight
+    {
+        get
+        {
+            if ( this.transform.childCount == 0 )
+            {
+                Debug.LogError("invoke this func , should after refresh");
+                return 0 ;
+            } 
+
+            return this.transform.GetChild(0).GetComponent<MJCard>().world_y_Size * 2.0f ;
+        }
+    }
     public void clear()
     {
         for (int i = 0; i < this.transform.childCount; i++)

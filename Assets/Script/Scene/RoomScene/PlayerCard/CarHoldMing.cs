@@ -39,7 +39,7 @@ public class CarHoldMing : MonoBehaviour
             {
                 case eMJActType.eMJAct_AnGang:
                 {
-                    this.addAnGang(item.nTargetCard,item.eDir ) ;
+                    this.addAnGang(item.nTargetCard) ;
                 }
                 break;
                 case eMJActType.eMJAct_BuGang:
@@ -126,9 +126,9 @@ public class CarHoldMing : MonoBehaviour
         t.transform.localPosition = new Vector3(mid.transform.localPosition.x,t.world_y_Size,0);
     }
 
-    public void addAnGang( int nCard , eArrowDirect dir )
+    public void addAnGang( int nCard)
     {
-        this.addPeng(nCard,dir) ;
+        this.addPeng(nCard,eArrowDirect.eDirect_Opposite) ;
         var lastIdx = this.mPengMidle.Count-1;
         var mid = this.mPengMidle[lastIdx];
         this.mPengMidle.RemoveAt(lastIdx);
@@ -178,4 +178,6 @@ public class CarHoldMing : MonoBehaviour
         // add elapas 
         this.mRightBounderPos += t.world_x_Size * 0.5f;
     }
+
+    public float getHoldMingSize(){ return this.mRightBounderPos ; }
 }
