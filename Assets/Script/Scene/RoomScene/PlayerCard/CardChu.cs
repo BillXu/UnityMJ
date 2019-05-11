@@ -6,10 +6,16 @@ public class CardChu : MonoBehaviour
 {
     // Start is called before the first frame update
     public MJFactory mMJFactory = null;
-    int mCountPerRow = 8 ;
+    int mCountPerRow = 6 ;
     void Start()
     {
-        
+        int nCnt = 16 ;
+        List<int> vc = new List<int>();
+        while ( nCnt-- > 0 )
+        {
+            vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
+        }
+        refresh(vc) ;
     }
 
     // Update is called once per frame
@@ -41,9 +47,9 @@ public class CardChu : MonoBehaviour
             mj.curState = MJCard.state.FACE_UP;     
 
             var curIdx = this.transform.childCount ;
-            int rowIdx = (curIdx + this.mCountPerRow - 1 ) / this.mCountPerRow;
-            var colIdx = curIdx % this.mCountPerRow ;
-            mj.transform.localPosition = new Vector3( colIdx * mj.world_x_Size, -1* mj.world_z_Size * rowIdx ,0 ) ;
+            int rowIdx = (curIdx + this.mCountPerRow - 1 ) / this.mCountPerRow - 1;
+            var colIdx = ( curIdx - 1 ) % this.mCountPerRow ;
+            mj.transform.localPosition = new Vector3( colIdx * mj.world_x_Size, 0,-1* mj.world_z_Size * rowIdx ) ;
         }
     }
 
@@ -59,9 +65,9 @@ public class CardChu : MonoBehaviour
         mj.transform.position = holdWordPos; 
 
         var curIdx = this.transform.childCount ;
-        int rowIdx = (curIdx + this.mCountPerRow - 1 ) / this.mCountPerRow;
-        var colIdx = curIdx % this.mCountPerRow ;
-        var posTarget = new Vector3( colIdx * mj.world_x_Size, -1* mj.world_z_Size * rowIdx ,0 ) ;
+        int rowIdx = (curIdx + this.mCountPerRow - 1 ) / this.mCountPerRow - 1;
+        var colIdx = ( curIdx - 1 ) % this.mCountPerRow ;
+        var posTarget = new Vector3( colIdx * mj.world_x_Size, 0,-1* mj.world_z_Size * rowIdx ) ;
         mj.transform.DOMove(posTarget,0.3f) ; 
     }
 

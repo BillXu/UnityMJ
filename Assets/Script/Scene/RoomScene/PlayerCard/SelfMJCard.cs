@@ -95,7 +95,7 @@ public class SelfMJCard : MonoBehaviour,IPointerUpHandler,IDragHandler,IBeginDra
         {
             // wait double click down 
             this.mActState = State.Act_WaitSecondClickDown;
-            this.Invoke("waitSecondClickDown",0.3f) ;
+            this.Invoke("waitSecondClickDown",0.2f) ;
         }
         else if ( this.mActState == State.Act_SecondClick_Down )
         {

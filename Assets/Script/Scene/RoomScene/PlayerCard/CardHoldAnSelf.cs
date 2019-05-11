@@ -14,6 +14,13 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
     void Start()
     {
         // sholud look at camera ;
+        int nCnt = 13 ;
+        List<int> vc = new List<int>();
+        while ( nCnt-- > 0 )
+        {
+            vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
+        }
+        refresh(vc,vc.Count) ;
     }
 
     // Update is called once per frame
@@ -139,7 +146,7 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
         {
             v.isSelected = true ;
             var pos = v.transform.localPosition ;
-            pos.y = mj.world_y_Size * 0.5f ;
+            pos.y = mj.world_y_Size * 0.3f ;
             v.transform.localPosition = pos;
             if ( this.mCurSelectedCard != null )
             {
