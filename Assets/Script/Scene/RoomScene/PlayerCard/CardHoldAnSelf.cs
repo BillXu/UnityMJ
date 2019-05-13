@@ -14,13 +14,6 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
     void Start()
     {
         // sholud look at camera ;
-        int nCnt = 13 ;
-        List<int> vc = new List<int>();
-        while ( nCnt-- > 0 )
-        {
-            vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
-        }
-        refresh(vc,vc.Count) ;
     }
 
     // Update is called once per frame

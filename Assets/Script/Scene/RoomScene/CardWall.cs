@@ -10,7 +10,7 @@ public class CardWall : MonoBehaviour
     int mWallTotalCnt = 0 ;
     void Start()
     {
- 
+
     }
 
     public float wallHeight
