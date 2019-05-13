@@ -92,12 +92,14 @@ public class LayerCards : MonoBehaviour
             this.refreshPlayerCards(item.idx,item.vChuCards,item.vActedCards,item.vHoldCards,item.vHoldCards.Count );
         }
     }
-    void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCntPerWall )
+    void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCnt )
     {
         int startWallIdx = bankerIdx + nDiceValue - 1 ;
         startWallIdx = startWallIdx % 4 ;
         int startWallLeftFront = ( nDiceValue % 6 + 1 ) * 2 ;
         
+        int addtionCnt = mjCnt % 8 ;
+        int mjCntPerWall = ( mjCnt - addtionCnt ) / 4 ;
         int notEmtpyWallCnt = ( nLeftMJCnt + mjCntPerWall - 1 ) / mjCntPerWall ;
         this.mCurWallIdx = ( startWallIdx - notEmtpyWallCnt + 4 ) % 4;
         int curWallLeftCnt = nLeftMJCnt % mjCntPerWall ;
