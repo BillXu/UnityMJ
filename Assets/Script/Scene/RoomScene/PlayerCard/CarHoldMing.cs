@@ -21,10 +21,16 @@ public class CarHoldMing : MonoBehaviour
 
     public void clear()
     {
-        for (int i = 0; i < this.transform.childCount; i++)
+        while ( this.transform.childCount > 0 )
         {
-            var mj = this.transform.GetChild(i).GetComponent<MJCard>();
-            this.mMJFactory.recycleCard(mj) ;
+            var child = this.transform.GetChild(0).GetComponent<MJCard>();
+            if ( child == null )
+            {
+                this.transform.GetChild(0).gameObject.SetActive(false);
+                this.transform.GetChild(0).SetParent(null);
+                continue;
+            }
+            this.mMJFactory.recycleCard(child) ;
         }
         this.mRightBounderPos = 0 ;
         this.mPengMidle.Clear();
@@ -33,6 +39,11 @@ public class CarHoldMing : MonoBehaviour
     public void refresh( List<PlayerActedCard> vCards )
     {
         this.clear();
+        if ( vCards == null )
+        {
+            return ;
+        }
+
         foreach (var item in vCards )
         {
             switch ( item.eAct )

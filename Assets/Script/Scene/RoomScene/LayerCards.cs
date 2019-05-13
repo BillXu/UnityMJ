@@ -17,6 +17,7 @@ public class LayerCards : MonoBehaviour
             {
                 if ( idx == value )
                 {
+                    Debug.Log(" self = idx = value " + idx + " v" + value );
                     this.mPlayerCards[idx].makeSelfPlayerCard( this.mScene.requestChu ) ;
                 }
                 else
@@ -39,7 +40,7 @@ public class LayerCards : MonoBehaviour
     }
     void Start()
     {
-
+        this.selfIdx = (int)0 ;
     }
 
     // Update is called once per frame
@@ -57,6 +58,7 @@ public class LayerCards : MonoBehaviour
 
         foreach (var itemc in this.mPlayerCards )
         {
+            Debug.Log("clear player card");
             itemc.clear();
         }
         this.isRemoveHuCardFromDianPao = false ;
@@ -73,7 +75,7 @@ public class LayerCards : MonoBehaviour
         var pos = wallParendNode.localPosition ;
         pos.y -= this.mWalls[0].wallHeight ;
         wallParendNode.localPosition = pos ;
-        wallParendNode.DOLocalMoveY(pos.y + this.mWalls[0].wallHeight,1 ) ;
+        wallParendNode.DOLocalMoveY(pos.y + this.mWalls[0].wallHeight,1.5f ) ;
     }
 
     public void refresh( RoomData data )
@@ -100,15 +102,20 @@ public class LayerCards : MonoBehaviour
         this.mCurWallIdx = ( startWallIdx - notEmtpyWallCnt + 4 ) % 4;
         int curWallLeftCnt = nLeftMJCnt % mjCntPerWall ;
 
+        int nNewCurWallIdx = this.mCurWallIdx ;
+        if ( nNewCurWallIdx < startWallIdx )
+        {
+            nNewCurWallIdx += 4 ;
+        }
         for ( int idx = startWallIdx ; idx < (startWallIdx + 4) ; ++idx )
         {
             int frontCnt = ( startWallIdx == idx % 4) ? startWallLeftFront : 0 ;
             int nBackCnt = 0 ;
-            if ( idx > (this.mCurWallIdx + 4) )
+            if ( idx > nNewCurWallIdx )
             {
                 nBackCnt = mjCntPerWall ;
             }
-            else if ( idx == (this.mCurWallIdx + 4) )
+            else if ( idx == nNewCurWallIdx )
             {
                 nBackCnt = curWallLeftCnt ;
             }
@@ -117,6 +124,7 @@ public class LayerCards : MonoBehaviour
                 nBackCnt = 0 ;
             }
 
+            Debug.Log( "refresh wall  idx " + ( idx % 4) + " front " + frontCnt + " backCnt " + nBackCnt + " perCnt = " + mjCntPerWall );
             this.mWalls[idx%4].refresh(mjCntPerWall,frontCnt,nBackCnt);
         }
     }
@@ -224,14 +232,60 @@ public class LayerCards : MonoBehaviour
     {
         if ( actIdx ==  ( invokerIdx + 1 ) % 4 )
         {
-            return eArrowDirect.eDirect_Righ ;
+            return eArrowDirect.eDirect_Left ;
         }
 
         if ( actIdx ==  ( invokerIdx + 2 ) % 4 )
         {
             return eArrowDirect.eDirect_Opposite ;
         }
-        return eArrowDirect.eDirect_Left ;
+        return eArrowDirect.eDirect_Righ ;
     }
 
+    /// test funct
+    public void doShuffle()
+    {
+        this.clear();
+        shuffle(106);
+    }
+    public void doClickDistribute()
+    {
+        this.refreshWall(2,0,55,26 );
+        int nCnt = 9 ;
+        List<int> vc = new List<int>();
+        while ( nCnt-- > 0 )
+        {
+            vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
+        }
+        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 1 ));
+        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 1 ));
+        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 2 ));
+        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 4 ));
+        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 4 ));
+        this.refreshPlayerCards(0,null,null,vc,14);
+        this.refreshPlayerCards(1,null,null,vc,13);
+        this.refreshPlayerCards(2,null,null,vc,13);
+        this.refreshPlayerCards(3,null,null,vc,13);
+ 
+    }
+
+    public void doPeng()
+    {
+        this.onPeng(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ),3);
+    }
+
+    public void doMo()
+    {
+        this.onMo(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ));
+    }
+
+    public void doGang()
+    {
+        this.onBuGang(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ),MJCard.makeCardNum(eMJCardType.eCT_Wan, 6 )) ;
+    }
+
+    public void onChu()
+    {
+        this.onChu(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ) );
+    }
 }

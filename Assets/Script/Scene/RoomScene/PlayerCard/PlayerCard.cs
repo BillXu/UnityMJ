@@ -20,12 +20,14 @@ public class PlayerCard : MonoBehaviour
         self.mChuPaiCallBack = this.selfDoChu;
         this.mHoldAn = self ;
         this.mReqChuPaiCallBack = pReqChuCallBack ;
+        self.mMJFactory = this.mChu.mMJFactory;
         
         var ot = this.mHoldAnTransform.GetComponent<CardHoldAnOther>();
         if ( null != ot )
         {
             ot.clear();
             ot.enabled = false ;
+            ot.mMJFactory = null;
         }
     }
 
@@ -36,6 +38,7 @@ public class PlayerCard : MonoBehaviour
         {
             other = this.mHoldAnTransform.gameObject.AddComponent<CardHoldAnOther>();
         }
+        other.mMJFactory = this.mChu.mMJFactory;
         other.enabled = true ;
         this.mHoldAn = other ;
 
@@ -46,6 +49,7 @@ public class PlayerCard : MonoBehaviour
             self.clear();
             self.enabled = false ;
             self.mChuPaiCallBack = null ;
+            self.mMJFactory = null;
         }
     }
 
@@ -112,32 +116,32 @@ public class PlayerCard : MonoBehaviour
 
     public void onPeng( int nCard , eArrowDirect eDir )
     {
-        this.mHoldMing.addPeng(nCard,eDir) ;
         this.mHoldAn.removeCard(nCard,2);
+        this.mHoldMing.addPeng(nCard,eDir) ;
         this.adjustHoldTransformPos() ;
         this.mHoldAn.onWaitChu();
     }
 
     public void onMingGang( int nCard , eArrowDirect eDir, int newCard, Vector3 newCardWallPos )
     {
-        this.mHoldMing.addMingGang(nCard,eDir) ;
         this.mHoldAn.removeCard(nCard,3);
+        this.mHoldMing.addMingGang(nCard,eDir) ;
         this.onMo(newCard,newCardWallPos) ;
         this.adjustHoldTransformPos() ;
     }
 
     public void onAnGang( int nCard,int newCard, Vector3 newCardWallPos )
     {
-        this.mHoldMing.addAnGang(nCard) ;
         this.mHoldAn.removeCard(nCard,4);
+        this.mHoldMing.addAnGang(nCard) ;
         this.onMo(newCard,newCardWallPos) ;
         this.adjustHoldTransformPos();
     }
 
     public void onBuGang( int nCard,int newCard, Vector3 newCardWallPos )
     {
-        this.mHoldMing.addBuGang(nCard) ;
         this.mHoldAn.removeCard(nCard,1);
+        this.mHoldMing.addBuGang(nCard) ;
         this.onMo(newCard,newCardWallPos) ;
         this.adjustHoldTransformPos();
     }

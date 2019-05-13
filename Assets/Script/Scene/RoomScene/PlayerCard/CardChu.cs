@@ -9,13 +9,13 @@ public class CardChu : MonoBehaviour
     int mCountPerRow = 6 ;
     void Start()
     {
-        int nCnt = 16 ;
-        List<int> vc = new List<int>();
-        while ( nCnt-- > 0 )
-        {
-            vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
-        }
-        refresh(vc) ;
+        // int nCnt = 16 ;
+        // List<int> vc = new List<int>();
+        // while ( nCnt-- > 0 )
+        // {
+        //     vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
+        // }
+        // refresh(vc) ;
     }
 
     // Update is called once per frame
@@ -26,16 +26,27 @@ public class CardChu : MonoBehaviour
 
     public void clear()
     {
-        for (int i = 0; i < this.transform.childCount; i++)
+        while ( this.transform.childCount > 0 )
         {
-            var mj = this.transform.GetChild(i).GetComponent<MJCard>();
-            this.mMJFactory.recycleCard(mj) ;
+            var child = this.transform.GetChild(0).GetComponent<MJCard>();
+            if ( child == null )
+            {
+                this.transform.GetChild(0).gameObject.SetActive(false);
+                this.transform.GetChild(0).SetParent(null);
+                Debug.Log("directo remove d");
+            }
+            this.mMJFactory.recycleCard(child) ;
         }
     }
 
     public void refresh( List<int> vChuCards )
     {
         clear();
+        if ( vChuCards == null )
+        {
+            return ;
+        }
+
         foreach (var item in vChuCards )
         {
             var mj = this.mMJFactory.getCard(item,this.transform) ;
@@ -68,7 +79,7 @@ public class CardChu : MonoBehaviour
         int rowIdx = (curIdx + this.mCountPerRow - 1 ) / this.mCountPerRow - 1;
         var colIdx = ( curIdx - 1 ) % this.mCountPerRow ;
         var posTarget = new Vector3( colIdx * mj.world_x_Size, 0,-1* mj.world_z_Size * rowIdx ) ;
-        mj.transform.DOMove(posTarget,0.3f) ; 
+        mj.transform.DOLocalMove(posTarget,0.3f) ; 
     }
 
     public void removeLastChu( int nCard )

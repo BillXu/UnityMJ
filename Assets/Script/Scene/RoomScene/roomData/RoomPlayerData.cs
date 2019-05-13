@@ -197,13 +197,13 @@ public class RoomPlayerData
     {
         if ( this.idx ==  ( invokerIdx + 1 ) % 4 )
         {
-            return eArrowDirect.eDirect_Righ ;
+            return eArrowDirect.eDirect_Left ;
         }
 
         if ( this.idx ==  ( invokerIdx + 2 ) % 4 )
         {
             return eArrowDirect.eDirect_Opposite ;
         }
-        return eArrowDirect.eDirect_Left ;
+        return eArrowDirect.eDirect_Righ ;
     }
 }

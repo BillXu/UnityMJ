@@ -21,18 +21,26 @@ public class CardHoldAnOther : MonoBehaviour,ICardHoldAn
 
     public void clear()
     {
-        for ( int i = 0 ; i < this.transform.childCount ; ++i )
+        while ( this.transform.childCount > 0 )
         {
-            var v = this.transform.GetChild(i).GetComponent<MJCard>();
-            if ( this.isShowingUnknown &&  ( null == this.mHuCard || v.transform != this.mHuCard.transform ) )
+            var child = this.transform.GetChild(0).GetComponent<MJCard>();
+            if ( child == null )
             {
-                this.mMJFactory.recycleUnknownCard(v) ;
+                this.transform.GetChild(0).gameObject.SetActive(false);
+                this.transform.GetChild(0).SetParent(null);
+                continue;
+            }
+
+            if ( this.isShowingUnknown &&  ( null == this.mHuCard || child.transform != this.mHuCard.transform ) )
+            {
+                this.mMJFactory.recycleUnknownCard(child) ;
             }
             else
             {
-                this.mMJFactory.recycleCard(v) ;
+                this.mMJFactory.recycleCard(child) ;
             }
         }
+
         this.isShowingUnknown = true ;
         this.mHuCard = null ;
     }

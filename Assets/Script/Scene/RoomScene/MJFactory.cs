@@ -82,6 +82,12 @@ public class MJFactory : MonoBehaviour
 
     public void recycleCard( MJCard card )
     {
+        if ( card == null )
+        {
+            Debug.LogWarning( "do not have mj card compoent" );
+            return ;
+        }
+
         var num = card.cardNum ;
         if ( this.vChacerCards.ContainsKey(num) == false )
         {
@@ -117,6 +123,11 @@ public class MJFactory : MonoBehaviour
 
     public void recycleUnknownCard( MJCard card )
     {
+        if ( card == null )
+        {
+            Debug.LogWarning( "do not have mj card compoent" );
+            return ;
+        }
         card.gameObject.SetActive(false);
         card.transform.SetParent(this.transform);
         this.vUnknownCards.Add(card);

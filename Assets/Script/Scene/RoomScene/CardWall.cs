@@ -22,15 +22,26 @@ public class CardWall : MonoBehaviour
                 Debug.LogError("invoke this func , should after refresh");
                 return 0 ;
             } 
-
-            return this.transform.GetChild(0).GetComponent<MJCard>().world_y_Size * 2.0f ;
+            var m = this.transform.GetChild(1).GetComponent<MJCard>();
+            if ( m == null )
+            {
+                Debug.LogError("no one ? is null ");
+                return 6.0f ;
+            }
+            return this.transform.GetChild(1).GetComponent<MJCard>().world_y_Size * 2.0f ;
         }
     }
     public void clear()
     {
-        for (int i = 0; i < this.transform.childCount; i++)
+        while ( this.transform.childCount > 0 )
         {
-            this.mMJFactory.recycleUnknownCard(this.transform.GetChild(i).GetComponent<MJCard>()) ;
+            var child = this.transform.GetChild(0).GetComponent<MJCard>();
+            if ( child == null )
+            {
+                this.transform.GetChild(0).SetParent(null);
+                continue;
+            }
+            this.mMJFactory.recycleUnknownCard(child) ;
         }
     }
 
@@ -44,23 +55,23 @@ public class CardWall : MonoBehaviour
         int pairCnt = totalCnt / 2 ;
         this.mFrontWallCnt = nFrontCnt ;
         this.mWallTotalCnt = totalCnt ;
-
+        int nBackBeginIdx = totalCnt - nBackCnt ;
         int idx = 0 ;
         for ( int pairIdx = 0 ; pairIdx < pairCnt ; ++pairIdx )
         {
-            if ( idx < nFrontCnt || idx > nBackCnt )
+            if ( idx < nFrontCnt || idx >= nBackBeginIdx )
             {
                 var pBottom = this.mMJFactory.getUnknownCard(this.transform);
                 pBottom.curState = MJCard.state.FACE_COVER ;
-                pBottom.transform.localPosition = new Vector3( pairIdx * pBottom.world_x_Size,0,0 );
+                pBottom.transform.localPosition = new Vector3(pairIdx * pBottom.world_x_Size,pBottom.world_y_Size,0 );
             }
             ++idx ;
 
-            if ( idx < nFrontCnt || idx > nBackCnt )
+            if ( idx < nFrontCnt || idx >= nBackBeginIdx )
             {
                 var p = mMJFactory.getUnknownCard(this.transform);
                 p.curState = MJCard.state.FACE_COVER ;
-                p.transform.localPosition = new Vector3(pairIdx * p.world_x_Size,p.world_y_Size,0 );
+                p.transform.localPosition = new Vector3( pairIdx * p.world_x_Size,0,0 );
             }
             ++idx ;
         }
@@ -75,6 +86,7 @@ public class CardWall : MonoBehaviour
         }
 
         var tran = this.transform.GetChild(this.mFrontWallCnt);
+        this.mMJFactory.recycleUnknownCard(tran.GetComponent<MJCard>());
         return tran.position;
     }
     public int getWallLeftCnt()

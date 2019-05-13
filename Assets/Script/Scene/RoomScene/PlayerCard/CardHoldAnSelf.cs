@@ -120,8 +120,13 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
         {
             this.mCards[i].transform.localPosition = new Vector3( i * this.mCards[i].world_x_Size , 0 ,0 ) ;
         }
-        this.mCurSelectedCard.isSelected = false ;
-        this.mCurSelectedCard = null ;
+        
+        if ( this.mCurSelectedCard != null )
+        {
+            this.mCurSelectedCard.isSelected = false ;
+            this.mCurSelectedCard = null ;
+        }
+
     }
     public void showCards( List<int> vCards ) // when game end do shou cards ;
     {
