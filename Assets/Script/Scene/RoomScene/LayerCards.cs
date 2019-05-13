@@ -66,10 +66,7 @@ public class LayerCards : MonoBehaviour
 
     public void shuffle( int mjCnt )
     {
-        foreach ( var item in this.mWalls )
-        {
-            item.refresh(mjCnt/4,mjCnt/4,0);
-        }
+        this.refreshWall(1,0,mjCnt,mjCnt ) ;
 
         var wallParendNode = this.mWalls[0].transform.parent;
         var pos = wallParendNode.localPosition ;
@@ -94,40 +91,54 @@ public class LayerCards : MonoBehaviour
     }
     void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCnt )
     {
+        if ( nDiceValue <= 0 )
+        {
+            return ;
+        }
+
         int startWallIdx = bankerIdx + nDiceValue - 1 ;
         startWallIdx = startWallIdx % 4 ;
         int startWallLeftFront = ( nDiceValue % 6 + 1 ) * 2 ;
-        
-        int addtionCnt = mjCnt % 8 ;
-        int mjCntPerWall = ( mjCnt - addtionCnt ) / 4 ;
-        int notEmtpyWallCnt = ( nLeftMJCnt + mjCntPerWall - 1 ) / mjCntPerWall ;
-        this.mCurWallIdx = ( startWallIdx - notEmtpyWallCnt + 4 ) % 4;
-        int curWallLeftCnt = nLeftMJCnt % mjCntPerWall ;
 
-        int nNewCurWallIdx = this.mCurWallIdx ;
-        if ( nNewCurWallIdx < startWallIdx )
+        int usedMJCnt = mjCnt - nLeftMJCnt ;
+        int addtionCnt = mjCnt % 8 ;
+        int addtionWallCnt = addtionCnt / 2 ;
+        int mjCntPerWall = ( mjCnt - addtionCnt ) / 4 ;
+        this.mCurWallIdx = -1 ;
+        int idx = 0 ;
+        for ( int i = startWallIdx ; i < ( startWallIdx + 4 ) ; ++i )
         {
-            nNewCurWallIdx += 4 ;
-        }
-        for ( int idx = startWallIdx ; idx < (startWallIdx + 4) ; ++idx )
-        {
-            int frontCnt = ( startWallIdx == idx % 4) ? startWallLeftFront : 0 ;
-            int nBackCnt = 0 ;
-            if ( idx > nNewCurWallIdx )
+            idx = i % 4 ;
+            int mjCntThisWall = mjCntPerWall ;
+            if ( addtionCnt > 0 && idx < addtionWallCnt )
             {
-                nBackCnt = mjCntPerWall ;
+                mjCntThisWall += 2 ;
+                addtionCnt -= 2 ;
             }
-            else if ( idx == nNewCurWallIdx )
+            int curWallCanUseMJCnt = mjCntThisWall;
+
+            if ( idx == startWallIdx )
             {
-                nBackCnt = curWallLeftCnt ;
+                curWallCanUseMJCnt -= startWallLeftFront ;
+            }
+
+            if ( usedMJCnt >= curWallCanUseMJCnt )
+            {
+                usedMJCnt -= curWallCanUseMJCnt ;
+                curWallCanUseMJCnt = 0 ;
             }
             else
             {
-                nBackCnt = 0 ;
+                curWallCanUseMJCnt -= usedMJCnt ;
+                usedMJCnt = 0 ;
+                if ( this.mCurWallIdx < 0 )
+                {
+                    this.mCurWallIdx = idx ;
+                }
+                
             }
-
-            Debug.Log( "refresh wall  idx " + ( idx % 4) + " front " + frontCnt + " backCnt " + nBackCnt + " perCnt = " + mjCntPerWall );
-            this.mWalls[idx%4].refresh(mjCntPerWall,frontCnt,nBackCnt);
+            Debug.Log("cur idx = " + idx + "can wall cnt = " + curWallCanUseMJCnt + " usedCnt = " + usedMJCnt );
+            this.mWalls[idx].refresh(mjCntThisWall,( startWallIdx == idx ) ? startWallLeftFront : 0,curWallCanUseMJCnt );
         }
     }
 
@@ -248,11 +259,11 @@ public class LayerCards : MonoBehaviour
     public void doShuffle()
     {
         this.clear();
-        shuffle(106);
+        shuffle(108);
     }
     public void doClickDistribute()
     {
-        this.refreshWall(2,0,55,26 );
+        this.refreshWall(2,0,55,108 );
         int nCnt = 9 ;
         List<int> vc = new List<int>();
         while ( nCnt-- > 0 )
