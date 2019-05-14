@@ -91,7 +91,6 @@ public class PlayerCard : MonoBehaviour
     public void selfDoChu( int nCard , Vector3 ptHoldWorldPos )
     {
         this.mChu.addChu(nCard,ptHoldWorldPos) ;
-        this.mChu.getLastChuCardWorldPos();
         if ( this.mReqChuPaiCallBack != null )
         {
             this.mReqChuPaiCallBack(nCard);
@@ -105,8 +104,7 @@ public class PlayerCard : MonoBehaviour
     public Vector3 onChu( int nCard )
     {
         var ptworPos = this.mHoldAn.doChu(nCard);
-        this.mChu.addChu(nCard,ptworPos) ;
-        return this.mChu.getLastChuCardWorldPos();
+        return this.mChu.addChu(nCard,ptworPos) ;
     }
 
     public void chuCardBeRemoved( int nCard )

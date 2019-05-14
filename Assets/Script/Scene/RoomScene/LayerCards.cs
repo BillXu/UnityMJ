@@ -6,6 +6,7 @@ public class LayerCards : MonoBehaviour
 {
     public List<CardWall> mWalls ;
     public List<PlayerCard> mPlayerCards ;
+    public CardChuIndicator mChuIndictor ;
     public RoomScene mScene ;
     bool isRemoveHuCardFromDianPao = false ;
     int mCurWallIdx = 0 ;
@@ -62,6 +63,7 @@ public class LayerCards : MonoBehaviour
             itemc.clear();
         }
         this.isRemoveHuCardFromDianPao = false ;
+        this.mChuIndictor.hide();
     }
 
     public void shuffle( int mjCnt )
@@ -184,6 +186,7 @@ public class LayerCards : MonoBehaviour
     {
         var pt = this.mPlayerCards[playerIdx].onChu(card);
         // show arrow pos ;
+        this.mChuIndictor.SetPos(pt) ;
     }   
 
     public void onPeng( int playerIdx , int card , int invokerIdx )
@@ -191,6 +194,7 @@ public class LayerCards : MonoBehaviour
         this.mPlayerCards[playerIdx].onPeng(card,this.getDirection(playerIdx,invokerIdx) );
         this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
         // hide arrow ;
+        this.mChuIndictor.hide();
     }
 
     public void onMingGang( int playerIdx , int card , int invokerIdx , int NewCard )
@@ -198,6 +202,7 @@ public class LayerCards : MonoBehaviour
         this.mPlayerCards[playerIdx].onMingGang( card,this.getDirection(playerIdx,invokerIdx),NewCard,this.featchCardFromWall() );
         this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
         // hide arrow ;
+        this.mChuIndictor.hide();
     }
 
     public void onBuGang( int playerIdx , int card , int NewCard )
@@ -217,12 +222,14 @@ public class LayerCards : MonoBehaviour
         {
             this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
             this.isRemoveHuCardFromDianPao = true ;
+            this.mChuIndictor.hide();
         }
     }
 
     public void onEat( int playerIdx , int targetCard , int withA , int withB )
     {
         this.mPlayerCards[playerIdx].onEat(targetCard,withA,withB) ;
+        this.mChuIndictor.hide();
     }
 
     public void showHoldCards( int playerIdx , List<int> vCards )

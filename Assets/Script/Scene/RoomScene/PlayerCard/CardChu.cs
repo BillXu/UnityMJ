@@ -64,13 +64,13 @@ public class CardChu : MonoBehaviour
         }
     }
 
-    public void addChu( int nCardNum , Vector3 holdWordPos )
+    public Vector3 addChu( int nCardNum , Vector3 holdWordPos )
     {
         var mj = this.mMJFactory.getCard(nCardNum,this.transform) ;
         if ( null == mj )
         {
             Debug.LogError("create mj null for chu num = " + nCardNum );
-            return;
+            return holdWordPos;
         }
         mj.curState = MJCard.state.FACE_UP;
         mj.transform.position = holdWordPos; 
@@ -80,6 +80,7 @@ public class CardChu : MonoBehaviour
         var colIdx = ( curIdx - 1 ) % this.mCountPerRow ;
         var posTarget = new Vector3( colIdx * mj.world_x_Size, 0,-1* mj.world_z_Size * rowIdx ) ;
         mj.transform.DOLocalMove(posTarget,0.3f) ; 
+        return mj.transform.parent.TransformPoint(posTarget) ;
     }
 
     public void removeLastChu( int nCard )
@@ -98,12 +99,12 @@ public class CardChu : MonoBehaviour
         this.mMJFactory.recycleCard(lastCard) ;
     }
 
-    public Vector3 getLastChuCardWorldPos()
-    {
-        if ( this.transform.childCount == 0 )
-        {
-            return this.transform.position;
-        }
-        return this.transform.GetChild(this.transform.childCount-1).transform.position ;
-    }
+    // public Vector3 getLastChuCardWorldPos()
+    // {
+    //     if ( this.transform.childCount == 0 )
+    //     {
+    //         return this.transform.position;
+    //     }
+    //     return this.transform.GetChild(this.transform.childCount-1).transform.position ;
+    // }
 }

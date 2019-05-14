@@ -7,6 +7,8 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     // Start is called before the first frame update
     public RoomData mRoomData = null ;
     public LayerCards mLayerCard = null ;
+    public SeatOrientation mSeatOriention = null;
+    public CountDownTimer mDeskTimer = null;
     private void Awake() {
         mRoomData.mSceneDelegate = this ;
     }
