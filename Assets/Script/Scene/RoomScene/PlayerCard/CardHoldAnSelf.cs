@@ -142,8 +142,8 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
         {
             return 0 ;
         }
-        
-        return this.mCards[this.mCards.Count-1].transform.localPosition.x + this.mCards[0].world_x_Size ;
+
+        return  (this.mCards.Count + 0.5f) * this.mCards[0].world_x_Size ;
     }
     // self card call back ;
     public void onOneClick( SelfMJCard v )

@@ -130,8 +130,8 @@ public class CardHoldAnOther : MonoBehaviour,ICardHoldAn
         {
             return 0 ;
         }
-        
+
         var last = this.transform.GetChild(this.transform.childCount - 1 );
-        return last.localPosition.x + last.GetComponent<MJCard>().world_x_Size ;
+        return last.GetComponent<MJCard>().world_x_Size * ( this.transform.childCount + 0.5f ) ;
     }
 }

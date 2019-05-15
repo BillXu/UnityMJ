@@ -190,5 +190,5 @@ public class CarHoldMing : MonoBehaviour
         this.mRightBounderPos += t.world_x_Size * 0.5f;
     }
 
-    public float getHoldMingSize(){ return this.mRightBounderPos ; }
+    public float getHoldMingSize(){ return this.mRightBounderPos + 2 ; }
 }

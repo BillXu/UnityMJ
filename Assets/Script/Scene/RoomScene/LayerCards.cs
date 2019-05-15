@@ -35,6 +35,7 @@ public class LayerCards : MonoBehaviour
 
     }
 
+    int testIdx = 0 ;
     public bool isReplay
     {
         set
@@ -47,7 +48,7 @@ public class LayerCards : MonoBehaviour
     }
     void Start()
     {
-        this.selfIdx = (int)2 ;
+        this.selfIdx = (int)1 ;
     }
 
     // Update is called once per frame
@@ -276,7 +277,7 @@ public class LayerCards : MonoBehaviour
     }
     public void doClickDistribute()
     {
-        this.refreshWall(2,0,55,108 );
+        this.refreshWall(2,2,55,108 );
         int nCnt = 9 ;
         List<int> vc = new List<int>();
         while ( nCnt-- > 0 )
@@ -297,22 +298,22 @@ public class LayerCards : MonoBehaviour
 
     public void doPeng()
     {
-        this.onPeng(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ),3);
+        this.onPeng(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 2 ),2);
     }
 
     public void doMo()
     {
         this.onMo(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ));
+        //this.selfIdx = ++testIdx % 4;
     }
 
     public void doGang()
     {
-        this.onBuGang(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ),MJCard.makeCardNum(eMJCardType.eCT_Wan, 6 )) ;
+        this.onBuGang(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 2 ),MJCard.makeCardNum(eMJCardType.eCT_Wan, 6 )) ;
     }
 
     public void onChu()
     {
-        //this.onChu(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ) );
-        this.selfIdx = 1;
+        this.onChu(2,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 2 ) );
     }
 }

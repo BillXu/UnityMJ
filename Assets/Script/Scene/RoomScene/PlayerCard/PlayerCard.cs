@@ -39,6 +39,7 @@ public class PlayerCard : MonoBehaviour
 
         var posMing = this.mHoldMing.transform.localPosition;
         posMing.z = pos.z;
+        posMing.y = pos.y;
         this.mHoldMing.transform.localPosition = posMing;
     }
 
@@ -71,6 +72,7 @@ public class PlayerCard : MonoBehaviour
         
         var posMing = this.mHoldMing.transform.localPosition;
         posMing.z = pos.z;
+        posMing.y = pos.y ;
         this.mHoldMing.transform.localPosition = posMing;
     }
 
@@ -101,6 +103,7 @@ public class PlayerCard : MonoBehaviour
         var tSize = this.mHoldMing.getHoldMingSize() + (this.mHoldAn != null ? this.mHoldAn.getHoldAnXSize() : 0) ;
         var pos = this.mHoldMing.transform.localPosition ;
         pos.x = -tSize * 0.5f ;
+        Debug.Log("adjustHoldTransformPos size = " + tSize );
         this.mHoldMing.transform.localPosition = pos;
         var posAn = this.mHoldAnTransform.localPosition;
         posAn.x = pos.x + this.mHoldMing.getHoldMingSize();
