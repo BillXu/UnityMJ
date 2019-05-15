@@ -10,10 +10,12 @@ public class LayerCards : MonoBehaviour
     public RoomScene mScene ;
     bool isRemoveHuCardFromDianPao = false ;
     int mCurWallIdx = 0 ;
+    public Transform mCameraParent ; 
     public int selfIdx
     {
         set
         {
+            this.clear();
             for ( int idx = 0 ; idx < 4 ; ++idx )
             {
                 if ( idx == value )
@@ -23,10 +25,14 @@ public class LayerCards : MonoBehaviour
                 }
                 else
                 {
-                    this.mPlayerCards[idx].makeOtherPlayerCard();
+                    var ePosDir = getDirection(value,idx) ;
+                    this.mPlayerCards[idx].makeOtherPlayerCard(ePosDir);
                 }
             }
+
+            this.mCameraParent.transform.DOLocalRotate( new Vector3(0,value * -90,0),0.3f);
         }
+
     }
 
     public bool isReplay
@@ -41,7 +47,7 @@ public class LayerCards : MonoBehaviour
     }
     void Start()
     {
-        this.selfIdx = (int)0 ;
+        this.selfIdx = (int)2 ;
     }
 
     // Update is called once per frame
@@ -306,6 +312,7 @@ public class LayerCards : MonoBehaviour
 
     public void onChu()
     {
-        this.onChu(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ) );
+        //this.onChu(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ) );
+        this.selfIdx = 1;
     }
 }

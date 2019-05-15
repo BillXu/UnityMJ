@@ -27,11 +27,22 @@ public class PlayerCard : MonoBehaviour
         {
             ot.clear();
             ot.enabled = false ;
-            ot.mMJFactory = null;
+            ot.mMJFactory = null;   
         }
+
+        var roateX = GameObject.Find("Main Camera").transform.localRotation.eulerAngles.x - 7 ;
+        self.transform.localEulerAngles = new Vector3(roateX,0,0) ;
+        var pos = self.transform.localPosition;
+        pos.y = 39.9f;
+        pos.z = -60.0f;
+        self.transform.localPosition = pos;
+
+        var posMing = this.mHoldMing.transform.localPosition;
+        posMing.z = pos.z;
+        this.mHoldMing.transform.localPosition = posMing;
     }
 
-    public void makeOtherPlayerCard()
+    public void makeOtherPlayerCard( eArrowDirect ePosDir )
     {
         CardHoldAnOther other = this.mHoldAnTransform.gameObject.GetComponent<CardHoldAnOther>();
         if ( other == null )
@@ -51,6 +62,16 @@ public class PlayerCard : MonoBehaviour
             self.mChuPaiCallBack = null ;
             self.mMJFactory = null;
         }
+
+        other.transform.localEulerAngles = Vector3.zero ;
+        var pos = other.transform.localPosition;
+        pos.y = 1.4f;
+        pos.z = eArrowDirect.eDirect_Opposite == ePosDir ? -33.8f : -38.7f;
+        other.transform.localPosition = pos;
+        
+        var posMing = this.mHoldMing.transform.localPosition;
+        posMing.z = pos.z;
+        this.mHoldMing.transform.localPosition = posMing;
     }
 
     public void makeReplayPlayerCard()
@@ -61,7 +82,10 @@ public class PlayerCard : MonoBehaviour
     {
         this.mChu.clear();
         this.mHoldMing.clear();
-        this.mHoldAn.clear();
+        if ( this.mHoldAn != null )
+        {
+            this.mHoldAn.clear();
+        }
         this.adjustHoldTransformPos();
     }
 
@@ -74,9 +98,13 @@ public class PlayerCard : MonoBehaviour
     }
     void adjustHoldTransformPos()
     {
-        var pos = this.mHoldAnTransform.localPosition ;
-        pos.x = this.mHoldMing.transform.localPosition.x + this.mHoldMing.getHoldMingSize();
-        this.mHoldAnTransform.localPosition = pos ;
+        var tSize = this.mHoldMing.getHoldMingSize() + (this.mHoldAn != null ? this.mHoldAn.getHoldAnXSize() : 0) ;
+        var pos = this.mHoldMing.transform.localPosition ;
+        pos.x = -tSize * 0.5f ;
+        this.mHoldMing.transform.localPosition = pos;
+        var posAn = this.mHoldAnTransform.localPosition;
+        posAn.x = pos.x + this.mHoldMing.getHoldMingSize();
+        this.mHoldAnTransform.localPosition = posAn ;
     }
     public void onDistribute( List<int> vCards , int nCnt )
     {

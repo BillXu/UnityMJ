@@ -15,4 +15,5 @@ public interface ICardHoldAn
     void onWaitChu();
     void rearrangeCard();
     void showCards( List<int> vCards ) ; // when game end do shou cards ;
+    float getHoldAnXSize();
 }

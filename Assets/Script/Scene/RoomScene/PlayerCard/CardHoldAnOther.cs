@@ -123,4 +123,15 @@ public class CardHoldAnOther : MonoBehaviour,ICardHoldAn
         
         onHu(nHuCard); 
     }
+
+    public float getHoldAnXSize()
+    {
+        if ( this.transform.childCount == 0 )
+        {
+            return 0 ;
+        }
+        
+        var last = this.transform.GetChild(this.transform.childCount - 1 );
+        return last.localPosition.x + last.GetComponent<MJCard>().world_x_Size ;
+    }
 }

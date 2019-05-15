@@ -53,7 +53,7 @@ public class SelfMJCard : MonoBehaviour,IPointerUpHandler,IDragHandler,IBeginDra
         col.enabled = true ;
         this.isSelected = false ;
         this.mActState = State.Act_Init ;
-        this.gameObject.layer = LayerMask.NameToLayer("Default");
+        this.gameObject.layer = LayerMask.NameToLayer("selfHold");
     }
     public void OnPointerDown(PointerEventData eventData)
     {

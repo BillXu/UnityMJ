@@ -63,7 +63,8 @@ public class CardWall : MonoBehaviour
             {
                 var pBottom = this.mMJFactory.getUnknownCard(this.transform);
                 pBottom.curState = MJCard.state.FACE_COVER ;
-                pBottom.transform.localPosition = new Vector3(pairIdx * pBottom.world_x_Size,pBottom.world_y_Size,0 );
+                var startX = -1 * pBottom.world_x_Size * pairCnt / 2;
+                pBottom.transform.localPosition = new Vector3( startX + pairIdx * pBottom.world_x_Size,pBottom.world_y_Size,0 );
             }
             ++idx ;
 
@@ -71,7 +72,8 @@ public class CardWall : MonoBehaviour
             {
                 var p = mMJFactory.getUnknownCard(this.transform);
                 p.curState = MJCard.state.FACE_COVER ;
-                p.transform.localPosition = new Vector3( pairIdx * p.world_x_Size,0,0 );
+                var startX = -1 * p.world_x_Size * pairCnt / 2;
+                p.transform.localPosition = new Vector3( startX +  pairIdx * p.world_x_Size,0,0 );
             }
             ++idx ;
         }

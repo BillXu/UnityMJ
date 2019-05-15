@@ -136,6 +136,15 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
         }
     }
 
+    public float getHoldAnXSize()
+    {
+        if ( this.mCards.Count == 0 )
+        {
+            return 0 ;
+        }
+        
+        return this.mCards[this.mCards.Count-1].transform.localPosition.x + this.mCards[0].world_x_Size ;
+    }
     // self card call back ;
     public void onOneClick( SelfMJCard v )
     {
