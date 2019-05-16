@@ -30,4 +30,6 @@ public interface IRoomDataDelegate
     void onRoomDoClosed();
 
     void onRecivedPlayerBrifeData( PlayerInfoData infoData );
+    void showEatOpts( List<eEatType> vEatOpts );
+    void showGangOpts( List<int> vGangOpts );
 }

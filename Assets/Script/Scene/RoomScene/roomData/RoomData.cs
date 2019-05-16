@@ -49,6 +49,14 @@ public class RoomData : NetBehaviour
                 {
                     this.onPlayerSitDown(item.Obj);
                 }
+
+                foreach (var item in this.mPlayers )
+                {
+                    if ( item != null && item.isEmpty() == false )
+                    {
+                        this.mSceneDelegate.onRecivedPlayerCards(item); // can not do with last foreach , beacuse  on playerSitDown , will set selfIdx for cardLayer ;
+                    }
+                }
             }
             break ;
             case eMsgType.MSG_ROOM_SIT_DOWN:
@@ -100,6 +108,10 @@ public class RoomData : NetBehaviour
                 if ( nret != 0  )
                 {
                     Debug.LogError( "act error nret = " + nret );
+                    Prompt.promptText( "操作失败code " + nret );
+                    
+                    var selfPlayer = this.mPlayers[this.getSelfIdx()];
+                    this.mSceneDelegate.onRecivedPlayerCards(selfPlayer); // do refresh self cards ;
                 }
             }
             break ;
@@ -226,6 +238,7 @@ public class RoomData : NetBehaviour
         this.mPlayers[idx].isSelf = ClientPlayerData.getInstance().getSelfUID() == this.mPlayers[idx].nUID ;
         this.mSceneDelegate.onPlayerSitDown(this.mPlayers[idx]);
     }
+
     void processRoomActMsg( JSONObject msg )
     {
         // svr : { idx : 0 , actType : 234, card : 23, gangCard : 12, eatWith : [22,33], huType : 23, fanShu : 23  }
@@ -385,5 +398,125 @@ public class RoomData : NetBehaviour
             }
         }
         return -1 ;
+    }
+
+    public void onPlayerChoseDoActAboutOtherCard( eMJActType act )
+    {
+        if ( act != eMJActType.eMJAct_Chi )
+        {
+            var msg = new JSONObject() ;
+            msg["actType"] = (int)act ;
+            msg["card"] = this.mBaseData.otherCanActCard ;
+            this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_ACT) ;
+            return ;
+        }
+
+        // check if have eat option ;
+        var player = this.mPlayers[this.getSelfIdx()];
+        List<eEatType> vL = new List<eEatType>();
+        player.getEatOpts(vL,this.mBaseData.otherCanActCard ) ;
+        if ( vL.Count == 1 )
+        {
+            this.onPlayerChoseEatType(vL[0]);
+        }
+        else
+        {
+            // show chose eat type result ;
+            this.mSceneDelegate.showEatOpts(vL);
+        }
+    }
+
+    public void onPlayerChoseActAboutRecievedCard( eMJActType act , int targetCard )
+    {
+        var player = this.mPlayers[this.getSelfIdx()];
+        switch ( act )
+        {
+            case eMJActType.eMJAct_BuGang:
+            case eMJActType.eMJAct_AnGang:
+            {
+                List<int> gangOpts = new List<int>();
+                player.getGangOpts(gangOpts);
+                if ( gangOpts.Count == 1 )
+                {
+                    this.onPlayerChosedGangCard(gangOpts[0]) ;
+                }
+                else
+                {
+                    // show chose gang card dlg ;
+                    this.mSceneDelegate.showGangOpts(gangOpts);
+                }
+            }
+            return;
+            case eMJActType.eMJAct_Hu:
+            case eMJActType.eMJAct_Pass:
+            {
+                targetCard = player.newMoChard ;
+            }
+            break;
+            case eMJActType.eMJAct_Chu:
+            {
+
+            }
+            break;
+        }
+
+        var msg = new JSONObject() ;
+        msg["actType"] = (int)act ;
+        msg["card"] = targetCard ;
+        this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_ACT) ;
+    }
+
+    public void onPlayerChosedGangCard( int cardForGang ) // must be anGang or bu Gang ;
+    {
+        var player = this.mPlayers[this.getSelfIdx()];
+
+        int type = (int)eMJActType.eMJAct_AnGang;
+        var info = player.getActedCardInfo(cardForGang);
+        if ( info != null )
+        {
+            type = (int)eMJActType.eMJAct_BuGang;
+        }
+        var msg = new JSONObject() ;
+        msg["actType"] = type;
+        msg["card"] = cardForGang ;
+        this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_ACT) ;
+    }
+
+    public void onPlayerChoseEatType( eEatType type )
+    {
+        JSONArray v = new JSONArray();
+        int nTargetCard = this.mBaseData.otherCanActCard ;
+        switch ( type )
+        {
+            case eEatType.eEat_Left:
+            {
+                v.Add(nTargetCard + 1 );
+                v.Add(nTargetCard + 2 );
+            }
+            break;
+            case eEatType.eEat_Middle:
+            {
+                v.Add(nTargetCard - 1 );
+                v.Add(nTargetCard + 1 );
+            }
+            break;
+            case eEatType.eEat_Righ:
+            {
+                v.Add(nTargetCard - 1 );
+                v.Add(nTargetCard - 2 );
+            }
+            break;
+        }
+
+        var msg = new JSONObject() ;
+        msg["actType"] = (int)eMJActType.eMJAct_Chi ;
+        msg["card"] = this.mBaseData.otherCanActCard ;
+        msg["eatWith"] = v;
+        this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_ACT) ;
+    }
+
+    public bool sendRoomMsg( JSONObject jsMsg , eMsgType msgID )
+    {
+        return sendMsg(jsMsg,msgID,Utility.getMsgPortByRoomID(this.mBaseData.roomID),this.mBaseData.roomID );
     }
 }

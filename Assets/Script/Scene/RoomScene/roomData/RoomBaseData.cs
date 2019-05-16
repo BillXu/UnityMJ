@@ -80,6 +80,14 @@ public class RoomBaseData
     }
 
     public int seatCnt { get{ return this.opts.seatCnt ;}}
+
+    public int roomID
+    {
+        get 
+        {
+            return (int)jsMsgInfo["roomID"].Number;
+        }
+    }
     public void parseInfo( JSONObject jsInfo )
     {
         this.jsMsgInfo = jsInfo ;

@@ -18,6 +18,7 @@ public class RoomPlayerData
     public int nChips ;
     public bool isOnline ;
     public bool isReady ;
+    public int newMoChard; 
     public List<int> vHoldCards = new List<int>();
     public List<int> vChuCards = new List<int>();
     public List<PlayerActedCard> vActedCards = new List<PlayerActedCard>();
@@ -32,11 +33,74 @@ public class RoomPlayerData
         this.isOnline = (int)jsInfo["isOnline"].Number == 1 ;
         // jsInfo["state"]
         // jsInfo["extraTime"]
+        if ( jsInfo["holdCnt"] == null && jsInfo["holdCards"] == null )
+        {
+            // no card info ;
+            this.vHoldCards.Clear();
+            this.vChuCards.Clear();
+            this.vActedCards.Clear();
+            return ;
+        }
+        this.parseCardInfo(jsInfo) ;
     }
 
-    public void parseCardInfo( JSONObject jsInfo )
+    public void parseCardInfo( JSONObject info )
     {
+        if ( info["holdCards"] != null )
+        {
+            var vh = info["holdCards"].Array;
+            foreach ( var item in vh )
+            {
+                this.vHoldCards.Add( (int)item.Number );
+            }
+            this.vHoldCards.Sort();
+        }
 
+        if ( this.vHoldCards.Count == 0 && info.ContainsKey("holdCnt") )
+        {
+           int cnt = (int)info["holdCnt"].Number ;
+           while ( cnt-- > 0 )
+           {
+               this.vHoldCards.Add(0);
+           }
+        }
+
+        if ( this.vHoldCards.Count % 3 == 2 )
+        {
+            this.newMoChard = this.vHoldCards[0] == 0 ? 1 : this.vHoldCards[0] ;
+        }
+
+        if ( info.ContainsKey("chued") )
+        {
+            var vh = info["chued"].Array;
+            foreach ( var item in vh )
+            {
+                this.vChuCards.Add( (int)item.Number );
+            }
+        }
+        
+        if ( info.ContainsKey("ming") )
+        {
+            var vMing = info["ming"].Array ;
+            foreach (var item in vMing )
+            {
+                var actedMj = new PlayerActedCard();
+                var ming = item.Obj;
+                actedMj.invokeIdx = (int)ming["invokerIdx"].Number;
+                actedMj.nTargetCard = (int)(ming["card"].Array)[0].Number;
+                actedMj.eAct = (eMJActType)ming["act"].Number ;
+                if ( eMJActType.eMJAct_Chi == actedMj.eAct )
+                {
+                    actedMj.vChiFinalCards = new List<int>();
+                    var eatc = ming["card"].Array;
+                    foreach (var ic in eatc )
+                    {
+                        actedMj.vChiFinalCards.Add((int)ic.Number);
+                    }
+                }
+                this.vActedCards.Add(actedMj);
+            }
+        }
     }
 
     public void clear()
@@ -44,6 +108,9 @@ public class RoomPlayerData
         this.onEndGame();
         this.nUID = 0 ;
         this.idx = -1 ;
+        this.vHoldCards.Clear();
+        this.vChuCards.Clear();
+        this.vActedCards.Clear();
     }
 
     public bool isEmpty()
@@ -54,6 +121,7 @@ public class RoomPlayerData
     public void onMo( int card )
     {
         this.vHoldCards.Add(card) ;
+        this.newMoChard = card ;
     }
 
     public void onChu( int card )
@@ -104,7 +172,7 @@ public class RoomPlayerData
     public void onAnGang( int card , int newCard )
     {
         this.removeHold(card,4);
-        this.vHoldCards.Add(newCard);
+        this.onMo(newCard);
 
         var v = new PlayerActedCard();
         v.eAct = eMJActType.eMJAct_AnGang ;
@@ -123,12 +191,12 @@ public class RoomPlayerData
         }
         actedCard.eAct = eMJActType.eMJAct_BuGang ;
         this.removeHold(card);
-        this.vHoldCards.Add(newCard);
+        this.onMo(newCard);
     }
     public void onMingGang( int card , int newCard , int invokerIdx )
     {
         this.removeHold(card,3);
-        this.vHoldCards.Add(newCard);
+        this.onMo(newCard);
 
         var v = new PlayerActedCard();
         v.eAct = eMJActType.eMJAct_MingGang ;
@@ -205,5 +273,60 @@ public class RoomPlayerData
             return eArrowDirect.eDirect_Opposite ;
         }
         return eArrowDirect.eDirect_Righ ;
+    }
+
+    public void getEatOpts( List<eEatType> vOutEatOpts, int nTargetCard )
+    {
+        int value = MJCard.parseCardValue(nTargetCard);
+        if ( value > 2 )
+        {
+            if ( this.vHoldCards.Contains( nTargetCard - 1 ) && this.vHoldCards.Contains( nTargetCard - 2 ) )
+            {
+                vOutEatOpts.Add(eEatType.eEat_Righ);
+            }
+        }
+
+        if ( value > 1 )
+        {
+            if ( this.vHoldCards.Contains( nTargetCard - 1 ) && this.vHoldCards.Contains( nTargetCard + 1 ) )
+            {
+                vOutEatOpts.Add(eEatType.eEat_Middle);
+            }
+        }
+
+        if ( this.vHoldCards.Contains( nTargetCard + 1 ) && this.vHoldCards.Contains( nTargetCard + 2 ) )
+        {
+            vOutEatOpts.Add(eEatType.eEat_Righ);
+        }
+    }
+
+    public void getGangOpts( List<int> vGangOpts )
+    {
+        // check bu gang ;
+        foreach ( var item in this.vActedCards )
+        {
+            if ( item.eAct != eMJActType.eMJAct_Peng )
+            {
+                continue ;
+            }    
+
+            if ( this.vHoldCards.Contains( item.nTargetCard ) )
+            {
+                vGangOpts.Add(item.nTargetCard);
+            }
+        }
+
+        // chcck An gang;
+        this.vHoldCards.Sort();
+        for (int i = 0; (i + 3) < this.vHoldCards.Count; )
+        {
+            if ( this.vHoldCards[i] == this.vHoldCards[ i + 3] )
+            {
+                vGangOpts.Add(this.vHoldCards[i]);
+                i += 4 ;
+                continue ;
+            }
+            ++i ;
+        }
     }
 }

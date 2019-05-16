@@ -11,10 +11,15 @@ public class LayerCards : MonoBehaviour
     bool isRemoveHuCardFromDianPao = false ;
     int mCurWallIdx = 0 ;
     public Transform mCameraParent ; 
+    int _selfIdx = -1 ;
     public int selfIdx
     {
         set
         {
+            if ( this._selfIdx == value )
+            {
+                return ;
+            }
             this.clear();
             for ( int idx = 0 ; idx < 4 ; ++idx )
             {
@@ -31,9 +36,14 @@ public class LayerCards : MonoBehaviour
             }
 
             this.mCameraParent.transform.DOLocalRotate( new Vector3(0,value * -90,0),0.3f);
+            this._selfIdx = value ;
         }
 
-    }
+        get
+        {
+            return this._selfIdx ;
+        }
+    } 
 
     int testIdx = 0 ;
     public bool isReplay
@@ -48,7 +58,7 @@ public class LayerCards : MonoBehaviour
     }
     void Start()
     {
-        this.selfIdx = (int)1 ;
+
     }
 
     // Update is called once per frame
@@ -84,21 +94,21 @@ public class LayerCards : MonoBehaviour
         wallParendNode.DOLocalMoveY(pos.y + this.mWalls[0].wallHeight,1.5f ) ;
     }
 
-    public void refresh( RoomData data )
-    {
-        this.selfIdx = data.getSelfIdx();
-        this.clear();
-        this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
-        foreach (var item in data.mPlayers )
-        {
-            if ( item == null || item.isEmpty() )
-            {
-                continue ;
-            }
-            this.refreshPlayerCards(item.idx,item.vChuCards,item.vActedCards,item.vHoldCards,item.vHoldCards.Count );
-        }
-    }
-    void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCnt )
+    // public void refresh( RoomData data )
+    // {
+    //     this.selfIdx = data.getSelfIdx();
+    //     this.clear();
+    //     this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
+    //     foreach (var item in data.mPlayers )
+    //     {
+    //         if ( item == null || item.isEmpty() )
+    //         {
+    //             continue ;
+    //         }
+    //         this.refreshPlayerCards(item.idx,item.vChuCards,item.vActedCards,item.vHoldCards,item.vHoldCards.Count );
+    //     }
+    // }
+    public void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCnt )
     {
         if ( nDiceValue <= 0 )
         {
@@ -151,7 +161,7 @@ public class LayerCards : MonoBehaviour
         }
     }
 
-    void refreshPlayerCards( int playerIdx , List<int> vChu , List<PlayerActedCard> vMing , List<int> vHoldAn, int holdAnCnt )
+    public void refreshPlayerCards( int playerIdx , List<int> vChu , List<PlayerActedCard> vMing , List<int> vHoldAn, int holdAnCnt )
     {
         this.mPlayerCards[playerIdx].refresh(vChu,vMing,vHoldAn,holdAnCnt);
     }
@@ -186,6 +196,11 @@ public class LayerCards : MonoBehaviour
 
     public void onMo( int playerIdx , int card )
     {
+        if ( this.selfIdx == playerIdx )
+        {
+            return ;
+        } 
+        
         this.mPlayerCards[playerIdx].onMo(card,this.featchCardFromWall()) ;
     }
 

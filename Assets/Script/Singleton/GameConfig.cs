@@ -13,4 +13,5 @@ public class GameConfig : SingletonBehaviour<GameConfig>
     public string SCENE_NAME_LOGIN = "loginScene";
     public string SCENE_NAME_MAIN = "mainScene" ;
     public string SCENE_NAME_ROOM = "roomScene";
+    public string VERSION = "1.0" ;
 }
