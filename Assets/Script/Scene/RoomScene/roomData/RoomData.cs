@@ -519,4 +519,9 @@ public class RoomData : NetBehaviour
     {
         return sendMsg(jsMsg,msgID,Utility.getMsgPortByRoomID(this.mBaseData.roomID),this.mBaseData.roomID );
     }
+
+    public void onPlayerClickedSitDown( int svrIdx )
+    {
+
+    }
 }

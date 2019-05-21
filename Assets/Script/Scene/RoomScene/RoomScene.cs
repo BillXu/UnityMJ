@@ -9,6 +9,8 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public LayerCards mLayerCard = null ;
     public SeatOrientation mSeatOriention = null;
     public CountDownTimer mDeskTimer = null;
+    public LayerInfo mLayerInfo = null ;
+    public LayerWaitReady mLayerWaitReady = null ;
     private void Awake() {
         mRoomData.mSceneDelegate = this ;
     }
@@ -29,6 +31,8 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         var selfIdx = this.mRoomData.getSelfIdx() ;
         this.mLayerCard.selfIdx = selfIdx < 0 ? 0 : selfIdx;
         this.mLayerCard.refreshWall(info.diceValue,info.bankerIdx,info.leftMJCnt,info.initCardCnt);
+        this.mLayerInfo.refresh(this.mRoomData.mBaseData);
+        this.mLayerWaitReady.refresh(this.mRoomData);
     }
 
     public void onPlayerSitDown(RoomPlayerData p )
@@ -38,6 +42,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         {
             this.mLayerCard.selfIdx = p.idx ;
         }
+        this.mLayerWaitReady.refresh(this.mRoomData);
     }
     public void onRecivedPlayerCards( RoomPlayerData p )
     {
@@ -54,7 +59,12 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     }
     public void onPlayerStandUp( int idx )
     {
+        this.mLayerWaitReady.refresh(this.mRoomData);
+    }
 
+    public void onPlayerReady( int idx )
+    {
+        this.mLayerWaitReady.onPlayerReady(idx);
     }
     public void onDistributedCards()
     {
@@ -104,7 +114,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 
     public void onGameStart()
     {
-
+        this.mLayerWaitReady.hide();
     }
     public void onGameEnd( JSONObject jsResult )
     {
@@ -145,5 +155,27 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void showGangOpts( List<int> vGangOpts )
     {
 
+    }
+
+    public int svrIdxToClientIdx( int svrIdx ) // used by UI layer;
+    {
+        int selfIdx = this.mRoomData.getSelfIdx();
+        if ( selfIdx < 0 )
+        {
+            selfIdx = 0 ;
+        }
+
+        return (int)Mathf.Abs( svrIdx - selfIdx ) ;
+    }
+
+    public int clientIdxToSvrIdx( int clientIdx ) // used by UI layer;
+    {
+        int selfIdx = this.mRoomData.getSelfIdx();
+        if ( selfIdx < 0 )
+        {
+            selfIdx = 0 ;
+        }
+
+        return ( clientIdx + selfIdx ) % 4 ;
     }
 }

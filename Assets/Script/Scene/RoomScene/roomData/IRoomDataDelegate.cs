@@ -10,6 +10,7 @@ public interface IRoomDataDelegate
     void onPlayerNetStateChanged( int playerIdx , bool isOnline );
     void onPlayerChatMsg( int playerIdx , eChatMsgType type , string strContent );
     void onPlayerStandUp( int idx );
+    void onPlayerReady( int idx );
     void onDistributedCards();
     void onPlayerActMo( int idx , int card );
     void onPlayerActChu( int idx , int card );
