@@ -12,7 +12,16 @@ public class LayerRoomInfo : MonoBehaviour
 
     public Text mVersion ;
     public Text mTime ;
+    public Text mLeftCardCnt ;
     public List<Transform> mBatteryLevel ;
+
+    public int leftMJCnt
+    {
+        set
+        {
+            this.mLeftCardCnt.text = value + "" ;
+        }
+    }
     // Start is called before the first frame update
     private void Start() {
         this.CancelInvoke();
@@ -26,6 +35,7 @@ public class LayerRoomInfo : MonoBehaviour
         this.mBaseScore.text = 1 + "";
         this.mRound.text = data.curRound + "/" + data.totalRoundCnt ;
         this.mRules.text = "not imples";
+        this.mLeftCardCnt.text = data.leftMJCnt + "" ;
     }
 
     void refreshTime()

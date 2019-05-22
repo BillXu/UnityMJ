@@ -43,6 +43,10 @@ public class CountDownTimer : MonoBehaviour
         
     }
 
+    public void resetTime()
+    {
+        this.mCurTime = 15 ;
+    }
     public void timeRepeat()
     {
         if ( this.mIsDecreseTime )

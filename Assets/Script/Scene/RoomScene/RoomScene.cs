@@ -29,6 +29,8 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     {
         this.mLayerCard.clear();
         this.mLayerInfo.refresh(this.mRoomData.mBaseData);
+        this.mSeatOriention.setCurActIdx(info.curActIdx) ;
+        this.mDeskTimer.resetTime();
     }
 
     public void onRecivedAllPlayers( List<RoomPlayerData> vPlayers )
@@ -37,9 +39,11 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         var selfIdx = this.mRoomData.getSelfIdx() ;
 
         this.mLayerCard.selfIdx = selfIdx < 0 ? 0 : selfIdx;
+        this.mDeskTimer.selfIdx = selfIdx < 0 ? 0 : selfIdx;
         this.mLayerCard.refreshWall(info.diceValue,info.bankerIdx,info.leftMJCnt,info.initCardCnt);
 
         this.mLayerPlayers.refresh(this.mRoomData);
+        
     }
 
     public void onPlayerSitDown(RoomPlayerData p )
@@ -48,6 +52,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         if ( p.nUID == ClientPlayerData.getInstance().getSelfUID() )
         {
             this.mLayerCard.selfIdx = p.idx ;
+            this.mDeskTimer.selfIdx = p.idx ;
         }
         this.mLayerPlayers.onPlayerSitDown(p);
     }
@@ -80,6 +85,9 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void onPlayerActMo( int idx , int card )
     {
         this.mLayerCard.onMo(idx,card);
+        this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(idx) ;
     }
     public void onPlayerActChu( int idx , int card )
     {
@@ -92,23 +100,36 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void onPlayerActChi( int idx , int card , int withA , int withB, int invokeIdx )
     {
         this.mLayerCard.onEat(idx,card,withA,withB ) ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(idx) ;
     }
     public void onPlayerActPeng( int idx , int Card, int invokeIdx )
     {
         this.mLayerCard.onPeng(idx,Card,invokeIdx) ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(idx) ;
     }
     public void onPlayerActMingGang( int idx , int Card, int invokeIdx, int newCard )
     {
         this.mLayerCard.onMingGang(idx,Card,invokeIdx,newCard ) ;
+        this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(idx) ;
     }
     public void onPlayerActAnGang( int idx , int card , int NewCard )
     {
         this.mLayerCard.onAnGang(idx,card,NewCard ) ;
+        this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(idx) ;
     }
 
     public void onPlayerActBuGang( int idx , int card , int NewCard )
     {
         this.mLayerCard.onBuGang( idx,card,NewCard );
+        this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(idx) ;
     }
     public void onPlayerActHu( int idx, int card , int invokerIdx )
     {
@@ -122,6 +143,9 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void onGameStart()
     {
         this.mLayerPlayers.onStartGame();
+        this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
+        this.mDeskTimer.resetTime();
+        this.mSeatOriention.setCurActIdx(this.mRoomData.mBaseData.bankerIdx) ;
     }
     public void onGameEnd( JSONObject jsResult )
     {
@@ -162,27 +186,5 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void showGangOpts( List<int> vGangOpts )
     {
 
-    }
-
-    public int svrIdxToClientIdx( int svrIdx ) // used by UI layer;
-    {
-        int selfIdx = this.mRoomData.getSelfIdx();
-        if ( selfIdx < 0 )
-        {
-            selfIdx = 0 ;
-        }
-
-        return (int)Mathf.Abs( svrIdx - selfIdx ) ;
-    }
-
-    public int clientIdxToSvrIdx( int clientIdx ) // used by UI layer;
-    {
-        int selfIdx = this.mRoomData.getSelfIdx();
-        if ( selfIdx < 0 )
-        {
-            selfIdx = 0 ;
-        }
-
-        return ( clientIdx + selfIdx ) % 4 ;
     }
 }

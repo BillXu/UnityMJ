@@ -8,11 +8,28 @@ public class LayerPlayers : MonoBehaviour
     public List<GameObject> mSeatButtons ;
     public List<GameObject> mReadyIcons ;
     public List<RoomPlayerItem> mPlayers ;
+    public Transform mBankIcon = null ;
     
     List<Vector3> mInitPosForButtons = new List<Vector3>();
     List<Vector3> mInitPosForReadyIcons = new List<Vector3>();
     List<Vector3> mInitPlayerPos = new List<Vector3>() ;
+    Vector3 mBankIconLocalPosPerPlayer = new Vector3(-24.7f,33.3f,0);
+    List<Vector3> mBankIconPosInUse = new List<Vector3>() ;
     public RoomScene mScene ;
+
+    public int bankIdx
+    {
+        set
+        {
+            if ( value < 0 )
+            {
+                this.mBankIcon.gameObject.SetActive(false);
+                return ;
+            }
+            this.mBankIcon.gameObject.SetActive(true);
+            this.mBankIcon.position = this.mBankIconPosInUse[value] ;
+        }
+    }
     void Start()
     {
         if ( this.mInitPosForButtons.Count == 0 )
@@ -23,7 +40,8 @@ public class LayerPlayers : MonoBehaviour
                 this.mInitPosForReadyIcons.Add(this.mReadyIcons[i].transform.localPosition );
                 this.mInitPlayerPos.Add( this.mPlayers[i].transform.localPosition );
             }
-        }        
+        }
+        this.adjustPos(0);     
     }
 
     public void onBtnSeat_0()
@@ -116,6 +134,7 @@ public class LayerPlayers : MonoBehaviour
                 this.mPlayers[i].refresh(p.nUID,p.nChips) ;
             }
         }
+        this.bankIdx = data.mBaseData.bankerIdx ;
     }
 
     void adjustPos( int selfIdx )
@@ -126,6 +145,7 @@ public class LayerPlayers : MonoBehaviour
             this.mReadyIcons[idx].transform.localPosition = this.mInitPosForReadyIcons[i];
             this.mSeatButtons[idx].transform.localPosition = this.mInitPosForButtons[i] ;
             this.mPlayers[idx].transform.localPosition = this.mInitPlayerPos[i];
+            this.mBankIconPosInUse[idx] = this.mPlayers[idx].transform.TransformPoint(this.mBankIconLocalPosPerPlayer) ;
         }
     }
     public void onStartGame()
@@ -134,5 +154,6 @@ public class LayerPlayers : MonoBehaviour
         {
             this.mReadyIcons[i].SetActive( false );
         }
+        this.bankIdx = this.mScene.mRoomData.mBaseData.bankerIdx ;
     }
 }
