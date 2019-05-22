@@ -6,7 +6,8 @@ public interface IRoomDataDelegate
 {
     void onRecivedRoomInfo( RoomBaseData info );
     void onPlayerSitDown(RoomPlayerData p );
-    void onRecivedPlayerCards( RoomPlayerData p ) ;
+    void onRecivedAllPlayers(List<RoomPlayerData> vPlayers ) ;
+    void onMJActError( RoomPlayerData p );
     void onPlayerNetStateChanged( int playerIdx , bool isOnline );
     void onPlayerChatMsg( int playerIdx , eChatMsgType type , string strContent );
     void onPlayerStandUp( int idx );

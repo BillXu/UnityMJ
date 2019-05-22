@@ -9,8 +9,8 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public LayerCards mLayerCard = null ;
     public SeatOrientation mSeatOriention = null;
     public CountDownTimer mDeskTimer = null;
-    public LayerInfo mLayerInfo = null ;
-    public LayerWaitReady mLayerWaitReady = null ;
+    public LayerRoomInfo mLayerInfo = null ;
+    public LayerPlayers mLayerPlayers = null ;
     private void Awake() {
         mRoomData.mSceneDelegate = this ;
     }
@@ -28,11 +28,18 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void onRecivedRoomInfo( RoomBaseData info )
     {
         this.mLayerCard.clear();
+        this.mLayerInfo.refresh(this.mRoomData.mBaseData);
+    }
+
+    public void onRecivedAllPlayers( List<RoomPlayerData> vPlayers )
+    {
+        var info = this.mRoomData.mBaseData ;
         var selfIdx = this.mRoomData.getSelfIdx() ;
+
         this.mLayerCard.selfIdx = selfIdx < 0 ? 0 : selfIdx;
         this.mLayerCard.refreshWall(info.diceValue,info.bankerIdx,info.leftMJCnt,info.initCardCnt);
-        this.mLayerInfo.refresh(this.mRoomData.mBaseData);
-        this.mLayerWaitReady.refresh(this.mRoomData);
+
+        this.mLayerPlayers.refresh(this.mRoomData);
     }
 
     public void onPlayerSitDown(RoomPlayerData p )
@@ -42,9 +49,9 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         {
             this.mLayerCard.selfIdx = p.idx ;
         }
-        this.mLayerWaitReady.refresh(this.mRoomData);
+        this.mLayerPlayers.onPlayerSitDown(p);
     }
-    public void onRecivedPlayerCards( RoomPlayerData p )
+    public void onMJActError( RoomPlayerData p )
     {
         this.mLayerCard.refreshPlayerCards( p.idx,p.vChuCards,p.vActedCards,p.vHoldCards,p.vHoldCards.Count ) ;
     }
@@ -59,12 +66,12 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     }
     public void onPlayerStandUp( int idx )
     {
-        this.mLayerWaitReady.refresh(this.mRoomData);
+        this.mLayerPlayers.onPlayerStandUp(idx);
     }
 
     public void onPlayerReady( int idx )
     {
-        this.mLayerWaitReady.onPlayerReady(idx);
+        this.mLayerPlayers.onPlayerReady(idx);
     }
     public void onDistributedCards()
     {
@@ -114,7 +121,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 
     public void onGameStart()
     {
-        this.mLayerWaitReady.hide();
+        this.mLayerPlayers.onStartGame();
     }
     public void onGameEnd( JSONObject jsResult )
     {

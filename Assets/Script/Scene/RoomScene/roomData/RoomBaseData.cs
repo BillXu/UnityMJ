@@ -112,4 +112,8 @@ public class RoomBaseData
     {
         this.leftMJCnt = this.initCardCnt ;
     }
+    public bool isWaitReadyState()
+    {
+        return true ;
+    }
 }

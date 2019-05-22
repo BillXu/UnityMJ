@@ -23,7 +23,7 @@ public class RoomPlayerData
     public List<int> vChuCards = new List<int>();
     public List<PlayerActedCard> vActedCards = new List<PlayerActedCard>();
 
-    public bool isSelf{ get ;set ;}
+    public bool isSelf{ get ; set ;}
 
     public void parseBaseInfo( JSONObject jsInfo )
     {

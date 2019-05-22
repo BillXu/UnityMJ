@@ -47,21 +47,14 @@ public class RoomData : NetBehaviour
                 var vMsgPlayers = msg["players"].Array ;
                 foreach ( var item in vMsgPlayers )
                 {
-                    this.onPlayerSitDown(item.Obj);
+                    this.onRecievedPlayer(item.Obj,false);
                 }
-
-                foreach (var item in this.mPlayers )
-                {
-                    if ( item != null && item.isEmpty() == false )
-                    {
-                        this.mSceneDelegate.onRecivedPlayerCards(item); // can not do with last foreach , beacuse  on playerSitDown , will set selfIdx for cardLayer ;
-                    }
-                }
+                this.mSceneDelegate.onRecivedAllPlayers(this.mPlayers);
             }
             break ;
             case eMsgType.MSG_ROOM_SIT_DOWN:
             {
-                this.onPlayerSitDown(msg);
+                this.onRecievedPlayer(msg,true);
             }
             break ;
             case eMsgType.MSG_ROOM_STAND_UP:
@@ -111,7 +104,7 @@ public class RoomData : NetBehaviour
                     Prompt.promptText( "操作失败code " + nret );
                     
                     var selfPlayer = this.mPlayers[this.getSelfIdx()];
-                    this.mSceneDelegate.onRecivedPlayerCards(selfPlayer); // do refresh self cards ;
+                    this.mSceneDelegate.onMJActError(selfPlayer); // do refresh self cards ;
                 }
             }
             break ;
@@ -220,7 +213,7 @@ public class RoomData : NetBehaviour
         }
         return true ; 
     }
-    void onPlayerSitDown( JSONObject jsInfo )
+    void onRecievedPlayer( JSONObject jsInfo, bool informDelegate )
     {
         var idx = (int)jsInfo["idx"].Number;
         if ( this.mPlayers[idx] == null )
@@ -236,7 +229,10 @@ public class RoomData : NetBehaviour
         }
         this.mPlayers[idx].parseBaseInfo(jsInfo);
         this.mPlayers[idx].isSelf = ClientPlayerData.getInstance().getSelfUID() == this.mPlayers[idx].nUID ;
-        this.mSceneDelegate.onPlayerSitDown(this.mPlayers[idx]);
+        if ( informDelegate )
+        {
+            this.mSceneDelegate.onPlayerSitDown(this.mPlayers[idx]);
+        }
     }
 
     void processRoomActMsg( JSONObject msg )
