@@ -176,7 +176,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public void requestChu( int nCard )
     {
         Debug.LogWarning("let room data send msg to chu pai");
-        this.mRoomData.onPlayerChoseActAboutRecievedCard(eMJActType.eMJAct_Chu,nCard ) ;
+        this.mRoomData.onPlayerChosedAct(eMJActType.eMJAct_Chu,nCard ) ;
     }  
 
     public void showEatOpts( List<eEatType> vEatOpts )

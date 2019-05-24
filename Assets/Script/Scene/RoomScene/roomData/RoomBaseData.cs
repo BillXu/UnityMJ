@@ -116,4 +116,14 @@ public class RoomBaseData
     {
         return true ;
     }
+
+    public bool isCanLeaveRoom()
+    {
+        return false ;
+    }
+
+    public bool isCanDismissRoom()
+    {
+        return false ;
+    }
 }

@@ -396,7 +396,7 @@ public class RoomData : NetBehaviour
         return -1 ;
     }
 
-    public void onPlayerChoseDoActAboutOtherCard( eMJActType act )
+    void onPlayerChoseDoActAboutOtherCard( eMJActType act )
     {
         if ( act != eMJActType.eMJAct_Chi )
         {
@@ -422,7 +422,7 @@ public class RoomData : NetBehaviour
         }
     }
 
-    public void onPlayerChoseActAboutRecievedCard( eMJActType act , int targetCard )
+    void onPlayerChoseActAboutRecievedCard( eMJActType act , int targetCard )
     {
         var player = this.mPlayers[this.getSelfIdx()];
         switch ( act )
@@ -460,6 +460,19 @@ public class RoomData : NetBehaviour
         msg["actType"] = (int)act ;
         msg["card"] = targetCard ;
         this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_ACT) ;
+    }
+
+    public void onPlayerChosedAct( eMJActType act , int targetCard )
+    {
+        var player = this.mPlayers[this.getSelfIdx()];
+        if ( act == eMJActType.eMJAct_Chu || player.vHoldCards.Count % 3 == 2 )
+        {
+            onPlayerChoseActAboutRecievedCard(act,targetCard);
+        }
+        else
+        {
+            onPlayerChoseDoActAboutOtherCard(act);
+        }
     }
 
     public void onPlayerChosedGangCard( int cardForGang ) // must be anGang or bu Gang ;
@@ -517,6 +530,16 @@ public class RoomData : NetBehaviour
     }
 
     public void onPlayerClickedSitDown( int svrIdx )
+    {
+
+    }
+
+    public void onPlayerApplyLeave()
+    {
+
+    }
+
+    public void onPlayerApplyDismissRoom()
     {
 
     }

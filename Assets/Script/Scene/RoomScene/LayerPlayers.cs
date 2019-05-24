@@ -8,11 +8,13 @@ public class LayerPlayers : MonoBehaviour
     public List<GameObject> mSeatButtons ;
     public List<GameObject> mReadyIcons ;
     public List<RoomPlayerItem> mPlayers ;
+    public List<EffectPlayerActResult> mEffectActResults;
     public Transform mBankIcon = null ;
     
     List<Vector3> mInitPosForButtons = new List<Vector3>();
     List<Vector3> mInitPosForReadyIcons = new List<Vector3>();
     List<Vector3> mInitPlayerPos = new List<Vector3>() ;
+    List<Vector3> mInitEffectPos = new List<Vector3>() ;
     Vector3 mBankIconLocalPosPerPlayer = new Vector3(-24.7f,33.3f,0);
     List<Vector3> mBankIconPosInUse = new List<Vector3>() ;
     public RoomScene mScene ;
@@ -39,9 +41,10 @@ public class LayerPlayers : MonoBehaviour
                 this.mInitPosForButtons.Add(this.mSeatButtons[i].transform.localPosition);
                 this.mInitPosForReadyIcons.Add(this.mReadyIcons[i].transform.localPosition );
                 this.mInitPlayerPos.Add( this.mPlayers[i].transform.localPosition );
+                this.mInitEffectPos.Add( this.mEffectActResults[i].transform.localPosition );
+                this.mBankIconPosInUse.Add( this.mPlayers[i].transform.TransformPoint(this.mBankIconLocalPosPerPlayer) ) ;
             }
-        }
-        this.adjustPos(0);     
+        }   
     }
 
     public void onBtnSeat_0()
@@ -71,6 +74,10 @@ public class LayerPlayers : MonoBehaviour
         this.mScene.mRoomData.onPlayerClickedSitDown( idx );
     }
 
+    public void playActResultEffect( int idx , eMJActType act )
+    {
+        this.mEffectActResults[idx].playActEffect(act) ;
+    }
     public void onPlayerReady( int idx )
     {
         this.mReadyIcons[idx].SetActive(true);
@@ -145,6 +152,7 @@ public class LayerPlayers : MonoBehaviour
             this.mReadyIcons[idx].transform.localPosition = this.mInitPosForReadyIcons[i];
             this.mSeatButtons[idx].transform.localPosition = this.mInitPosForButtons[i] ;
             this.mPlayers[idx].transform.localPosition = this.mInitPlayerPos[i];
+            this.mEffectActResults[idx].transform.localPosition = this.mInitEffectPos[i] ;
             this.mBankIconPosInUse[idx] = this.mPlayers[idx].transform.TransformPoint(this.mBankIconLocalPosPerPlayer) ;
         }
     }

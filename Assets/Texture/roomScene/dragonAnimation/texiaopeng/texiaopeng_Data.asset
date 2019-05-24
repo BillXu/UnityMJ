@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a64e5b0e436d4bed9780211ae245f7b, type: 3}
+  m_Name: texiaopeng_Data
+  m_EditorClassIdentifier: 
+  dataName: texiaopeng
+  dragonBonesJSON: {fileID: 4900000, guid: 5f64f312af8b73544a429460a290bb6d, type: 3}
+  textureAtlas:
+  - textureAtlasJSON: {fileID: 4900000, guid: 969a2a423f919ef4db4595314d88fa59, type: 3}
+    texture: {fileID: 2800000, guid: 307bcaa77029425478165d8aecc0013c, type: 3}
+    material: {fileID: 2100000, guid: e9bd5b97baa1f6048aa04d59b8b42cb2, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 70b852adf0b6aa54d9770b0bc3cab638, type: 2}
