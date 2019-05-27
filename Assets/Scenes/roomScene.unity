@@ -18393,9 +18393,9 @@ MonoBehaviour:
   mLayerCard: {fileID: 1389042798}
   mSeatOriention: {fileID: 505826486}
   mDeskTimer: {fileID: 511550829}
-  mLayerInfo: {fileID: 0}
-  mLayerPlayers: {fileID: 0}
-  mLayerDlg: {fileID: 0}
+  mLayerInfo: {fileID: 374084957}
+  mLayerPlayers: {fileID: 729374051}
+  mLayerDlg: {fileID: 1751533798}
 --- !u!4 &1895535895
 Transform:
   m_ObjectHideFlags: 0
