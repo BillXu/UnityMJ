@@ -292,7 +292,7 @@ public class LayerCards : MonoBehaviour
     }
     public void doClickDistribute()
     {
-        this.refreshWall(2,2,55,108 );
+        this.refreshWall(2,0,55,108 );
         int nCnt = 9 ;
         List<int> vc = new List<int>();
         while ( nCnt-- > 0 )

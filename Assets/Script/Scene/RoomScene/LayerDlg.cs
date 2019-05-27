@@ -10,6 +10,7 @@ public class LayerDlg : MonoBehaviour
     public DlgShowMore mDlgShowMore ;
     public Toggle mToggleShowMore ;
     public DlgActButtons mDlgAct ; 
+    public DlgEatGangCardsOpts mDlgEatGangOpts ;
     public void onClickLoaction()
     {
 
@@ -72,5 +73,24 @@ public class LayerDlg : MonoBehaviour
     public void onDlgActResult( eMJActType act )
     {
         this.mScene.mRoomData.onPlayerChosedAct(act,0);
+    }
+
+    public void showEatOpts( List<eEatType> vEatOpts , int nTargetCard )
+    {
+        this.mDlgEatGangOpts.showEatOpts(vEatOpts,nTargetCard);
+    }
+
+    public void showGangOpts( List<int> gangs )
+    {
+        this.mDlgEatGangOpts.showGangOpts(gangs);
+    }
+    public void onChoseGangResult( int card )
+    {
+        this.mScene.mRoomData.onPlayerChosedGangCard(card);
+    }
+
+    public void onChoseEatResult( eEatType type  )
+    {
+        this.mScene.mRoomData.onPlayerChoseEatType(type);
     }
 }

@@ -16,7 +16,7 @@ public class EffectPlayerActResult : MonoBehaviour
         this.mGang.AddEventListener(DragonBones.EventObject.COMPLETE,this.onAnimationComplete);
         this.mHu.AddEventListener(DragonBones.EventObject.COMPLETE,this.onAnimationComplete);
 
-        this.playActEffect(eMJActType.eMJAct_Hu);
+        //this.playActEffect(eMJActType.eMJAct_Hu);
     }
 
     // Update is called once per frame

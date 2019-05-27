@@ -53,7 +53,7 @@ public class RoomBaseData
     public int curRound{ get { return this.totalRoundCnt - this.leftRound ;}}
     public int totalRoundCnt { get {return this.opts.round ;}}  
     public int lastChuIdx{ get ; set ;}
-    public int otherCanActCard { get ; set ;}
+    public int otherCanActCard { get ; set ;}  // do not forget parse last chu card is here ;
 
     public int leftRound
     {

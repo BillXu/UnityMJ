@@ -418,7 +418,7 @@ public class RoomData : NetBehaviour
         else
         {
             // show chose eat type result ;
-            this.mSceneDelegate.showEatOpts(vL);
+            this.mSceneDelegate.showEatOpts( vL,this.mBaseData.otherCanActCard );
         }
     }
 

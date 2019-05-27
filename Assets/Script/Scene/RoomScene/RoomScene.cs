@@ -11,12 +11,13 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public CountDownTimer mDeskTimer = null;
     public LayerRoomInfo mLayerInfo = null ;
     public LayerPlayers mLayerPlayers = null ;
+    public LayerDlg mLayerDlg = null ;
     private void Awake() {
         mRoomData.mSceneDelegate = this ;
     }
     void Start()
     {
-        
+        this.mLayerCard.selfIdx = 0 ;
     }
 
     // Update is called once per frame
@@ -95,19 +96,21 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     }
     public void showActOptsAboutOtherCard( JSONArray vActs )
     {
-
+        this.mLayerDlg.showDlgAct(vActs);
     }
     public void onPlayerActChi( int idx , int card , int withA , int withB, int invokeIdx )
     {
         this.mLayerCard.onEat(idx,card,withA,withB ) ;
         this.mDeskTimer.resetTime();
         this.mSeatOriention.setCurActIdx(idx) ;
+        this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_Chi );
     }
     public void onPlayerActPeng( int idx , int Card, int invokeIdx )
     {
         this.mLayerCard.onPeng(idx,Card,invokeIdx) ;
         this.mDeskTimer.resetTime();
         this.mSeatOriention.setCurActIdx(idx) ;
+        this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_Peng );
     }
     public void onPlayerActMingGang( int idx , int Card, int invokeIdx, int newCard )
     {
@@ -115,6 +118,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
         this.mDeskTimer.resetTime();
         this.mSeatOriention.setCurActIdx(idx) ;
+        this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_MingGang );
     }
     public void onPlayerActAnGang( int idx , int card , int NewCard )
     {
@@ -122,6 +126,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
         this.mDeskTimer.resetTime();
         this.mSeatOriention.setCurActIdx(idx) ;
+        this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_AnGang );
     }
 
     public void onPlayerActBuGang( int idx , int card , int NewCard )
@@ -130,14 +135,16 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
         this.mDeskTimer.resetTime();
         this.mSeatOriention.setCurActIdx(idx) ;
+        this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_BuGang );
     }
     public void onPlayerActHu( int idx, int card , int invokerIdx )
     {
         this.mLayerCard.onHu(idx,card,invokerIdx ) ;
+        this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_Hu );
     }
     public void showActOptsWhenRecivedCards( JSONArray vActs )
     {
-
+        this.mLayerDlg.showDlgAct(vActs);
     }
 
     public void onGameStart()
@@ -179,12 +186,12 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         this.mRoomData.onPlayerChosedAct(eMJActType.eMJAct_Chu,nCard ) ;
     }  
 
-    public void showEatOpts( List<eEatType> vEatOpts )
+    public void showEatOpts( List<eEatType> vEatOpts , int ntargetCard )
     {
-
+        this.mLayerDlg.showEatOpts(vEatOpts,ntargetCard);
     }
     public void showGangOpts( List<int> vGangOpts )
     {
-
+        this.mLayerDlg.showGangOpts(vGangOpts);
     }
 }
