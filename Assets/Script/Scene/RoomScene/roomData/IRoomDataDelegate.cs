@@ -25,7 +25,7 @@ public interface IRoomDataDelegate
     void showActOptsWhenRecivedCards( JSONArray vActs );
 
     void onGameStart();
-    void onGameEnd( JSONObject jsResult );
+    void onGameEnd( ResultSingleData data );
     void onRoomOvered( JSONObject jsResult );
     void onApplyDismisRoom( int idx );
     void onReplayDismissRoom( int idx , bool isAgree );

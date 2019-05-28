@@ -86,7 +86,12 @@ public class DlgBase : MonoBehaviour
         }
     }
 
-    public void closeDlg()
+    public bool isShowDlg()
+    {
+        return this.pRootNode.activeSelf ;
+    }
+
+    public virtual void closeDlg()
     {
         this.pRootNode.SetActive( false ) ;
         if ( this.pOnCloseCallBack != null )

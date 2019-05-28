@@ -11,6 +11,8 @@ public class LayerDlg : MonoBehaviour
     public Toggle mToggleShowMore ;
     public DlgActButtons mDlgAct ; 
     public DlgEatGangCardsOpts mDlgEatGangOpts ;
+    public DlgResultSingle mDlgResultSingle ;
+    public DlgDismissRoom mDlgDismissRoom ;
     public void onClickLoaction()
     {
 
@@ -92,5 +94,38 @@ public class LayerDlg : MonoBehaviour
     public void onChoseEatResult( eEatType type  )
     {
         this.mScene.mRoomData.onPlayerChoseEatType(type);
+    }
+    
+    public void showDlgResultSingle( ResultSingleData data )
+    {
+        this.mDlgResultSingle.showResult(data);
+    }
+    public void onResultSingleNextGoOn()
+    {
+        this.mScene.mRoomData.onPlayerReady();
+    }
+
+    public void showDlgDismiss( RoomData data )
+    {
+        this.mDlgDismissRoom.showDlg(null,data,null ) ;
+    }
+
+    public void onReplayDismiss( int idx , bool isAgree )
+    {
+        this.mDlgDismissRoom.onPlayerReply(idx,isAgree );
+    }
+
+    public void onDlgDismissResult( bool isAgree )
+    {
+        this.mScene.mRoomData.onPlayerReplyDismiss( isAgree ) ;
+    }
+
+    public void onRecivedPlayerBrifeData( PlayerInfoData infoData )
+    {
+        if ( this.mDlgDismissRoom.isShowDlg() )
+        {
+            this.mDlgDismissRoom.onRecivedPlayerBrifeData(infoData);
+        }
+        
     }
 }

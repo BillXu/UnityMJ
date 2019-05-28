@@ -88,6 +88,10 @@ public class RoomBaseData
             return (int)jsMsgInfo["roomID"].Number;
         }
     }
+    
+    public int applyDismissIdx { get ; set ;}
+    public List<int> agreeDismissIdx { get ; set ;}
+    public int dimissRoomLeftTime { get ; set ;}
     public void parseInfo( JSONObject jsInfo )
     {
         this.jsMsgInfo = jsInfo ;

@@ -7,6 +7,7 @@ public class RoomData : NetBehaviour
     // Start is called before the first frame update
     public IRoomDataDelegate mSceneDelegate ;
     public RoomBaseData mBaseData = new RoomBaseData();
+    public ResultSingleData mSinglResultData = new ResultSingleData();
     public List<RoomPlayerData> mPlayers = new List<RoomPlayerData>();
     
     private void Start() {
@@ -156,11 +157,8 @@ public class RoomData : NetBehaviour
             break ;
             case eMsgType.MSG_ROOM_SCMJ_GAME_END:
             {
-                // this.pdlgDismiss.closeDlg();
-                // this.pdlgSingleReuslt.refresh(msg,this.pRoomData) ;
-                // this.pdlgSingleReuslt.showDlg();
-                // this.enterWaitReadyState();
-                this.mSceneDelegate.onGameEnd(msg) ;
+                this.mSinglResultData.parseResult(msg);
+                this.mSceneDelegate.onGameEnd(this.mSinglResultData) ;
                 this.endGame();
             }
             break ;
@@ -178,7 +176,15 @@ public class RoomData : NetBehaviour
             break ;
             case eMsgType.MSG_ROOM_APPLY_DISMISS_VIP_ROOM:
             {
-                this.mSceneDelegate.onApplyDismisRoom( (int)msg["applyerIdx"].Number );
+                this.mBaseData.applyDismissIdx = (int)msg["applyerIdx"].Number;
+                this.mBaseData.dimissRoomLeftTime = 300 ;
+                if ( this.mBaseData.agreeDismissIdx == null )
+                {
+                    this.mBaseData.agreeDismissIdx = new List<int>();
+                }
+                this.mBaseData.agreeDismissIdx.Clear();
+                this.mBaseData.agreeDismissIdx.Add(this.mBaseData.applyDismissIdx);
+                this.mSceneDelegate.onApplyDismisRoom( this.mBaseData.applyDismissIdx );
             }
             break ;
             case eMsgType.MSG_ROOM_REPLY_DISSMISS_VIP_ROOM_APPLY:
@@ -526,6 +532,7 @@ public class RoomData : NetBehaviour
 
     public bool sendRoomMsg( JSONObject jsMsg , eMsgType msgID )
     {
+        jsMsg["dstRoomID"] = this.mBaseData.roomID;
         return sendMsg(jsMsg,msgID,Utility.getMsgPortByRoomID(this.mBaseData.roomID),this.mBaseData.roomID );
     }
 
@@ -536,11 +543,28 @@ public class RoomData : NetBehaviour
 
     public void onPlayerApplyLeave()
     {
-
+        var msg = new JSONObject() ;
+        this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_LEAVE_ROOM) ;
     }
 
     public void onPlayerApplyDismissRoom()
     {
+        // send msg ;
+        var msg = new JSONObject() ;
+        this.sendRoomMsg(msg,eMsgType.MSG_APPLY_DISMISS_VIP_ROOM) ;
+    }
 
+    public void onPlayerReplyDismiss( bool isAgree )
+    {
+        // send msg ;
+        var msg = new JSONObject() ;
+        msg["reply"] = isAgree ? 1 : 0 ;
+        this.sendRoomMsg(msg,eMsgType.MSG_REPLY_DISSMISS_VIP_ROOM_APPLY) ;
+    }
+
+    public void onPlayerReady()
+    {
+        var msg = new JSONObject() ;
+        this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_SET_READY) ;
     }
 }
