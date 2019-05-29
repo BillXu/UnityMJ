@@ -96,4 +96,9 @@ public class DlgActButtons : MonoBehaviour
         this.gameObject.SetActive(false);
         Debug.Log("click act = " + act.ToString());
     }
+
+    public void close()
+    {
+        this.gameObject.SetActive(false);
+    }
 }

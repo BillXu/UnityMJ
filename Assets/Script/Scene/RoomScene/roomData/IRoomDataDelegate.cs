@@ -26,7 +26,7 @@ public interface IRoomDataDelegate
 
     void onGameStart();
     void onGameEnd( ResultSingleData data );
-    void onRoomOvered( JSONObject jsResult );
+    void onRoomOvered( ResultTotalData data );
     void onApplyDismisRoom( int idx );
     void onReplayDismissRoom( int idx , bool isAgree );
     void onRoomDoClosed();

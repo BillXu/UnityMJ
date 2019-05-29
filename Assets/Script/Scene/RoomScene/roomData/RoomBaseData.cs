@@ -92,6 +92,8 @@ public class RoomBaseData
     public int applyDismissIdx { get ; set ;}
     public List<int> agreeDismissIdx { get ; set ;}
     public int dimissRoomLeftTime { get ; set ;}
+    public string rule{ get ; set ;} = "not set";
+    public int baseScore { get ; set ; } = 1 ;
     public void parseInfo( JSONObject jsInfo )
     {
         this.jsMsgInfo = jsInfo ;

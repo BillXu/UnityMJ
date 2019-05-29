@@ -149,6 +149,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 
     public void onGameStart()
     {
+        this.mLayerDlg.onGameStart();
         this.mLayerPlayers.onStartGame();
         this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
         this.mDeskTimer.resetTime();
@@ -167,9 +168,9 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
             this.mLayerCard.showHoldCards(item.mIdx,item.mAnHoldCards );
         }
     }
-    public void onRoomOvered( JSONObject jsResult )
+    public void onRoomOvered( ResultTotalData jsResult )
     {
-
+        this.mLayerDlg.showDlgResultTotal(this.mRoomData) ;
     }
     public void onApplyDismisRoom( int idx )
     {
@@ -186,7 +187,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 
     public void onRecivedPlayerBrifeData( PlayerInfoData infoData )
     {
-
+        this.mLayerDlg.onRecivedPlayerBrifeData(infoData);
     } 
 
     public void requestChu( int nCard )

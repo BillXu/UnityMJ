@@ -32,9 +32,9 @@ public class LayerRoomInfo : MonoBehaviour
     public void refresh( RoomBaseData data )
     {
         this.mRoomID.text = data.roomID + "" ;
-        this.mBaseScore.text = 1 + "";
+        this.mBaseScore.text = data.baseScore + "";
         this.mRound.text = data.curRound + "/" + data.totalRoundCnt ;
-        this.mRules.text = "not imples";
+        this.mRules.text = data.rule;
         this.mLeftCardCnt.text = data.leftMJCnt + "" ;
     }
 

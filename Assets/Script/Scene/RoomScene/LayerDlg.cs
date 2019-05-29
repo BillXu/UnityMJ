@@ -6,6 +6,8 @@ using UnityEngine.UI ;
 
 public class LayerDlg : MonoBehaviour
 {
+    public GameObject mBtnInviteFirends;
+    public GameObject mBtnCopyRoomID ;
     public RoomScene mScene ;
     public DlgShowMore mDlgShowMore ;
     public Toggle mToggleShowMore ;
@@ -13,19 +15,29 @@ public class LayerDlg : MonoBehaviour
     public DlgEatGangCardsOpts mDlgEatGangOpts ;
     public DlgResultSingle mDlgResultSingle ;
     public DlgDismissRoom mDlgDismissRoom ;
+    public DlgResultTotal mDlgResultTotal ;
+
+    public void onGameStart()
+    {
+        this.mBtnCopyRoomID.SetActive(false);
+        this.mBtnInviteFirends.SetActive(false);
+        this.mDlgResultSingle.close();
+        this.mDlgEatGangOpts.close();
+        this.mDlgAct.close();
+    }
     public void onClickLoaction()
     {
-
+        Prompt.promptText( "Loaction" );
     }
 
     public void onClickCopyRoomNum()
     {
-
+        Prompt.promptText( "CopyRoomID" );
     }
 
     public void onClickInviteFriends()
     {
-
+        Prompt.promptText( "invite firends" );
     }
 
     public void onClickShowMore( bool isShow )
@@ -98,6 +110,7 @@ public class LayerDlg : MonoBehaviour
     
     public void showDlgResultSingle( ResultSingleData data )
     {
+        this.mDlgResultSingle.selfIdx = this.mScene.mRoomData.getSelfIdx();
         this.mDlgResultSingle.showResult(data);
     }
     public void onResultSingleNextGoOn()
@@ -118,6 +131,11 @@ public class LayerDlg : MonoBehaviour
     public void onDlgDismissResult( bool isAgree )
     {
         this.mScene.mRoomData.onPlayerReplyDismiss( isAgree ) ;
+    }
+
+    public void showDlgResultTotal( RoomData data )
+    {
+        this.mDlgResultTotal.showDlg(null,data,null) ;
     }
 
     public void onRecivedPlayerBrifeData( PlayerInfoData infoData )

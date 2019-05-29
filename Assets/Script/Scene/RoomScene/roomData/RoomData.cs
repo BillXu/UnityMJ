@@ -8,6 +8,7 @@ public class RoomData : NetBehaviour
     public IRoomDataDelegate mSceneDelegate ;
     public RoomBaseData mBaseData = new RoomBaseData();
     public ResultSingleData mSinglResultData = new ResultSingleData();
+    public ResultTotalData mTotalResultData = new ResultTotalData();
     public List<RoomPlayerData> mPlayers = new List<RoomPlayerData>();
     
     private void Start() {
@@ -171,7 +172,8 @@ public class RoomData : NetBehaviour
                 // {
                 //     this.pdlgRoomOver.showDlg();
                 // }
-                this.mSceneDelegate.onRoomOvered( msg ) ;
+                this.mTotalResultData.parseResult(msg);
+                this.mSceneDelegate.onRoomOvered( this.mTotalResultData ) ;
             }
             break ;
             case eMsgType.MSG_ROOM_APPLY_DISMISS_VIP_ROOM:
@@ -538,7 +540,9 @@ public class RoomData : NetBehaviour
 
     public void onPlayerClickedSitDown( int svrIdx )
     {
-
+        var msg = new JSONObject() ;
+        msg["idx"] = svrIdx ;
+        this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_SIT_DOWN) ;
     }
 
     public void onPlayerApplyLeave()
