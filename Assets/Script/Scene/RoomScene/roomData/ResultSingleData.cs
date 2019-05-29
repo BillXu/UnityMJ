@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Boomlagoon.JSON ;
 using System.Text ;
-public class ResultSingleData : MonoBehaviour
+public class ResultSingleData
 {
     public class ResultItem
     {

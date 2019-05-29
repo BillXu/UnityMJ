@@ -53,7 +53,7 @@ public class DlgDismissRoom : DlgBase
         {
             applyerName = pInfo.name;
         }
-        this.mDesc.text = "用户【" + applyerName + "】请求解散房间，是否同意？\n(超过300秒默认同意)" ;
+        this.mDesc.text = "用户【" + applyerName + "】请求解散房间，是否同意？" ;
 
         // fill player info ;
         for ( int i = 0 ; i < 4 ; ++i )
@@ -121,7 +121,7 @@ public class DlgDismissRoom : DlgBase
     {
         if ( this.mApplyUID == infoData.uid )
         {
-            this.mDesc.text = "用户【" + infoData.name + "】请求解散房间，是否同意？\n(超过300秒默认同意)" ;
+            this.mDesc.text = "用户【" + infoData.name + "】请求解散房间，是否同意？" ;
         }
     } 
 }
