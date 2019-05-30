@@ -54,6 +54,8 @@ public class RoomData : NetBehaviour
                 }
 
                 this.mSceneDelegate.onRecivedAllPlayers(this.mPlayers);
+                
+                this.reqActList();
             }
             break ;
             case eMsgType.MSG_ROOM_SIT_DOWN:
@@ -123,11 +125,12 @@ public class RoomData : NetBehaviour
                 this.mSceneDelegate.showActOptsAboutOtherCard(msg["acts"].Array);
             }
             break;
+            case eMsgType.MSG_ROOM_MQMJ_WAIT_ACT_AFTER_CP:
             case eMsgType.MSG_PLAYER_WAIT_ACT_AFTER_RECEIVED_CARD:
             {
                 this.mSceneDelegate.showActOptsWhenRecivedCards(msg["acts"].Array) ;
             }
-            break ;
+            break;
             case eMsgType.MSG_ROOM_MQMJ_PLAYER_HU:
             {
                 var isZiMo = (int)msg["isZiMo"].Number == 1 ;
@@ -255,6 +258,10 @@ public class RoomData : NetBehaviour
         if ( msg.ContainsKey("invokerIdx") )
         {
             invokerIdx = (int)msg["invokerIdx"].Number;
+        }
+        else
+        {
+            invokerIdx = this.mBaseData.lastChuIdx;
         }
         this.mBaseData.curActIdx = svrIdx ;
         switch ( actType )
@@ -482,7 +489,6 @@ public class RoomData : NetBehaviour
             onPlayerChoseDoActAboutOtherCard(act);
         }
     }
-
     public void onPlayerChosedGangCard( int cardForGang ) // must be anGang or bu Gang ;
     {
         var player = this.mPlayers[this.getSelfIdx()];
@@ -570,5 +576,11 @@ public class RoomData : NetBehaviour
     {
         var msg = new JSONObject() ;
         this.sendRoomMsg(msg,eMsgType.MSG_PLAYER_SET_READY) ;
+    }
+
+    public void reqActList()
+    {
+        var msg = new JSONObject() ;
+        this.sendRoomMsg(msg,eMsgType.MSG_REQ_ACT_LIST ) ;
     }
 }

@@ -66,6 +66,8 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
 
     /// net event can not process must dispatch in update 
     List<JSONObject> vMessageCacher = new List<JSONObject>() ;
+    List<JSONObject> vMessageProcessing = new List<JSONObject>() ;
+    Object thisLock = new Object();
     bool isInvokeNetFailedFunct = false ;
     // can ony invoke in init method , only invoke one time , connect other ip ,please use function : tryNewDstIP()
     public void setUpAndConnect( string dstIPPort,string backUpIPPort = null ) 
@@ -208,11 +210,18 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             this.onNetworkFailed();
         }
 
-        foreach (var item in this.vMessageCacher )
+        lock ( thisLock )  // keep lock scope simple logic 
+        {
+            this.vMessageProcessing.AddRange(this.vMessageCacher);
+            this.vMessageCacher.Clear();
+        }
+
+        foreach (var item in this.vMessageProcessing )
         {
             this.doProcessMsg(item) ;
         }
-        this.vMessageCacher.Clear();
+        this.vMessageProcessing.Clear();
+
     }
 
     private bool processInternalMsg( eMsgType msgID , JSONObject jsm )
@@ -300,12 +309,17 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
             return ;
         }
 
-        this.vMessageCacher.Add(msg);
+        lock ( thisLock )
+        {
+            this.vMessageCacher.Add(msg);
+        }
+        
     }
 
     void doProcessMsg( JSONObject msg )
     {
         eMsgType nMsgID = (eMsgType)(msg[Network.MSG_ID].Number);
+        Debug.Log("procceed msg id = " + nMsgID.ToString() );
         if ( this.processInternalMsg(nMsgID,msg) )
         {
             return ;

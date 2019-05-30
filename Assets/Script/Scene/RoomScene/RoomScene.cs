@@ -41,10 +41,22 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 
         //this.mLayerCard.selfIdx = selfIdx < 0 ? 0 : selfIdx;
         this.mDeskTimer.selfIdx = selfIdx < 0 ? 0 : selfIdx;
+        if ( this.mRoomData.mBaseData.isDuringGame() )
+        {
+            this.mDeskTimer.resetTime();
+            this.mSeatOriention.setCurActIdx( this.mRoomData.mBaseData.curActIdx );
+        }
+        else
+        {
+            this.mDeskTimer.mCurTime = 0 ;
+            this.mSeatOriention.setCurActIdx(-1);
+        }
         this.mLayerCard.refresh(this.mRoomData);
         //this.mLayerCard.refreshWall(info.diceValue,info.bankerIdx,info.leftMJCnt,info.initCardCnt);
 
         this.mLayerPlayers.refresh(this.mRoomData);
+
+        this.mLayerDlg.refresh(this.mRoomData);
         
     }
 
@@ -93,12 +105,22 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     }
     public void onPlayerActChu( int idx , int card )
     {
+        if ( idx == this.mRoomData.getSelfIdx() )
+        {
+            return ;
+        } 
         this.mLayerCard.onChu(idx,card);
     }
     public void showActOptsAboutOtherCard( JSONArray vActs )
     {
-        this.mLayerDlg.showDlgAct(vActs);
+        this.mLayerDlg.showDlgAct(vActs,false );
     }
+
+    public void showActOptsWhenRecivedCards( JSONArray vActs )
+    {
+        this.mLayerDlg.showDlgAct(vActs,true);
+    }
+
     public void onPlayerActChi( int idx , int card , int withA , int withB, int invokeIdx )
     {
         this.mLayerCard.onEat(idx,card,withA,withB ) ;
@@ -142,10 +164,6 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     {
         this.mLayerCard.onHu(idx,card,invokerIdx ) ;
         this.mLayerPlayers.playActResultEffect(idx,eMJActType.eMJAct_Hu );
-    }
-    public void showActOptsWhenRecivedCards( JSONArray vActs )
-    {
-        this.mLayerDlg.showDlgAct(vActs);
     }
 
     public void onGameStart()

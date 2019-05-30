@@ -82,7 +82,7 @@ public class CardWall : MonoBehaviour
     {
         if ( getWallLeftCnt() <= 0 )
         {
-            Debug.LogError("this wall is empty front cnt = " + this.mFrontWallCnt );
+            Debug.Log("this wall is empty front cnt = " + this.mFrontWallCnt );
             return Vector3.zero;
 
         }

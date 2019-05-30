@@ -56,9 +56,12 @@ public enum eGameType
 
 public enum eRoomState
 {
-	// new state 
 	eRoomSate_WaitReady,
 	eRoomState_StartGame,
+
+	// Caution! special define can not be use
+	eRoomState_AskForHuAndPeng = 12, // 询问玩家碰或者胡  { invokeIdx : 2 , card : 23 }
+
 	eRoomState_Common_Max = 20,
 
 	// niu niu special ;
@@ -73,10 +76,13 @@ public enum eRoomState
 	eRoomState_NN_Max = 50,
 	
 	// mj specail ;
-	eRoomState_WaitPlayerAct,  // �ȴ���Ҳ��� { idx : 0 , huaCard : 23 }
-	eRoomState_DoPlayerAct,  // ��Ҳ��� // { idx : 0 ,huIdxs : [1,3,2,], act : eMJAct_Chi , card : 23, invokeIdx : 23, eatWithA : 23 , eatWithB : 22 }
-	eRoomState_AskForRobotGang, // ѯ��������ܺ��� { invokeIdx : 2 , card : 23 }
-	eRoomState_WaitPlayerChu, // �ȴ���ҳ��� { idx : 2 }
+	eRoomState_WaitPlayerAct,  // 等待玩家操作 { idx : 0 , huaCard : 23 }
+	eRoomState_DoPlayerAct,  // 玩家操作 // { idx : 0 ,huIdxs : [1,3,2,], act : eMJAct_Chi , card : 23, invokeIdx : 23, eatWithA : 23 , eatWithB : 22 }
+	eRoomState_AskForRobotGang, // 询问玩家抢杠胡， { invokeIdx : 2 , card : 23 }
+	eRoomState_WaitPlayerChu, // 等待玩家出牌 { idx : 2 }
+	eRoomState_AfterChiOrPeng, //吃碰后等待玩家操作
+	eRoomState_AfterGang, //杠后等待玩家操作（摸牌前）
+	eRoomState_AutoBuHua, //游戏开始时自动补花
 	eRoomState_MJ_Common_Max = 80, 
 
 	// bj specail 
@@ -86,47 +92,7 @@ public enum eRoomState
 	eRoomState_DDZ_Chu,
 	eRoomState_JJ_DDZ_Ti_La_Chuai, 
 	eRoomState_JJ_DDZ_Chao_Zhuang,
-
-	// above is new ;
-	eRoomState_None,
-	eRoomState_WaitOpen,
-	eRoomState_Opening,
-	eRoomState_Pasue,
-	eRoomState_Dead,
-	eRoomState_WillDead,
-	eRoomState_TP_Dead = eRoomState_Dead,
-	eRoomState_WaitJoin,
-	eRoomState_NN_WaitJoin = eRoomState_WaitJoin ,
-	eRoomState_TP_WaitJoin = eRoomState_WaitJoin,
-	eRoomState_WillClose,
-	eRoomState_Close,
-	eRoomState_DidGameOver,
-	eRoomState_NN_Disribute4Card = eRoomState_StartGame,
-
-
-	// state for golden
-	eRoomState_Golden_Bet,
-	eRoomState_Golden_PK,
-	eRoomState_Golden_GameResult,
-
-	// state for si chuan ma jiang 
-	eRoomState_WaitExchangeCards, //  �ȴ���һ���
-	eRoomState_DoExchangeCards, // ��һ���
-	eRoomState_WaitDecideQue,  // �ȴ���Ҷ�ȱ
-	eRoomState_DoDecideQue,  //  ��Ҷ�ȱ
-	eRoomState_DoFetchCard, // �������
-	
-	
-	
-	eRoomState_WaitOtherPlayerAct,  // �ȴ���Ҳ��������˳����� { invokerIdx : 0 , card : 0 ,cardFrom : eMJActType , arrNeedIdxs : [2,0,1] } 
-	eRoomState_DoOtherPlayerAct,  // ������Ҳ����ˡ�
-	
-	eRoomState_AskForHuAndPeng, // ѯ����������ߺ�  { invokeIdx : 2 , card : 23 }
-	eRoomState_WaitSupplyCoin, // �ȴ���Ҳ�����  {nextState: 234 , transData : { ... } }
-	eRoomState_WaitPlayerRecharge = eRoomState_WaitSupplyCoin,  //  �ȴ���ҳ�ֵ
-	eRoomState_NJ_Auto_Buhua, // �Ͼ��齫�Զ����� 
-	
-	eRoomState_Max,
+	eRoomState_DDZ_Double,
 };
 
 

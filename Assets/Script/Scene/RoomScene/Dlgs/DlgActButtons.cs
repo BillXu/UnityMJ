@@ -51,7 +51,16 @@ public class DlgActButtons : MonoBehaviour
 
         foreach (var item in vjs)
         {
-            var type = (eMJActType)item.Number;
+            eMJActType type = eMJActType.eMJAct_Max ;
+            if ( item.Type == JSONValueType.Object )
+            {
+                type = (eMJActType)item.Obj["act"].Number;
+            }
+            else
+            {
+                type = (eMJActType)item.Number;
+            }
+            
             switch ( type )
             {
                 case eMJActType.eMJAct_Chi:
@@ -79,6 +88,12 @@ public class DlgActButtons : MonoBehaviour
                     this.mBtnGang.mActType = type ;
                 }
                 break ;
+                case eMJActType.eMJAct_Pass:
+                case eMJActType.eMJAct_Chu:
+                {
+
+                }
+                break;
                 default:
                 Debug.LogError("unknwon act type = " + type + " to show act buttons" );
                 break ;

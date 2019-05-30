@@ -17,6 +17,22 @@ public class LayerDlg : MonoBehaviour
     public DlgDismissRoom mDlgDismissRoom ;
     public DlgResultTotal mDlgResultTotal ;
 
+    public void refresh( RoomData data )
+    {
+        if ( data.mBaseData.isDuringGame() )
+        {
+            this.mBtnCopyRoomID.SetActive(false);
+            this.mBtnInviteFirends.SetActive(false);
+            this.mDlgResultSingle.close();
+            this.mDlgEatGangOpts.close();
+            this.mDlgAct.close();
+        }
+
+        if ( data.mBaseData.applyDismissIdx >= 0 )
+        {
+            this.showDlgDismiss(data);
+        }
+    }
     public void onGameStart()
     {
         this.mBtnCopyRoomID.SetActive(false);
@@ -75,13 +91,14 @@ public class LayerDlg : MonoBehaviour
         }
  
     }
-    public void showDlgAct( JSONArray vjs )
+    public void showDlgAct( JSONArray vjs, bool isRecivedCard )
     {
-        if ( vjs.Length == 1 && (eMJActType)vjs[0].Number == eMJActType.eMJAct_Chu )
+        if ( isRecivedCard == false && vjs.Length == 1 && (eMJActType)vjs[0].Number == eMJActType.eMJAct_Chu )
         {
             Debug.LogWarning("one opt need not show act buttons ");
             return ;
         }
+        
         this.mDlgAct.showButtons(vjs) ;
     }
     public void onDlgActResult( eMJActType act )

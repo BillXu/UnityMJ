@@ -6,7 +6,18 @@ public class RoomBaseData
 {
     JSONObject jsMsgInfo = null ;
     public DawoerRoomOpts opts = null ;
-    public int diceValue{ get ;set; } = 1 ;
+    public int diceValue 
+    {
+        get
+        { 
+            return (int)this.jsMsgInfo["dice"].Number ; 
+        } 
+
+        set
+        {
+            this.jsMsgInfo["dice"] = value;
+        }
+    }
     public int bankerIdx
     {
         get
@@ -89,11 +100,23 @@ public class RoomBaseData
         }
     }
     
-    public int applyDismissIdx { get ; set ;}
+    public int applyDismissIdx { get ; set ;} = -1 ;
     public List<int> agreeDismissIdx { get ; set ;}
     public int dimissRoomLeftTime { get ; set ;}
     public string rule{ get ; set ;} = "not set";
     public int baseScore { get ; set ; } = 1 ;
+    public eRoomState state 
+    { 
+        get 
+        {
+            return (eRoomState)jsMsgInfo["state"].Number; 
+        }
+
+        set 
+        {
+            jsMsgInfo["state"] = (int)value;
+        } 
+    }
     public void parseInfo( JSONObject jsInfo )
     {
         this.jsMsgInfo = jsInfo ;
@@ -105,6 +128,17 @@ public class RoomBaseData
         {
             this.opts.parseOpts( jsInfo["opts"].Obj );
         }
+
+        if ( jsInfo.ContainsKey( "lastActInfo" ) && jsInfo["lastActInfo"] != null )
+        {
+            var obj = jsInfo["lastActInfo"].Obj;
+            this.curActIdx = (int)obj["idx"].Number;
+            if ( ((eMJActType)obj["type"].Number) == eMJActType.eMJAct_Chu )
+            {
+                this.otherCanActCard = (int)obj["card"].Number;
+                this.lastChuIdx = this.curActIdx;
+            }
+        }
     }
 
     public void onGameWillStart( JSONObject jsMsg )
@@ -113,23 +147,30 @@ public class RoomBaseData
         this.leftRound = (int)jsMsg["leftCircle"].Number ;
         this.curActIdx = this.bankerIdx ;
         this.leftMJCnt = this.initCardCnt ;
+        this.isRoomOpen = true ;
+        this.state = eRoomState.eRoomState_StartGame ;
     }
     public void onEndGame()
     {
         this.leftMJCnt = this.initCardCnt ;
+        this.state = eRoomState.eRoomSate_WaitReady ;
     }
     public bool isWaitReadyState()
     {
-        return true ;
+        return this.state == eRoomState.eRoomSate_WaitReady ;
     }
 
+    public bool isDuringGame()
+    {
+        return this.state != eRoomState.eRoomSate_WaitReady && this.state != eRoomState.eRoomState_GameEnd;
+    }
     public bool isCanLeaveRoom()
     {
-        return false ;
+        return this.isRoomOpen == false ;
     }
 
     public bool isCanDismissRoom()
     {
-        return false ;
+        return this.isRoomOpen ;
     }
 }

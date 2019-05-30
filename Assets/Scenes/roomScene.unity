@@ -25365,7 +25365,18 @@ MonoBehaviour:
   mBtnEat: {fileID: 1375025515}
   onActedResult:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1751533798}
+        m_MethodName: onDlgActResult
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: DlgActButtons+ActResultEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!1 &1618352486
@@ -27515,8 +27526,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c963182a14a93444296b36ed71d455b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mBtnInviteFirends: {fileID: 0}
-  mBtnCopyRoomID: {fileID: 0}
+  mBtnInviteFirends: {fileID: 6918970}
+  mBtnCopyRoomID: {fileID: 776103981}
   mScene: {fileID: 1895535894}
   mDlgShowMore: {fileID: 138602864}
   mToggleShowMore: {fileID: 1243030331}

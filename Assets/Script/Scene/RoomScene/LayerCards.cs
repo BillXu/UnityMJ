@@ -99,6 +99,11 @@ public class LayerCards : MonoBehaviour
         var idx = data.getSelfIdx() ;
         this.selfIdx = idx < 0 ? 0 : idx;
         this.clear();
+        if ( data.mBaseData.isDuringGame() == false )
+        {
+            return ;
+        }
+        
         this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
         foreach (var item in data.mPlayers )
         {

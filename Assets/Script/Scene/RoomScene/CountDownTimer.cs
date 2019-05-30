@@ -54,10 +54,11 @@ public class CountDownTimer : MonoBehaviour
             if ( this.mCurTime > 0 )
             {
                 this.mCurTime -= 1 ;
-                if ( this.mCurTime == 0 )
-                {
-                    this.CancelInvoke();
-                }
+            }
+            
+            if ( this.mCurTime == 0 )
+            {
+                this.CancelInvoke();
             }
         }
         else

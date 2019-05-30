@@ -97,6 +97,10 @@ public class PlayerCard : MonoBehaviour
         this.mHoldAn.refresh(vHoldAn,holdCnt) ;
         this.mHoldMing.refresh(vMingHold) ;
         this.adjustHoldTransformPos();
+        if ( holdCnt % 3 == 2 )
+        {
+            this.mHoldAn.onWaitChu();
+        }
     }
     void adjustHoldTransformPos()
     {

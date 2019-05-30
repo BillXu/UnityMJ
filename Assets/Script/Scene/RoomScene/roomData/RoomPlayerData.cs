@@ -303,7 +303,7 @@ public class RoomPlayerData
 
         if ( this.vHoldCards.Contains( nTargetCard + 1 ) && this.vHoldCards.Contains( nTargetCard + 2 ) )
         {
-            vOutEatOpts.Add(eEatType.eEat_Righ);
+            vOutEatOpts.Add(eEatType.eEat_Left);
         }
     }
 
