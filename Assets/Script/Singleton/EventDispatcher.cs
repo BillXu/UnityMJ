@@ -125,11 +125,12 @@ public class EventDispatcher : Singleton<EventDispatcher>
         {
             if ( handle(arg) )
             {
-                Debug.Log( "interup event hadle for retrun true " );
+                Debug.Log( "interup event hadle for retrun true event = " + arg.type );
                 return ;
             }
         }
 
+        this.mLockEventTypeName = null;
         foreach ( var itemA in this.mLockAddCacher )
         {
             this.registerEventHandle(arg.type,itemA) ;
@@ -141,7 +142,7 @@ public class EventDispatcher : Singleton<EventDispatcher>
             this.removeEventHandle(arg.type,itemR) ;
         }
         this.mLockRemoveCacher.Clear();
-        this.mLockEventTypeName = null;
+        
     }
     public void dispatch<T>(string eventName , T eventArgObj )
     {

@@ -45,10 +45,14 @@ public class RoomData : NetBehaviour
             case eMsgType.MSG_ROOM_PLAYER_INFO:
             {
                 var vMsgPlayers = msg["players"].Array ;
-                foreach ( var item in vMsgPlayers )
+                if ( vMsgPlayers != null )
                 {
-                    this.onRecievedPlayer(item.Obj,false);
+                    foreach ( var item in vMsgPlayers )
+                    {
+                        this.onRecievedPlayer(item.Obj,false);
+                    }
                 }
+
                 this.mSceneDelegate.onRecivedAllPlayers(this.mPlayers);
             }
             break ;

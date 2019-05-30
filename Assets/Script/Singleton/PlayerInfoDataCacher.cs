@@ -159,7 +159,7 @@ public class PlayerInfoDataCacher : SingletonBehaviour<PlayerInfoDataCacher>
             }
 
             int readUID = (int)jsmsg["uid"].Number ;
-            if ( self.vPlayerInfos[readUID] == null )
+            if ( self.vPlayerInfos.ContainsKey( readUID ) == false || self.vPlayerInfos[readUID] == null )
             {
                 self.vPlayerInfos[readUID] = new PlayerInfoData();
             }

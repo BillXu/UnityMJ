@@ -39,9 +39,10 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         var info = this.mRoomData.mBaseData ;
         var selfIdx = this.mRoomData.getSelfIdx() ;
 
-        this.mLayerCard.selfIdx = selfIdx < 0 ? 0 : selfIdx;
+        //this.mLayerCard.selfIdx = selfIdx < 0 ? 0 : selfIdx;
         this.mDeskTimer.selfIdx = selfIdx < 0 ? 0 : selfIdx;
-        this.mLayerCard.refreshWall(info.diceValue,info.bankerIdx,info.leftMJCnt,info.initCardCnt);
+        this.mLayerCard.refresh(this.mRoomData);
+        //this.mLayerCard.refreshWall(info.diceValue,info.bankerIdx,info.leftMJCnt,info.initCardCnt);
 
         this.mLayerPlayers.refresh(this.mRoomData);
         

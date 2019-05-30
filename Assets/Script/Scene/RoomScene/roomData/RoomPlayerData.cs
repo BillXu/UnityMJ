@@ -73,32 +73,39 @@ public class RoomPlayerData
         if ( info.ContainsKey("chued") )
         {
             var vh = info["chued"].Array;
-            foreach ( var item in vh )
+            if ( vh != null )
             {
-                this.vChuCards.Add( (int)item.Number );
+                foreach ( var item in vh )
+                {
+                    this.vChuCards.Add( (int)item.Number );
+                }
             }
+
         }
         
         if ( info.ContainsKey("ming") )
         {
             var vMing = info["ming"].Array ;
-            foreach (var item in vMing )
+            if ( vMing != null )
             {
-                var actedMj = new PlayerActedCard();
-                var ming = item.Obj;
-                actedMj.invokeIdx = (int)ming["invokerIdx"].Number;
-                actedMj.nTargetCard = (int)(ming["card"].Array)[0].Number;
-                actedMj.eAct = (eMJActType)ming["act"].Number ;
-                if ( eMJActType.eMJAct_Chi == actedMj.eAct )
+                foreach (var item in vMing )
                 {
-                    actedMj.vChiFinalCards = new List<int>();
-                    var eatc = ming["card"].Array;
-                    foreach (var ic in eatc )
+                    var actedMj = new PlayerActedCard();
+                    var ming = item.Obj;
+                    actedMj.invokeIdx = (int)ming["invokerIdx"].Number;
+                    actedMj.nTargetCard = (int)(ming["card"].Array)[0].Number;
+                    actedMj.eAct = (eMJActType)ming["act"].Number ;
+                    if ( eMJActType.eMJAct_Chi == actedMj.eAct )
                     {
-                        actedMj.vChiFinalCards.Add((int)ic.Number);
+                        actedMj.vChiFinalCards = new List<int>();
+                        var eatc = ming["card"].Array;
+                        foreach (var ic in eatc )
+                        {
+                            actedMj.vChiFinalCards.Add((int)ic.Number);
+                        }
                     }
+                    this.vActedCards.Add(actedMj);
                 }
-                this.vActedCards.Add(actedMj);
             }
         }
     }

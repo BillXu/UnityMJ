@@ -68,6 +68,16 @@ public class MJFactory : MonoBehaviour
             }
         } 
 
+        // feng ---dong
+        for ( int nCnt = 0 ; nCnt < 4 ; ++nCnt )
+        {
+            var p = this.createMJCardObject(eMJCardType.eCT_Feng,4);
+            if ( p )
+            {
+                this.recycleCard(p);
+            }
+        }
+
         // create hua 
         for ( int value = 1 ; value <= 8 ; ++value )
         {
@@ -101,13 +111,14 @@ public class MJFactory : MonoBehaviour
     
     public MJCard getCard( int num, Transform parent )
     {
-        var v = this.vChacerCards[num] ;
-        if ( v == null )
+
+        if ( this.vChacerCards.ContainsKey(num) == false || this.vChacerCards[num] == null )
         {
-            Debug.LogError("do not have card num = " + num );
+            Debug.LogError("do not have card num = " + num + " type =" + MJCard.parseCardType(num) + " value = " + MJCard.parseCardValue(num) );
             return getUnknownCard(parent);
         }
 
+        var v = this.vChacerCards[num] ;
         if ( v.Count == 0 )
         {
             Debug.LogError("why do not have this card ? , more than 4 = " + num);

@@ -51,6 +51,6 @@ public class Utility : MonoBehaviour
 
     public static eMsgPort getMsgPortByGameType( eGameType game  )
     {
-        return eMsgPort.ID_MSG_PORT_DAWOER ;
+        return eMsgPort.ID_MSG_PORT_DDMJ ;
     }
 }

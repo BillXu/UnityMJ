@@ -80,7 +80,7 @@ public class CardWall : MonoBehaviour
     }
     public Vector3 onFetchCardFromWall()
     {
-        if ( getWallLeftCnt() < 0 )
+        if ( getWallLeftCnt() <= 0 )
         {
             Debug.LogError("this wall is empty front cnt = " + this.mFrontWallCnt );
             return Vector3.zero;

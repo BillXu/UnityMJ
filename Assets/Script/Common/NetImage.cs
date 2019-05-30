@@ -89,7 +89,16 @@ public class NetImage : MonoBehaviour
             {
                 s_ImageCacher.Clear();
             }
-            s_ImageCacher.Add(this.curUrl,myTexture);
+
+            if ( s_ImageCacher.ContainsKey(this.curUrl) == false )
+            {
+                s_ImageCacher.Add(this.curUrl,myTexture);
+            }
+            else
+            {
+                Debug.LogWarning("loading duplicate img = " + this.curUrl );
+            }
+            
         }
     }
 

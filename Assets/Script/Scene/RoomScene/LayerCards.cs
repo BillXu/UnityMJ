@@ -94,20 +94,22 @@ public class LayerCards : MonoBehaviour
         wallParendNode.DOLocalMoveY(pos.y + this.mWalls[0].wallHeight,1.5f ) ;
     }
 
-    // public void refresh( RoomData data )
-    // {
-    //     this.selfIdx = data.getSelfIdx();
-    //     this.clear();
-    //     this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
-    //     foreach (var item in data.mPlayers )
-    //     {
-    //         if ( item == null || item.isEmpty() )
-    //         {
-    //             continue ;
-    //         }
-    //         this.refreshPlayerCards(item.idx,item.vChuCards,item.vActedCards,item.vHoldCards,item.vHoldCards.Count );
-    //     }
-    // }
+    public void refresh( RoomData data )
+    {
+        var idx = data.getSelfIdx() ;
+        this.selfIdx = idx < 0 ? 0 : idx;
+        this.clear();
+        this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
+        foreach (var item in data.mPlayers )
+        {
+            if ( item == null || item.isEmpty() )
+            {
+                continue ;
+            }
+            this.refreshPlayerCards(item.idx,item.vChuCards,item.vActedCards,item.vHoldCards,item.vHoldCards.Count );
+        }
+    }
+
     public void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCnt )
     {
         if ( nDiceValue <= 0 )

@@ -45,8 +45,9 @@ public class UserSetting : SingletonBehaviour<UserSetting>
     
     private new void Awake() {
         base.Awake();
+        Debug.LogWarning("current do not read use stttings");
         var str = PlayerPrefs.GetString("userSetting");
-        if ( str != null )
+        if ( str != null && false )
         {
             this.mJsContent = JSONObject.Parse(str);
             Debug.Log("parsed user setting " + ( this.mJsContent == null ? " result null" : " ok " ) );
@@ -85,6 +86,8 @@ public class UserSetting : SingletonBehaviour<UserSetting>
 
     private void doSave()
     {
+        Debug.LogWarning("current do not save use stttings");
+        return ;
         if ( this.mJsContent == null )
         {
             PlayerPrefs.DeleteKey("userSetting") ;

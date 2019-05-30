@@ -33,7 +33,7 @@ public class DawoerRoomOpts : IRoomOpts
     { 
         get
         {
-            if ( this.mOpts["level"] != null )
+            if ( this.mOpts["level"] == null )
             {
                 this.mOpts["level"] = 0 ;
                 Debug.LogError("round key is null");

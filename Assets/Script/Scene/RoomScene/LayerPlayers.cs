@@ -23,7 +23,7 @@ public class LayerPlayers : MonoBehaviour
     {
         set
         {
-            if ( value < 0 )
+            if ( value < 0 || value >= 4 )
             {
                 this.mBankIcon.gameObject.SetActive(false);
                 return ;

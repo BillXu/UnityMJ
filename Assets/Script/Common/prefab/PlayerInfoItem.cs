@@ -23,7 +23,8 @@ public class PlayerInfoItem : MonoBehaviour
                 this.onPlayerItemInfo(pdata);
                 return ;
             }
-
+            Debug.Log("register player info recived event for player info");
+            this.mID.text = value.ToString();
             EventDispatcher.getInstance().registerEventHandle(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA,this.onEvent);
         }
     }
@@ -50,10 +51,13 @@ public class PlayerInfoItem : MonoBehaviour
     bool onEvent( EventArg arg )
     {
         var p = (EventWithObject<PlayerInfoData>)arg ;
+        Debug.Log("player info recived event for player info id = " + this.playerUID + "r id =" + p.argObject.uid );
         if ( p.argObject.uid != this.playerUID )
         {
             return false ;
         }
+
+        Debug.Log("do refresh player info recived event for player info");
         this.onPlayerItemInfo(p.argObject);
         EventDispatcher.getInstance().removeEventHandle(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA,this.onEvent);
         return false ;
