@@ -10,7 +10,6 @@ public class RoomData : NetBehaviour
     public ResultSingleData mSinglResultData = new ResultSingleData();
     public ResultTotalData mTotalResultData = new ResultTotalData();
     public List<RoomPlayerData> mPlayers = new List<RoomPlayerData>();
-    
     private void Start() {
         mPlayers.Add(null);
         mPlayers.Add(null);
@@ -19,7 +18,6 @@ public class RoomData : NetBehaviour
         this.registerEvent(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA);
         this.reqRoomInfo(ClientPlayerData.getInstance().getComponentData<PlayerBaseData>().stayInRoomID) ;
     }
-
     protected override bool onEvent(EventArg arg)
     {
         if ( PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA == arg.type )
@@ -242,7 +240,6 @@ public class RoomData : NetBehaviour
             this.mSceneDelegate.onPlayerSitDown(this.mPlayers[idx]);
         }
     }
-
     void processRoomActMsg( JSONObject msg )
     {
         // svr : { idx : 0 , actType : 234, card : 23, gangCard : 12, eatWith : [22,33], huType : 23, fanShu : 23  }
@@ -403,7 +400,6 @@ public class RoomData : NetBehaviour
         }
         return -1 ;
     }
-
     void onPlayerChoseDoActAboutOtherCard( eMJActType act )
     {
         if ( act != eMJActType.eMJAct_Chi )

@@ -107,22 +107,22 @@ public class DawoerRoomOpts : IRoomOpts
     {
         get 
         {
-            return (int)mOpts["pao"].Number ;
+            return (int)mOpts["dpOnePay"].Number ;
         }
         set
         {
-            mOpts["pao"] = value ;
+            mOpts["dpOnePay"] = value == 1 ? 1 : 0;
         }
     }
     public int limitFen
     {
         get 
         {
-            return (int)mOpts["limitFen"].Number ;
+            return (int)mOpts["guang"].Number ;
         }
         set
         {
-            mOpts["limitFen"] = value ;
+            mOpts["guang"] = value ;
         }
     }
     public bool isRandSeat

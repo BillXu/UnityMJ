@@ -939,7 +939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &65518102
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27515,6 +27515,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c963182a14a93444296b36ed71d455b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mBtnInviteFirends: {fileID: 0}
+  mBtnCopyRoomID: {fileID: 0}
   mScene: {fileID: 1895535894}
   mDlgShowMore: {fileID: 138602864}
   mToggleShowMore: {fileID: 1243030331}
