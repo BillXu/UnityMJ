@@ -144,7 +144,8 @@ public class RoomBaseData
     public void onGameWillStart( JSONObject jsMsg )
     {
         this.bankerIdx = (int)jsMsg["bankerIdx"].Number ;
-        this.leftRound = (int)jsMsg["leftCircle"].Number ;
+        --this.leftRound;// = (int)jsMsg["leftCircle"].Number ;
+        this.diceValue = (int)jsMsg["dice"].Number;
         this.curActIdx = this.bankerIdx ;
         this.leftMJCnt = this.initCardCnt ;
         this.isRoomOpen = true ;

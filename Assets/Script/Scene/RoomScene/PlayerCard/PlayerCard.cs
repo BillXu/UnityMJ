@@ -116,6 +116,7 @@ public class PlayerCard : MonoBehaviour
     public void onDistribute( List<int> vCards , int nCnt )
     {
         this.mHoldAn.onDistribute(vCards,nCnt);
+        adjustHoldTransformPos();
     }
     public void onMo( int nCard , Vector3 ptWorldPosFromWall )
     {
@@ -190,6 +191,7 @@ public class PlayerCard : MonoBehaviour
         this.mHoldAn.removeCard(withB,1);
         this.mHoldMing.addEat(withA,withB,targetCard ); 
         this.mHoldAn.onWaitChu();
+        this.adjustHoldTransformPos();
     }
 
     public void showCards( List<int> holdCards )

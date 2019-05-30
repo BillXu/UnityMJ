@@ -193,6 +193,7 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
         {
             this.mCurSelectedCard = null ;
         }
+        this.rearrangeCard();
         return pos ;
 
     }

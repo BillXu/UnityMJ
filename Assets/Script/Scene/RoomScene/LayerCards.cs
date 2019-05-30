@@ -103,7 +103,7 @@ public class LayerCards : MonoBehaviour
         {
             return ;
         }
-        
+
         this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
         foreach (var item in data.mPlayers )
         {
@@ -175,11 +175,14 @@ public class LayerCards : MonoBehaviour
 
     public void onDistribute( RoomData data )
     {
-        int startWallIdx = data.mBaseData.bankerIdx + data.mBaseData.diceValue - 1 ;
-        startWallIdx = startWallIdx % 4 ;
-        int startWallLeftFront = ( data.mBaseData.diceValue % 6 + 1 ) * 2 ;
-        this.mCurWallIdx = startWallIdx;
-        this.mWalls[this.mCurWallIdx].mFrontWallCnt = startWallLeftFront ;
+        // int startWallIdx = data.mBaseData.bankerIdx + data.mBaseData.diceValue - 1 ;
+        // startWallIdx = startWallIdx % 4 ;
+        // int startWallLeftFront = ( data.mBaseData.diceValue % 6 + 1 ) * 2 ;
+        // this.mCurWallIdx = startWallIdx;
+        // this.mWalls[this.mCurWallIdx].mFrontWallCnt = startWallLeftFront ;
+        Debug.Log("onDistribute card sss");
+        this.refreshWall( data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.initCardCnt,data.mBaseData.initCardCnt );
+        
 
         foreach (var item in data.mPlayers )
         {
@@ -187,12 +190,13 @@ public class LayerCards : MonoBehaviour
             {
                 continue ;
             }
-            this.mPlayerCards[item.idx].onDistribute(item.vHoldCards,item.vHoldCards.Count);
-            // decrease wall
+
+             // decrease wall
             for ( int i = 0 ; i < item.vHoldCards.Count ; ++i )
             {
                 this.featchCardFromWall();
             }
+            this.mPlayerCards[item.idx].onDistribute(item.vHoldCards,item.vHoldCards.Count);
         }
     }
 
@@ -203,11 +207,6 @@ public class LayerCards : MonoBehaviour
 
     public void onMo( int playerIdx , int card )
     {
-        if ( this.selfIdx == playerIdx )
-        {
-            return ;
-        } 
-        
         this.mPlayerCards[playerIdx].onMo(card,this.featchCardFromWall()) ;
     }
 
@@ -220,16 +219,16 @@ public class LayerCards : MonoBehaviour
 
     public void onPeng( int playerIdx , int card , int invokerIdx )
     {
-        this.mPlayerCards[playerIdx].onPeng(card,this.getDirection(playerIdx,invokerIdx) );
         this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
+        this.mPlayerCards[playerIdx].onPeng(card,this.getDirection(playerIdx,invokerIdx) );
         // hide arrow ;
         this.mChuIndictor.hide();
     }
 
     public void onMingGang( int playerIdx , int card , int invokerIdx , int NewCard )
     {
-        this.mPlayerCards[playerIdx].onMingGang( card,this.getDirection(playerIdx,invokerIdx),NewCard,this.featchCardFromWall() );
         this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
+        this.mPlayerCards[playerIdx].onMingGang( card,this.getDirection(playerIdx,invokerIdx),NewCard,this.featchCardFromWall() );
         // hide arrow ;
         this.mChuIndictor.hide();
     }
@@ -246,18 +245,24 @@ public class LayerCards : MonoBehaviour
 
     public void onHu( int playerIdx , int card , int invokerIdx )
     {
-        this.mPlayerCards[playerIdx].onHu(card);
         if ( playerIdx != invokerIdx && this.isRemoveHuCardFromDianPao == false )
         {
             this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
             this.isRemoveHuCardFromDianPao = true ;
             this.mChuIndictor.hide();
         }
+
+        if ( playerIdx != invokerIdx )  // zi mo need not add hold card
+        {
+            this.mPlayerCards[playerIdx].onHu(card);
+        }
+        
     }
 
     public void onEat( int playerIdx , int targetCard , int withA , int withB )
     {
         this.mPlayerCards[playerIdx].onEat(targetCard,withA,withB) ;
+        this.mPlayerCards[( playerIdx - 1 + 4 ) % 4 ].chuCardBeRemoved(targetCard);
         this.mChuIndictor.hide();
     }
 

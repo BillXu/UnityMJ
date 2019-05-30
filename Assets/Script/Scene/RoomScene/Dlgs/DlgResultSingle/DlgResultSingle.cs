@@ -47,6 +47,7 @@ public class DlgResultSingle : MonoBehaviour
 
     public void showResult( ResultSingleData data )
     {
+        this.gameObject.SetActive(true);
         foreach (var item in data.mResults )
         {
             if ( item == null || item.isEmpty() )

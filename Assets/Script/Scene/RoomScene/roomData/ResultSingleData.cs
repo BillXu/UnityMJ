@@ -22,7 +22,11 @@ public class ResultSingleData
             this.mHuScore = 0 ;
             this.mGangScore = 0 ;
             this.mIdx = -1 ;
-            this.mHuTypes = null ;
+            if ( this.mHuTypes != null )
+            {
+                this.mHuTypes.Clear();
+            }
+
             this.mFinalChip = 0 ;
             this.mOffset = 0 ;
             this.mIsZiMo = false ;
@@ -42,16 +46,31 @@ public class ResultSingleData
         public string getHuTypeStr()
         {
             var str = new StringBuilder() ;
-            for ( int i = 0 ; i < this.mHuTypes.Count ; ++i )
+            if ( this.mHuTypes != null )
             {
-               if ( i != 0 )
+                for ( int i = 0 ; i < this.mHuTypes.Count ; ++i )
+                {
+                if ( i != 0 )
+                {
+                    str.Append( " " ) ;
+                }
+
+                str.Append("【");
+                str.Append(this.huTypeToString(this.mHuTypes[i]));
+                str.Append("】");
+                }
+            }
+
+            if ( this.mIsZiMo )
+            {
+                
+               if ( this.mHuTypes != null && this.mHuTypes.Count > 0 )
                {
                    str.Append( " " ) ;
                }
-
                str.Append("【");
-               str.Append(this.huTypeToString(this.mHuTypes[i]));
-               str.Append("】");
+               str.Append("自摸");
+               str.Append("】");               
             }
             return str.ToString() ;
         }
@@ -233,15 +252,18 @@ public class ResultSingleData
         if ( isZiMo )
         {
             int idx = (int)detail["huIdx"].Number ;
-            var vht = detail["vhuTypes"].Array ;
             this.mResults[idx].mIsZiMo = true ;
-            for ( int i = 0; i < vht.Length; i++ )
+            var vht = detail["vhuTypes"].Array ;
+            if ( vht != null )
             {
-                if ( null == this.mResults[idx].mHuTypes )
+                for ( int i = 0; i < vht.Length; i++ )
                 {
-                    this.mResults[idx].mHuTypes = new List<eFanxingType>();
-                } 
-                this.mResults[idx].mHuTypes.Add( (eFanxingType)vht[i].Number );
+                    if ( null == this.mResults[idx].mHuTypes )
+                    {
+                        this.mResults[idx].mHuTypes = new List<eFanxingType>();
+                    } 
+                    this.mResults[idx].mHuTypes.Add( (eFanxingType)vht[i].Number );
+                }
             }
         }
         else
@@ -252,14 +274,26 @@ public class ResultSingleData
                 var obj = huPlayers[i].Obj;
                 int idx = (int)obj["idx"].Number ;
                 var vht = obj["vhuTypes"].Array ;
-                for ( int ht= 0; ht < vht.Length; ht++ )
+                if ( vht != null )
+                {
+                    for ( int ht= 0; ht < vht.Length; ht++ )
+                    {
+                        if ( null == this.mResults[idx].mHuTypes )
+                        {
+                            this.mResults[idx].mHuTypes = new List<eFanxingType>();
+                        } 
+                        this.mResults[idx].mHuTypes.Add( (eFanxingType)vht[ht].Number );
+                    }                   
+                }
+                else
                 {
                     if ( null == this.mResults[idx].mHuTypes )
                     {
                         this.mResults[idx].mHuTypes = new List<eFanxingType>();
                     } 
-                    this.mResults[idx].mHuTypes.Add( (eFanxingType)vht[ht].Number );
+                    this.mResults[idx].mHuTypes.Add( eFanxingType.eFanxing_PingHu );
                 }
+
             }
         }
     }

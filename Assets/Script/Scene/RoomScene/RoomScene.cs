@@ -223,4 +223,15 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     {
         this.mLayerDlg.showGangOpts(vGangOpts);
     }
+
+    public void onExchangedSeat()
+    {
+        var info = this.mRoomData.mBaseData ;
+        var selfIdx = this.mRoomData.getSelfIdx() ;
+
+        this.mDeskTimer.selfIdx = selfIdx < 0 ? 0 : selfIdx;
+        this.mLayerCard.selfIdx = selfIdx;
+ 
+        this.mLayerPlayers.refresh(this.mRoomData);
+    }
 }

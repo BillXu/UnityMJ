@@ -58,6 +58,34 @@ public class RoomData : NetBehaviour
                 this.reqActList();
             }
             break ;
+            case eMsgType.MSG_ROOM_PLAYER_EXCHANGE_SEAT:
+            {
+                List<RoomPlayerData> tmpPlayers = new List<RoomPlayerData>();
+                tmpPlayers.AddRange(this.mPlayers);
+                this.mPlayers.Clear();
+                this.mPlayers.Add(null);
+                this.mPlayers.Add(null);
+                this.mPlayers.Add(null);
+                this.mPlayers.Add(null);
+                var vPlayers = msg["detail"].Array;
+                foreach (var item in vPlayers )
+                {
+                    int idx = (int)item.Obj["idx"].Number;
+                    int uid = (int)item.Obj["uid"].Number;
+                    var tmp = tmpPlayers.Find(( RoomPlayerData p )=>{ return p.nUID == uid ;} );
+                    if ( tmp == null )
+                    {
+                        Debug.LogError("why client do not have player uid = " + uid );
+                        continue ;
+                    }
+                    this.mPlayers[idx] = tmp;
+                    tmp.idx = idx ;
+                }
+                tmpPlayers.Clear();
+                tmpPlayers = null ;
+                this.mSceneDelegate.onExchangedSeat();
+            }
+            break;
             case eMsgType.MSG_ROOM_SIT_DOWN:
             {
                 this.onRecievedPlayer(msg,true);
@@ -158,6 +186,7 @@ public class RoomData : NetBehaviour
             break;
             case eMsgType.MSG_ROOM_MQMJ_GAME_START:
             {
+                this.willStartGame(msg);
                 this.startGame(msg);
             }
             break ;

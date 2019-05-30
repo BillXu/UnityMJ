@@ -34,4 +34,5 @@ public interface IRoomDataDelegate
     void onRecivedPlayerBrifeData( PlayerInfoData infoData );
     void showEatOpts( List<eEatType> vEatOpts , int ntargetCard );
     void showGangOpts( List<int> vGangOpts );
+    void onExchangedSeat();
 }

@@ -98,7 +98,13 @@ public class LayerDlg : MonoBehaviour
             Debug.LogWarning("one opt need not show act buttons ");
             return ;
         }
-        
+
+        if ( isRecivedCard && vjs.Length == 1 && (eMJActType)vjs[0].Obj["act"].Number == eMJActType.eMJAct_Chu )
+        {
+            Debug.LogWarning("one opt need not show act buttons ");
+            return ;
+        }
+
         this.mDlgAct.showButtons(vjs) ;
     }
     public void onDlgActResult( eMJActType act )
@@ -127,8 +133,8 @@ public class LayerDlg : MonoBehaviour
     
     public void showDlgResultSingle( ResultSingleData data )
     {
-        this.mDlgResultSingle.selfIdx = this.mScene.mRoomData.getSelfIdx();
         this.mDlgResultSingle.showResult(data);
+        this.mDlgResultSingle.selfIdx = this.mScene.mRoomData.getSelfIdx();
     }
     public void onResultSingleNextGoOn()
     {
