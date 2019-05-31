@@ -105,6 +105,7 @@ public class RoomBaseData
     public int dimissRoomLeftTime { get ; set ;}
     public string rule{ get ; set ;} = "not set";
     public int baseScore { get ; set ; } = 1 ;
+    public bool isRoomOverd = false ;
     public eRoomState state 
     { 
         get 

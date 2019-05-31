@@ -131,11 +131,11 @@ public class DawoerRoomOpts : IRoomOpts
     {
         get
         {
-            return mOpts["isRandSeat"].Number == 1 ;
+            return mOpts["rcs"].Number == 1 ;
         }
         set
         {
-            mOpts["isRandSeat"] = value ? 1 : 0 ;
+            mOpts["rcs"] = value ? 1 : 0 ;
         }
     }
     public bool isEnableIPAndGps

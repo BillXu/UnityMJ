@@ -10,7 +10,7 @@ public class CountDownTimer : MonoBehaviour
     {
         set
         {
-            this.mText.transform.Rotate(0,0, 90 * value );
+            this.mText.transform.localEulerAngles = new Vector3(0,0,90 * value );
         }
     }
 

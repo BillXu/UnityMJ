@@ -21,6 +21,10 @@ public class ResultTotalData
     public int mApplyDismissID = 0 ;
     public List<int> mTuHaoID = new List<int>() ;
 
+    public bool isRecived()
+    {
+        return this.mResults.Count > 0 ;
+    }
     public void parseResult( JSONObject js )
     {
         if ( js.ContainsKey("dismissID") )

@@ -138,7 +138,15 @@ public class LayerDlg : MonoBehaviour
     }
     public void onResultSingleNextGoOn()
     {
-        this.mScene.mRoomData.onPlayerReady();
+        if ( this.mScene.mRoomData.mTotalResultData.isRecived() )
+        {
+            this.mDlgResultTotal.showDlg(null,this.mScene.mRoomData,null) ;
+        }
+        else
+        {
+            this.mScene.mRoomData.onPlayerReady();
+        }
+        
     }
 
     public void showDlgDismiss( RoomData data )
@@ -163,7 +171,11 @@ public class LayerDlg : MonoBehaviour
 
     public void showDlgResultTotal( RoomData data )
     {
-        this.mDlgResultTotal.showDlg(null,data,null) ;
+        if ( this.mDlgResultSingle.isShow() == false )
+        {
+            this.mDlgResultTotal.showDlg(null,data,null) ;
+        }
+        
     }
 
     public void onRecivedPlayerBrifeData( PlayerInfoData infoData )

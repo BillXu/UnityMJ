@@ -24,6 +24,7 @@ public class DlgResultTotal : DlgBase
 
     public override void showDlg<T>(ResultCallBack pfResult, T jsUserData, CloseCallBack pfOnClose)
     {
+        base.showDlg(pfResult,jsUserData,pfOnClose);
         RoomData data = jsUserData as RoomData ;
         this.mRoomID.text = "房间号: " + data.mBaseData.roomID ;
         this.mTime.text = DateTime.Now.ToString(); 

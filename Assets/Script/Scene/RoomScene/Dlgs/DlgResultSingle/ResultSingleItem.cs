@@ -13,7 +13,7 @@ public class ResultSingleItem : MonoBehaviour
     {
         set 
         {
-            this.mHuScore.text = "胡分：" + (value > 0 ? "+" : "-" ) + value ;
+            this.mHuScore.text = "胡分：" + (value > 0 ? "+" : "" ) + value ;
             this.mHuTypeComponent.SetActive( value > 0 );
             Color clr ;
             ColorUtility.TryParseHtmlString( value >= 0 ? "#FFCD1A":"#43CEFF",out clr );
@@ -25,7 +25,7 @@ public class ResultSingleItem : MonoBehaviour
     {
         set 
         {
-            this.mGangScore.text = "杠分：" + (value > 0 ? "+" : "-" ) + value ;
+            this.mGangScore.text = "杠分：" + (value > 0 ? "+" : "" ) + value ;
             Color clr ;
             ColorUtility.TryParseHtmlString( value >= 0 ? "#FFCD1A":"#43CEFF",out clr );
             this.mGangScore.color = clr ;

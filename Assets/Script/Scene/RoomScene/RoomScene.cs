@@ -190,6 +190,10 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     }
     public void onRoomOvered( ResultTotalData jsResult )
     {
+        if ( jsResult.mApplyDismissID > 0 )
+        {
+            this.mLayerDlg.closeDlgDismiss();
+        } 
         this.mLayerDlg.showDlgResultTotal(this.mRoomData) ;
     }
     public void onApplyDismisRoom( int idx )

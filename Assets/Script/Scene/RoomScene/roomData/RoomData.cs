@@ -34,6 +34,11 @@ public class RoomData : NetBehaviour
     }
     protected override bool onMsg( eMsgType nMsgID , JSONObject msg )
     {
+        if ( this.mBaseData.isRoomOverd )  // if room over we can not recieved any msg , user will tansfer scene ;
+        {
+            return false ;
+        } 
+
         switch ( nMsgID )
         {
             case eMsgType.MSG_ROOM_INFO:
@@ -208,6 +213,7 @@ public class RoomData : NetBehaviour
                 // }
                 this.mTotalResultData.parseResult(msg);
                 this.mSceneDelegate.onRoomOvered( this.mTotalResultData ) ;
+                this.mBaseData.isRoomOverd = true ;
             }
             break ;
             case eMsgType.MSG_ROOM_APPLY_DISMISS_VIP_ROOM:

@@ -93,6 +93,11 @@ public class DlgResultSingle : MonoBehaviour
         this.clear();
     }
 
+    public bool isShow()
+    {
+        return this.gameObject.activeSelf ;
+    }
+
     void clear()
     {
         foreach (var item in this.mSingleItems )
