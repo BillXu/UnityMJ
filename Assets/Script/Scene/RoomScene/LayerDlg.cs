@@ -135,6 +135,7 @@ public class LayerDlg : MonoBehaviour
     {
         this.mDlgResultSingle.showResult(data);
         this.mDlgResultSingle.selfIdx = this.mScene.mRoomData.getSelfIdx();
+        this.mDlgResultSingle.isFinal = false ;
     }
     public void onResultSingleNextGoOn()
     {
@@ -174,6 +175,10 @@ public class LayerDlg : MonoBehaviour
         if ( this.mDlgResultSingle.isShow() == false )
         {
             this.mDlgResultTotal.showDlg(null,data,null) ;
+        }
+        else
+        {
+            this.mDlgResultSingle.isFinal = true ;
         }
         
     }

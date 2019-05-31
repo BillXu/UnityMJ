@@ -27,6 +27,17 @@ public class DlgResultSingle : MonoBehaviour
         }
     }
     public UnityEvent onNext = null;
+    public GameObject mNext;
+    public GameObject mTotal;
+    public bool isFinal
+    {
+        set 
+        {
+            this.mNext.SetActive( value == false );
+            this.mTotal.SetActive( value );
+        }
+
+    }
     private void Awake() {
         foreach (var item in this.mSingleItems )
         {
