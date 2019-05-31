@@ -230,7 +230,7 @@ public class RoomData : NetBehaviour
             break;
             case eMsgType.MSG_VIP_ROOM_DO_CLOSED:
             {
-                this.mSceneDelegate.onRoomDoClosed();
+                this.mSceneDelegate.onRoomDoClosed( (int)msg["isDismiss"].Number == 1 );
             }
             break ;
             case eMsgType.MSG_ROOM_REFRESH_NET_STATE:

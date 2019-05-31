@@ -42,7 +42,7 @@ public class LoginSceneData : NetBehaviour
     }
     protected override void onDisconnect()
     {
-        this.onDisconnect();
+        base.onDisconnect();
     }
     public bool login( string acc , string pwd )
     {

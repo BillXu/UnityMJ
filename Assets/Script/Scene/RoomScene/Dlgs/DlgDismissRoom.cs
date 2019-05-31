@@ -44,6 +44,9 @@ public class DlgDismissRoom : DlgBase
 
     public override void showDlg<T>( ResultCallBack pfResult, T jsUserData, CloseCallBack pfOnClose )
     {
+        // set count down ;
+        base.showDlg(pfResult,jsUserData,pfOnClose);
+
         RoomData data = jsUserData as RoomData ;
         var appyer = data.mPlayers[data.mBaseData.applyDismissIdx];
         var applyerName = ""+appyer.nUID ;
@@ -73,8 +76,7 @@ public class DlgDismissRoom : DlgBase
 
         setLeftTime(data.mBaseData.dimissRoomLeftTime);
         this.mActButtonParent.SetActive( data.mBaseData.agreeDismissIdx.Contains(data.getSelfIdx()) == false );
-        // set count down ;
-        base.showDlg(pfResult,jsUserData,pfOnClose);
+
     }
 
     void setLeftTime( int leftTime )

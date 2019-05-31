@@ -8,7 +8,7 @@ using System ;
 public class NetImage : MonoBehaviour
 {
     // Start is called before the first frame update
-    public RawImage image ;
+    public RawImage image = null;
     private Texture defaultTet = null;
     private string  curUrl = "" ;
     public string url
@@ -49,7 +49,7 @@ public class NetImage : MonoBehaviour
     }
 
     static Dictionary<string,Texture> s_ImageCacher = new Dictionary<string,Texture>();
-    void Start()
+    void Awake()
     {
         if ( null == this.image )
         {
@@ -104,6 +104,16 @@ public class NetImage : MonoBehaviour
 
     void downloadImage()
     {
+        if ( null == this.image )
+        {
+            this.image = this.GetComponent<RawImage>();
+            if ( null == this.image )
+            {
+                Debug.LogError("image atrribute is not set , script must bind to rawImage or image property can not be null ");
+                return ;
+            }
+        }
+
         Texture t = null ;
         if ( s_ImageCacher.TryGetValue(this.curUrl,out t) )
         {

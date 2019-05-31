@@ -29,7 +29,7 @@ public interface IRoomDataDelegate
     void onRoomOvered( ResultTotalData data );
     void onApplyDismisRoom( int idx );
     void onReplayDismissRoom( int idx , bool isAgree );
-    void onRoomDoClosed();
+    void onRoomDoClosed( bool isDismissed );
 
     void onRecivedPlayerBrifeData( PlayerInfoData infoData );
     void showEatOpts( List<eEatType> vEatOpts , int ntargetCard );

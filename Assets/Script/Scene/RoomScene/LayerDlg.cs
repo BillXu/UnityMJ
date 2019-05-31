@@ -146,6 +146,11 @@ public class LayerDlg : MonoBehaviour
         this.mDlgDismissRoom.showDlg(null,data,null ) ;
     }
 
+    public void closeDlgDismiss()
+    {
+        this.mDlgDismissRoom.closeDlg();
+    }
+
     public void onReplayDismiss( int idx , bool isAgree )
     {
         this.mDlgDismissRoom.onPlayerReply(idx,isAgree );

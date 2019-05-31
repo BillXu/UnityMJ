@@ -101,7 +101,7 @@ public class RoomBaseData
     }
     
     public int applyDismissIdx { get ; set ;} = -1 ;
-    public List<int> agreeDismissIdx { get ; set ;}
+    public List<int> agreeDismissIdx { get ; set ;} = new List<int>() ;
     public int dimissRoomLeftTime { get ; set ;}
     public string rule{ get ; set ;} = "not set";
     public int baseScore { get ; set ; } = 1 ;
@@ -138,6 +138,29 @@ public class RoomBaseData
                 this.otherCanActCard = (int)obj["card"].Number;
                 this.lastChuIdx = this.curActIdx;
             }
+        }
+
+        if ( (int)jsInfo["isWaitingDismiss"].Number == 1 )
+        {
+            var AgreeIdx = jsInfo["agreeIdxs"].Array;
+            this.agreeDismissIdx.Clear();
+            foreach (var item in AgreeIdx )
+            {
+                this.agreeDismissIdx.Add((int)item.Number);
+            }
+
+            this.dimissRoomLeftTime = (int)jsInfo["leftWaitTime"].Number;
+            this.applyDismissIdx = agreeDismissIdx[0];
+        }
+        else
+        {
+            this.applyDismissIdx = -1 ;
+            this.agreeDismissIdx.Clear();
+        }
+
+        if ( this.state != eRoomState.eRoomSate_WaitReady )
+        {
+            this.isRoomOpen = true ;
         }
     }
 

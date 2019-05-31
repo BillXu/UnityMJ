@@ -86,7 +86,7 @@ public class Network : SingletonBehaviour<Network>,WebSocketUnityDelegate
     {
         if ( eNetworkState.eNet_Connected != this.mNetState )
         {
-            Debug.LogError( "socket is not open , can not send msgid = " + msgID + " state = " + this.mNetState );
+            Debug.LogWarning( "socket is not open , can not send msgid = " + msgID + " state = " + this.mNetState );
             return false;
         }
         jsMsg[Network.MSG_ID] = (int)msgID ;

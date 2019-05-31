@@ -17,6 +17,7 @@ public class PlayerInfoItem : MonoBehaviour
         get { return int.Parse(mID.text) ;}
         set
         {
+            this.mID.text = value.ToString();
             var pdata = PlayerInfoDataCacher.getInstance().getPlayerInfoByID(value) ;
             if ( pdata != null )
             {
@@ -24,7 +25,6 @@ public class PlayerInfoItem : MonoBehaviour
                 return ;
             }
             Debug.Log("register player info recived event for player info");
-            this.mID.text = value.ToString();
             EventDispatcher.getInstance().registerEventHandle(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA,this.onEvent);
         }
     }

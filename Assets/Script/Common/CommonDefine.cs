@@ -50,7 +50,21 @@ public enum ePayRoomCardType
 public enum eGameType
 {
 	eGame_None,
-	eGame_DaWoEr,
+	eGame_NiuNiu,
+	eGame_BiJi,
+	eGame_CYDouDiZhu,
+	eGame_JJDouDiZhu,
+	eGame_TestMJ,
+	eGame_Golden,
+	eGame_SCMJ,
+	eGame_MQMJ,
+	eGame_LuoMJ,
+	eGame_FXMJ,
+	eGame_CFMJ,
+	eGame_AHMJ,
+	eGame_NCMJ,
+	eGame_DDMJ,
+	eGame_SZMJ,
 	eGame_Max,
 };
 

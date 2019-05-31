@@ -10,7 +10,7 @@ public class DawoerRoomOpts : IRoomOpts
     {
         mOpts = new JSONObject();
         this.mOpts["circle"] = 0 ;
-        this.gameType = eGameType.eGame_DaWoEr;
+        this.gameType = eGameType.eGame_DDMJ;
     }
 
     public DawoerRoomOpts( JSONObject jsOpts )

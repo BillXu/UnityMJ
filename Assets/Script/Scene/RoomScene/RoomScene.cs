@@ -172,6 +172,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         this.mLayerPlayers.onStartGame();
         this.mLayerInfo.leftMJCnt = this.mRoomData.mBaseData.leftMJCnt ;
         this.mDeskTimer.resetTime();
+        this.mLayerCard.clear();
         this.mSeatOriention.setCurActIdx(this.mRoomData.mBaseData.bankerIdx) ;
     }
     public void onGameEnd( ResultSingleData data )
@@ -199,9 +200,12 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     {
         this.mLayerDlg.onReplayDismiss(idx,isAgree);
     }
-    public void onRoomDoClosed()
+    public void onRoomDoClosed( bool isDismissed )
     {
-
+        if ( isDismissed )
+        {
+            this.mLayerDlg.closeDlgDismiss();
+        } 
     }
 
     public void onRecivedPlayerBrifeData( PlayerInfoData infoData )
@@ -229,7 +233,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         var info = this.mRoomData.mBaseData ;
         var selfIdx = this.mRoomData.getSelfIdx() ;
 
-        this.mDeskTimer.selfIdx = selfIdx < 0 ? 0 : selfIdx;
+        this.mDeskTimer.selfIdx = selfIdx;
         this.mLayerCard.selfIdx = selfIdx;
  
         this.mLayerPlayers.refresh(this.mRoomData);
