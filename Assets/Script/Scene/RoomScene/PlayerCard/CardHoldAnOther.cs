@@ -109,6 +109,7 @@ public class CardHoldAnOther : MonoBehaviour,ICardHoldAn
         if ( this.mHuCard != null )
         {
             nHuCard = this.mHuCard.cardNum ;
+            vCards.Remove(nHuCard); // server already contained huCards ;
         }
 
         this.clear();
@@ -121,7 +122,11 @@ public class CardHoldAnOther : MonoBehaviour,ICardHoldAn
             v.transform.localPosition = new Vector3( i * v.world_x_Size,0,0) ;
         }   
         
-        onHu(nHuCard); 
+        if ( nHuCard != 0 )
+        {
+            onHu(nHuCard); 
+        }
+        
     }
 
     public float getHoldAnXSize()

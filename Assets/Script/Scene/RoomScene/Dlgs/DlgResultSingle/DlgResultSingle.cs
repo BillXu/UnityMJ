@@ -32,11 +32,12 @@ public class DlgResultSingle : MonoBehaviour
         {
             this.mInitPos.Add(item.transform.localPosition );            
         }
+        this.clear();
     }
     // Start is called before the first frame update
     void Start()
     {
-        this.clear();
+        
     }
 
     // Update is called once per frame
