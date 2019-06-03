@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Boomlagoon.JSON ;
+using UnityEngine.SceneManagement ;
 public class RoomData : NetBehaviour
 {
     // Start is called before the first frame update
@@ -41,6 +42,16 @@ public class RoomData : NetBehaviour
 
         switch ( nMsgID )
         {
+            case eMsgType.MSG_REQUEST_ROOM_INFO:
+            {
+                var isOk = msg.ContainsKey( "ret" ) && ((int)msg["ret"].Number == 0 );
+                if ( isOk == false )
+                {
+                    Prompt.promptText( "房间已经不存在了！" );
+                    SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_MAIN) ;
+                }
+            }
+            break;
             case eMsgType.MSG_ROOM_INFO:
             {
                 this.mBaseData.parseInfo(msg) ;
@@ -120,6 +131,15 @@ public class RoomData : NetBehaviour
                 this.mPlayers[idx].isReady = true ;
             }
             break ;
+            case eMsgType.MSG_PLAYER_LEAVE_ROOM:
+            {
+                Debug.Log("leave room ret = " + msg["ret"].Number );   
+                if ( (int)msg["ret"].Number == 0 )
+                {
+                    SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_MAIN) ;
+                }
+            }
+            break;
             case eMsgType.MSG_ROOM_DO_OPEN:
             {
                 this.mBaseData.isRoomOpen = true ;
@@ -617,5 +637,22 @@ public class RoomData : NetBehaviour
     {
         var msg = new JSONObject() ;
         this.sendRoomMsg(msg,eMsgType.MSG_REQ_ACT_LIST ) ;
+    }
+    
+    protected override void onDisconnect()
+    {
+        Prompt.promptText("网络连接丢失，尝试重连");
+    }
+    protected override void onReconnect( bool isSuccess )
+    {
+        if ( isSuccess )
+        {
+            Prompt.promptText("网络重连成功！");
+            this.reqRoomInfo(ClientPlayerData.getInstance().getComponentData<PlayerBaseData>().stayInRoomID) ;
+        }
+        else
+        {
+            SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_LOGIN ) ;
+        }
     }
 }

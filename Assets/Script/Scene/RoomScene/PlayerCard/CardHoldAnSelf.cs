@@ -130,10 +130,11 @@ public class CardHoldAnSelf : MonoBehaviour,ICardHoldAn,SelfMJCardDelegate
     }
     public void showCards( List<int> vCards ) // when game end do shou cards ;
     {
-        for ( int i = 0 ; i < this.mCards.Count; ++ i )
-        {
-            this.mCards[i].curState = MJCard.state.FACE_UP ;
-        }
+        return ;// self do nothing ;
+        // for ( int i = 0 ; i < this.mCards.Count; ++ i )
+        // {
+        //     this.mCards[i].curState = MJCard.state.FACE_UP ;
+        // }
     }
 
     public float getHoldAnXSize()

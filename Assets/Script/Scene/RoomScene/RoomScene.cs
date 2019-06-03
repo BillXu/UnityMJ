@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Boomlagoon.JSON ;
+using DragonBones ;
 public class RoomScene : MonoBehaviour, IRoomDataDelegate
 {
     // Start is called before the first frame update
@@ -12,6 +13,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     public LayerRoomInfo mLayerInfo = null ;
     public LayerPlayers mLayerPlayers = null ;
     public LayerDlg mLayerDlg = null ;
+    public UnityArmatureComponent mEffectStartGame ;
     private void Awake() {
         mRoomData.mSceneDelegate = this ;
     }
@@ -174,6 +176,11 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
         this.mDeskTimer.resetTime();
         this.mLayerCard.clear();
         this.mSeatOriention.setCurActIdx(this.mRoomData.mBaseData.bankerIdx) ;
+        if ( this.mEffectStartGame.gameObject.activeSelf == false )
+        {
+            this.mEffectStartGame.gameObject.SetActive(true);
+        }
+        this.mEffectStartGame.animation.Play("kaishipaiju",1);
     }
     public void onGameEnd( ResultSingleData data )
     {
