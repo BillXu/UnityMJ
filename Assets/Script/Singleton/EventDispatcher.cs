@@ -126,7 +126,7 @@ public class EventDispatcher : Singleton<EventDispatcher>
             if ( handle(arg) )
             {
                 Debug.Log( "interup event hadle for retrun true event = " + arg.type );
-                return ;
+                break ;
             }
         }
 
