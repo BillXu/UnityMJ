@@ -30,11 +30,11 @@ public class PlayerCard : MonoBehaviour
             ot.mMJFactory = null;   
         }
 
-        var roateX = GameObject.Find("Main Camera").transform.localRotation.eulerAngles.x - 7 ;
+        var roateX = GameObject.Find("Main Camera").transform.localRotation.eulerAngles.x - 4 ;
         self.transform.localEulerAngles = new Vector3(roateX,0,0) ;
         var pos = self.transform.localPosition;
-        pos.y = 39.9f;
-        pos.z = -60.0f;
+        pos.y = 78.65f;
+        pos.z = -84.1f;
         self.transform.localPosition = pos;
 
         var posMing = this.mHoldMing.transform.localPosition;

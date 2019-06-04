@@ -103,7 +103,7 @@ public class RoomBaseData
     public int applyDismissIdx { get ; set ;} = -1 ;
     public List<int> agreeDismissIdx { get ; set ;} = new List<int>() ;
     public int dimissRoomLeftTime { get ; set ;}
-    public string rule{ get ; set ;} = "not set";
+    public string rule{ get{ return this.opts.ruleDesc() ; }} 
     public int baseScore { get ; set ; } = 1 ;
     public bool isRoomOverd = false ;
     public eRoomState state 
@@ -193,7 +193,6 @@ public class RoomBaseData
     {
         return this.isRoomOpen == false ;
     }
-
     public bool isCanDismissRoom()
     {
         return this.isRoomOpen ;

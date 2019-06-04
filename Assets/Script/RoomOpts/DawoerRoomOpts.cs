@@ -12,12 +12,10 @@ public class DawoerRoomOpts : IRoomOpts
         this.mOpts["circle"] = 0 ;
         this.gameType = eGameType.eGame_DDMJ;
     }
-
     public DawoerRoomOpts( JSONObject jsOpts )
     {
         mOpts = jsOpts ;
     }
-
     public eGameType gameType
     {
         get
@@ -38,7 +36,7 @@ public class DawoerRoomOpts : IRoomOpts
                 this.mOpts["level"] = 0 ;
                 Debug.LogError("round key is null");
             }
-            return (int)this.mOpts["level"].Number ; 
+            return (int)this.mOpts["level"].Number == 0 ? 8 : 16; 
         } 
 
         set
@@ -51,7 +49,7 @@ public class DawoerRoomOpts : IRoomOpts
     { 
         get
         {
-            if ( this.mOpts["seatCnt"] != null )
+            if ( this.mOpts.ContainsKey("seatCnt") == false )
             {
                 this.mOpts["seatCnt"] = 4 ;
                 Debug.LogError("seatCnt key is null");
@@ -167,5 +165,25 @@ public class DawoerRoomOpts : IRoomOpts
     public JSONObject toJsOpts()
     {
         return mOpts ;
+    }
+
+    public string ruleDesc()
+    {
+        string str = "";
+        bool isOnePay = this.paoType == 1 ;
+        if ( isOnePay )
+        {
+            str = "[一家炮] ";
+        }
+        else
+        {
+            str = this.seatCnt == 4 ? "[三家炮]" : "[两家炮]" ;
+        }
+
+        if ( this.limitFen > 0 )
+        {
+            str = str + " [上限" + this.limitFen + "分]" ;
+        }
+        return str ;
     }
 }
