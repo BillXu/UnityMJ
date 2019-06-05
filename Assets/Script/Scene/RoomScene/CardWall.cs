@@ -6,8 +6,9 @@ public class CardWall : MonoBehaviour
 {
     // Start is called before the first frame update
     public MJFactory mMJFactory ;
-    public int mFrontWallCnt = 0 ;
-    int mWallTotalCnt = 0 ;
+    public List<MJCard> mCards = new List<MJCard>();
+    //public int mFrontWallCnt = 0 ;
+    public int mWallTotalCnt = 0 ;
     void Start()
     {
 
@@ -43,9 +44,10 @@ public class CardWall : MonoBehaviour
             }
             this.mMJFactory.recycleUnknownCard(child) ;
         }
+        this.mCards.Clear();
     }
 
-    public void refresh( int totalCnt , int nFrontCnt, int nBackCnt )
+    public void refresh( int totalCnt )
     {
         clear();
         if ( totalCnt % 2 != 0 )
@@ -53,47 +55,95 @@ public class CardWall : MonoBehaviour
             Debug.LogError("invlaid total wall card count = " + totalCnt );
         }
         int pairCnt = totalCnt / 2 ;
-        this.mFrontWallCnt = nFrontCnt ;
         this.mWallTotalCnt = totalCnt ;
-        int nBackBeginIdx = totalCnt - nBackCnt ;
-        int idx = 0 ;
         for ( int pairIdx = 0 ; pairIdx < pairCnt ; ++pairIdx )
         {
-            if ( idx < nFrontCnt || idx >= nBackBeginIdx )
-            {
-                var pBottom = this.mMJFactory.getUnknownCard(this.transform);
-                pBottom.curState = MJCard.state.FACE_COVER ;
-                var startX = -1 * pBottom.world_x_Size * pairCnt / 2;
-                pBottom.transform.localPosition = new Vector3( startX + pairIdx * pBottom.world_x_Size,pBottom.world_y_Size,0 );
-            }
-            ++idx ;
+            var pBottom = this.mMJFactory.getUnknownCard(this.transform);
+            pBottom.curState = MJCard.state.FACE_COVER ;
+            var startX = pBottom.world_x_Size * pairCnt / 2;
+            pBottom.transform.localPosition = new Vector3( startX - pairIdx * pBottom.world_x_Size,pBottom.world_y_Size,0 );
+            this.mCards.Add(pBottom);
 
-            if ( idx < nFrontCnt || idx >= nBackBeginIdx )
-            {
-                var p = mMJFactory.getUnknownCard(this.transform);
-                p.curState = MJCard.state.FACE_COVER ;
-                var startX = -1 * p.world_x_Size * pairCnt / 2;
-                p.transform.localPosition = new Vector3( startX +  pairIdx * p.world_x_Size,0,0 );
-            }
-            ++idx ;
+            var p = mMJFactory.getUnknownCard(this.transform);
+            p.curState = MJCard.state.FACE_COVER ;
+            p.transform.localPosition = new Vector3( startX -  pairIdx * p.world_x_Size,0,0 );
+            this.mCards.Add(p);
         }
     }
-    public Vector3 onFetchCardFromWall()
+
+    // public void refresh( int totalCnt , int nFrontCnt, int nBackCnt )
+    // {
+    //     clear();
+    //     if ( totalCnt % 2 != 0 )
+    //     {
+    //         Debug.LogError("invlaid total wall card count = " + totalCnt );
+    //     }
+    //     int pairCnt = totalCnt / 2 ;
+    //     this.mFrontWallCnt = nFrontCnt ;
+    //     this.mWallTotalCnt = totalCnt ;
+    //     int nBackBeginIdx = totalCnt - nBackCnt ;
+    //     int idx = 0 ;
+    //     for ( int pairIdx = 0 ; pairIdx < pairCnt ; ++pairIdx )
+    //     {
+    //         if ( idx < nFrontCnt || idx >= nBackBeginIdx )
+    //         {
+    //             var pBottom = this.mMJFactory.getUnknownCard(this.transform);
+    //             pBottom.curState = MJCard.state.FACE_COVER ;
+    //             var startX = -1 * pBottom.world_x_Size * pairCnt / 2;
+    //             pBottom.transform.localPosition = new Vector3( startX + pairIdx * pBottom.world_x_Size,pBottom.world_y_Size,0 );
+    //         }
+    //         ++idx ;
+
+    //         if ( idx < nFrontCnt || idx >= nBackBeginIdx )
+    //         {
+    //             var p = mMJFactory.getUnknownCard(this.transform);
+    //             p.curState = MJCard.state.FACE_COVER ;
+    //             var startX = -1 * p.world_x_Size * pairCnt / 2;
+    //             p.transform.localPosition = new Vector3( startX +  pairIdx * p.world_x_Size,0,0 );
+    //         }
+    //         ++idx ;
+    //     }
+    // }
+    public Vector3 removeCardFromWall( int idx )
     {
-        if ( getWallLeftCnt() <= 0 )
+        if ( this.isTargetCardEmpty(idx) )
         {
-            Debug.Log("this wall is empty front cnt = " + this.mFrontWallCnt );
+            Debug.Log("this wall is empty front cnt = " + idx );
             return Vector3.zero;
 
         }
 
-        var tran = this.transform.GetChild(this.mFrontWallCnt);
-        this.mMJFactory.recycleUnknownCard(tran.GetComponent<MJCard>());
-        return tran.position;
+        var card = this.mCards[idx] ;
+        var pos = card.transform.position; ;
+        this.mMJFactory.recycleUnknownCard(card);
+        this.mCards[idx] = null ;
+        return pos ;
     }
-    public int getWallLeftCnt()
+    public bool isTargetCardEmpty( int idx )
     {
-        return this.transform.childCount - this.mFrontWallCnt ;
+        if ( idx < this.mCards.Count )
+        {
+            return this.mCards[idx] == null ;
+        }
+        return true ;
+    }
+
+    public bool showWallCard( int idx , int cardNum )
+    {
+        if ( this.isTargetCardEmpty(idx) )
+        {
+            Debug.LogWarning("target idx is null can not show card = " + cardNum );
+            return false ;
+        }
+
+        var pos = this.mCards[idx].transform.localPosition ;
+        removeCardFromWall(idx) ;
+        var card = this.mMJFactory.getCard(cardNum,this.transform);
+        card.curState = MJCard.state.FACE_UP ;
+        this.mCards[idx] = card ;
+        card.transform.localPosition = pos ;
+        Debug.LogWarning("show wall card = idx " + idx + " cardnum =" + cardNum );
+        return true ;
     }
 
     // Update is called once per frame

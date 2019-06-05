@@ -100,6 +100,17 @@ public class RoomBaseData
         }
     }
     
+    public int wallCard8
+    {
+        get { return (int)jsMsgInfo["r8"].Number;}
+        set { jsMsgInfo["r8"] = value ;} 
+    } 
+
+    public int wallCard16
+    {
+        get { return (int)jsMsgInfo["r16"].Number;}
+        set { jsMsgInfo["r16"] = value ;} 
+    } 
     public int applyDismissIdx { get ; set ;} = -1 ;
     public List<int> agreeDismissIdx { get ; set ;} = new List<int>() ;
     public int dimissRoomLeftTime { get ; set ;}
@@ -170,6 +181,8 @@ public class RoomBaseData
         this.bankerIdx = (int)jsMsg["bankerIdx"].Number ;
         --this.leftRound;// = (int)jsMsg["leftCircle"].Number ;
         this.diceValue = (int)jsMsg["dice"].Number;
+        this.wallCard16 = (int)jsMsg["r16"].Number;
+        this.wallCard8 = (int)jsMsg["r8"].Number;
         this.curActIdx = this.bankerIdx ;
         this.leftMJCnt = this.initCardCnt ;
         this.isRoomOpen = true ;

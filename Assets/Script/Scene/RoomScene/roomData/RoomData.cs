@@ -655,4 +655,18 @@ public class RoomData : NetBehaviour
             SceneManager.LoadScene(GameConfig.getInstance().SCENE_NAME_LOGIN ) ;
         }
     }
+
+    public int getAlreadyGangCnt()
+    {
+        int cnt = 0 ;
+        foreach (var item in this.mPlayers )
+        {
+            if ( item == null || item.isEmpty() )
+            {
+                continue ;
+            } 
+            cnt += item.getGangCnt();
+        }
+        return cnt ;
+    }
 }

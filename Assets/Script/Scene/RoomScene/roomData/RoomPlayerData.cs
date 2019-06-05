@@ -336,4 +336,24 @@ public class RoomPlayerData
             ++i ;
         }
     }
+
+    public int getGangCnt()
+    {
+        int cnt = 0 ;
+        foreach (var item in this.vActedCards )
+        {
+            switch ( item.eAct )
+            {
+                case eMJActType.eMJAct_AnGang:
+                case eMJActType.eMJAct_MingGang:
+                case eMJActType.eMJAct_BuGang:
+                case eMJActType.eMJAct_BuGang_Done:
+                {
+                    ++cnt ;
+                }
+                break ;
+            } 
+        }
+        return cnt ;
+    }
 }

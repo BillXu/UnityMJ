@@ -1930,7 +1930,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mMJFactory: {fileID: 674349296}
-  mFrontWallCnt: 0
+  mCards: []
+  mWallTotalCnt: 0
 --- !u!1 &160404551
 GameObject:
   m_ObjectHideFlags: 0
@@ -7256,7 +7257,7 @@ GameObject:
   - component: {fileID: 503968492}
   - component: {fileID: 503968493}
   m_Layer: 0
-  m_Name: wall1
+  m_Name: wall3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7289,7 +7290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mMJFactory: {fileID: 674349296}
-  mFrontWallCnt: 0
+  mCards: []
+  mWallTotalCnt: 0
 --- !u!1 &505826484
 GameObject:
   m_ObjectHideFlags: 0
@@ -12612,7 +12614,7 @@ GameObject:
   - component: {fileID: 787302725}
   - component: {fileID: 787302726}
   m_Layer: 0
-  m_Name: wall3
+  m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12645,7 +12647,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mMJFactory: {fileID: 674349296}
-  mFrontWallCnt: 0
+  mCards: []
+  mWallTotalCnt: 0
 --- !u!1 &792185541
 GameObject:
   m_ObjectHideFlags: 0
@@ -17715,6 +17718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1150614652}
+  - component: {fileID: 1150614653}
   m_Layer: 0
   m_Name: walls
   m_TagString: Untagged
@@ -17740,6 +17744,23 @@ Transform:
   m_Father: {fileID: 1389042797}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1150614653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150614651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2bd5d29a4563e4b8fc220f29c31c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mWalls:
+  - {fileID: 147327590}
+  - {fileID: 787302726}
+  - {fileID: 1340496635}
+  - {fileID: 503968493}
 --- !u!1 &1153488960
 GameObject:
   m_ObjectHideFlags: 0
@@ -20621,7 +20642,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mMJFactory: {fileID: 674349296}
-  mFrontWallCnt: 0
+  mCards: []
+  mWallTotalCnt: 0
 --- !u!1 &1342319356
 GameObject:
   m_ObjectHideFlags: 0
@@ -21364,11 +21386,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b41b7b9e64379bd458a13d9dd2f27ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mWalls:
-  - {fileID: 147327590}
-  - {fileID: 503968493}
-  - {fileID: 1340496635}
-  - {fileID: 787302726}
   mPlayerCards:
   - {fileID: 189918714}
   - {fileID: 794926440}
@@ -21376,6 +21393,7 @@ MonoBehaviour:
   - {fileID: 952586084}
   mChuIndictor: {fileID: 794434319}
   mScene: {fileID: 1895535894}
+  mWalls: {fileID: 1150614653}
   mCameraParent: {fileID: 2014362031}
 --- !u!1 &1401476429
 GameObject:

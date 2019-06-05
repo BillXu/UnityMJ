@@ -2,14 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening ;
+using System ;
 public class LayerCards : MonoBehaviour
 {
-    public List<CardWall> mWalls ;
     public List<PlayerCard> mPlayerCards ;
     public CardChuIndicator mChuIndictor ;
     public RoomScene mScene ;
+    public CardWalls mWalls ;
     bool isRemoveHuCardFromDianPao = false ;
-    int mCurWallIdx = 0 ;
+    int lastWallIdx
+    {
+        get
+        {
+            var baseData = mScene.mRoomData.mBaseData;
+            int startWallIdx = baseData.bankerIdx + baseData.diceValue - 1 ;
+            startWallIdx = startWallIdx % 4 ;
+            return startWallIdx ;
+        }
+    }
     public Transform mCameraParent ; 
     int _selfIdx = -1 ;
     public int selfIdx
@@ -45,7 +55,6 @@ public class LayerCards : MonoBehaviour
         }
     } 
 
-    int testIdx = 0 ;
     public bool isReplay
     {
         set
@@ -69,10 +78,7 @@ public class LayerCards : MonoBehaviour
 
     public void clear()
     {
-        foreach (var item in this.mWalls )
-        {
-            item.clear();
-        }
+        this.mWalls.clear();
 
         foreach (var itemc in this.mPlayerCards )
         {
@@ -81,17 +87,6 @@ public class LayerCards : MonoBehaviour
         }
         this.isRemoveHuCardFromDianPao = false ;
         this.mChuIndictor.hide();
-    }
-
-    public void shuffle( int mjCnt )
-    {
-        this.refreshWall(1,0,mjCnt,mjCnt ) ;
-
-        var wallParendNode = this.mWalls[0].transform.parent;
-        var pos = wallParendNode.localPosition ;
-        pos.y -= this.mWalls[0].wallHeight ;
-        wallParendNode.localPosition = pos ;
-        wallParendNode.DOLocalMoveY(pos.y + this.mWalls[0].wallHeight,1.5f ) ;
     }
 
     public void refresh( RoomData data )
@@ -104,7 +99,8 @@ public class LayerCards : MonoBehaviour
             return ;
         }
 
-        this.refreshWall(data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.leftMJCnt,data.mBaseData.initCardCnt);
+        this.mWalls.refresh(data.mBaseData,data.getAlreadyGangCnt() );
+    
         foreach (var item in data.mPlayers )
         {
             if ( item == null || item.isEmpty() )
@@ -115,59 +111,6 @@ public class LayerCards : MonoBehaviour
         }
     }
 
-    public void refreshWall( int nDiceValue , int bankerIdx , int nLeftMJCnt, int mjCnt )
-    {
-        if ( nDiceValue <= 0 )
-        {
-            return ;
-        }
-
-        int startWallIdx = bankerIdx + nDiceValue - 1 ;
-        startWallIdx = startWallIdx % 4 ;
-        int startWallLeftFront = ( nDiceValue % 6 + 1 ) * 2 ;
-
-        int usedMJCnt = mjCnt - nLeftMJCnt ;
-        int addtionCnt = mjCnt % 8 ;
-        int addtionWallCnt = addtionCnt / 2 ;
-        int mjCntPerWall = ( mjCnt - addtionCnt ) / 4 ;
-        this.mCurWallIdx = -1 ;
-        int idx = 0 ;
-        for ( int i = startWallIdx ; i < ( startWallIdx + 4 ) ; ++i )
-        {
-            idx = i % 4 ;
-            int mjCntThisWall = mjCntPerWall ;
-            if ( addtionCnt > 0 && idx < addtionWallCnt )
-            {
-                mjCntThisWall += 2 ;
-                addtionCnt -= 2 ;
-            }
-            int curWallCanUseMJCnt = mjCntThisWall;
-
-            if ( idx == startWallIdx )
-            {
-                curWallCanUseMJCnt -= startWallLeftFront ;
-            }
-
-            if ( usedMJCnt >= curWallCanUseMJCnt )
-            {
-                usedMJCnt -= curWallCanUseMJCnt ;
-                curWallCanUseMJCnt = 0 ;
-            }
-            else
-            {
-                curWallCanUseMJCnt -= usedMJCnt ;
-                usedMJCnt = 0 ;
-                if ( this.mCurWallIdx < 0 )
-                {
-                    this.mCurWallIdx = idx ;
-                }
-                
-            }
-            Debug.Log("cur idx = " + idx + "can wall cnt = " + curWallCanUseMJCnt + " usedCnt = " + usedMJCnt );
-            this.mWalls[idx].refresh(mjCntThisWall,( startWallIdx == idx ) ? startWallLeftFront : 0,curWallCanUseMJCnt );
-        }
-    }
-
     public void refreshPlayerCards( int playerIdx , List<int> vChu , List<PlayerActedCard> vMing , List<int> vHoldAn, int holdAnCnt )
     {
         this.mPlayerCards[playerIdx].refresh(vChu,vMing,vHoldAn,holdAnCnt);
@@ -175,30 +118,48 @@ public class LayerCards : MonoBehaviour
 
     public void onDistribute( RoomData data )
     {
-        // int startWallIdx = data.mBaseData.bankerIdx + data.mBaseData.diceValue - 1 ;
-        // startWallIdx = startWallIdx % 4 ;
-        // int startWallLeftFront = ( data.mBaseData.diceValue % 6 + 1 ) * 2 ;
-        // this.mCurWallIdx = startWallIdx;
-        // this.mWalls[this.mCurWallIdx].mFrontWallCnt = startWallLeftFront ;
         Debug.Log("onDistribute card sss");
-        this.refreshWall( data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.initCardCnt,data.mBaseData.initCardCnt );
-        
-
-        foreach (var item in data.mPlayers )
-        {
-            if ( item == null || item.isEmpty() )
-            {
-                continue ;
-            }
-
-             // decrease wall
-            for ( int i = 0 ; i < item.vHoldCards.Count ; ++i )
-            {
-                this.featchCardFromWall();
-            }
-            this.mPlayerCards[item.idx].onDistribute(item.vHoldCards,item.vHoldCards.Count);
-        }
+        // this.refreshWall( data.mBaseData.diceValue,data.mBaseData.bankerIdx,data.mBaseData.initCardCnt,data.mBaseData.initCardCnt );
+        StartCoroutine("doDistribute");
     }
+
+    public IEnumerator doDistribute()
+    {
+        yield return new WaitForSeconds(0.9f);
+        var data = this.mScene.mRoomData ;
+        var baseData = this.mScene.mRoomData.mBaseData ;
+        this.mWalls.shuffle(baseData.initCardCnt,baseData.bankerIdx,baseData.diceValue);
+        yield return new WaitForSeconds(1.5f);
+
+        for ( int iRound = 0 ; iRound < 3 ; ++iRound )
+        {
+            foreach (var item in data.mPlayers )
+            {
+                if ( item == null || item.isEmpty() )
+                {
+                    continue ;
+                }
+
+                // decrease wall
+                var cnt = 4 ;
+                if ( iRound == 2 )
+                {
+                    cnt = item.idx == baseData.bankerIdx ? 6 : 5 ;
+                }
+
+
+                for ( int i = 0 ; i < cnt ; ++i )
+                {
+                    this.featchCardFromWall();
+                }
+                this.mPlayerCards[item.idx].onDistribute(item.vHoldCards.GetRange(iRound * 4,cnt),cnt);
+            }
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        this.mWalls.showWallCard(baseData.wallCard8,baseData.wallCard16 ) ;
+    } 
 
     public void waitPlayerChu( int playerIdx )
     {
@@ -228,19 +189,19 @@ public class LayerCards : MonoBehaviour
     public void onMingGang( int playerIdx , int card , int invokerIdx , int NewCard )
     {
         this.mPlayerCards[invokerIdx].chuCardBeRemoved(card);
-        this.mPlayerCards[playerIdx].onMingGang( card,this.getDirection(playerIdx,invokerIdx),NewCard,this.featchCardFromWall() );
+        this.mPlayerCards[playerIdx].onMingGang( card,this.getDirection(playerIdx,invokerIdx),NewCard,this.featchCardFromWall(true) );
         // hide arrow ;
         this.mChuIndictor.hide();
     }
 
     public void onBuGang( int playerIdx , int card , int NewCard )
     {
-        this.mPlayerCards[playerIdx].onBuGang( card,NewCard,this.featchCardFromWall() );
+        this.mPlayerCards[playerIdx].onBuGang( card,NewCard,this.featchCardFromWall(true) );
     } 
 
     public void onAnGang( int playerIdx , int card , int NewCard )
     {
-        this.mPlayerCards[playerIdx].onAnGang(card,NewCard,this.featchCardFromWall() );
+        this.mPlayerCards[playerIdx].onAnGang(card,NewCard,this.featchCardFromWall(true) );
     }
 
     public void onHu( int playerIdx , int card , int invokerIdx )
@@ -271,15 +232,9 @@ public class LayerCards : MonoBehaviour
         this.mPlayerCards[playerIdx].showCards(vCards);
     }
 
-    Vector3 featchCardFromWall()
+    Vector3 featchCardFromWall( bool isGang = false )
     {
-        if ( this.mWalls[this.mCurWallIdx].getWallLeftCnt() > 0 )
-        {
-            return this.mWalls[this.mCurWallIdx].onFetchCardFromWall();
-        }
-
-        this.mCurWallIdx = ( this.mCurWallIdx + 1 ) % 4 ;
-        return this.mWalls[this.mCurWallIdx].onFetchCardFromWall(); ;
+        return this.mWalls.moCardFromWall(isGang) ;
     }
 
     eArrowDirect getDirection( int actIdx , int invokerIdx )
@@ -294,53 +249,5 @@ public class LayerCards : MonoBehaviour
             return eArrowDirect.eDirect_Opposite ;
         }
         return eArrowDirect.eDirect_Righ ;
-    }
-
-    /// test funct
-    public void doShuffle()
-    {
-        this.clear();
-        shuffle(108);
-    }
-    public void doClickDistribute()
-    {
-        this.refreshWall(2,0,55,108 );
-        int nCnt = 9 ;
-        List<int> vc = new List<int>();
-        while ( nCnt-- > 0 )
-        {
-            vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan,nCnt % 9 + 1 ));
-        }
-        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 1 ));
-        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 1 ));
-        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 2 ));
-        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 4 ));
-        vc.Add(MJCard.makeCardNum(eMJCardType.eCT_Wan, 4 ));
-        this.refreshPlayerCards(0,null,null,vc,14);
-        this.refreshPlayerCards(1,null,null,vc,13);
-        this.refreshPlayerCards(2,null,null,vc,13);
-        this.refreshPlayerCards(3,null,null,vc,13);
- 
-    }
-
-    public void doPeng()
-    {
-        this.onPeng(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 2 ),2);
-    }
-
-    public void doMo()
-    {
-        this.onMo(1,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 1 ));
-        //this.selfIdx = ++testIdx % 4;
-    }
-
-    public void doGang()
-    {
-        this.onBuGang(3,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 2 ),MJCard.makeCardNum(eMJCardType.eCT_Wan, 6 )) ;
-    }
-
-    public void onChu()
-    {
-        this.onChu(2,MJCard.makeCardNum(eMJCardType.eCT_Tiao, 2 ) );
     }
 }
