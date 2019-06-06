@@ -9,7 +9,7 @@ public class PlayerCard : MonoBehaviour
     public Transform mHoldAnTransform = null ;
     ICardHoldAn mHoldAn = null ;
     UnityAction<int> mReqChuPaiCallBack = null ;
-    public void makeSelfPlayerCard( UnityAction<int> pReqChuCallBack )
+    public void makeSelfPlayerCard( UnityAction<int> pReqChuCallBack, int selfIdx )
     {
         CardHoldAnSelf self = this.mHoldAnTransform.gameObject.GetComponent<CardHoldAnSelf>();
         if ( self == null )

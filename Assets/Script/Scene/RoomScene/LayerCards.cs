@@ -36,7 +36,7 @@ public class LayerCards : MonoBehaviour
                 if ( idx == value )
                 {
                     Debug.Log(" self = idx = value " + idx + " v" + value );
-                    this.mPlayerCards[idx].makeSelfPlayerCard( this.mScene.requestChu ) ;
+                    this.mPlayerCards[idx].makeSelfPlayerCard( this.mScene.requestChu ,value ) ;
                 }
                 else
                 {
