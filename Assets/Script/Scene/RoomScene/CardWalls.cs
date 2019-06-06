@@ -8,6 +8,7 @@ public class CardWalls : MonoBehaviour
 
     int mStartWallPreseverCnt = 0 ;
 
+    int mStartWallIdx = 0 ;
     int mCurWallIdx = 0 ;
     int mMoIdxOfCurWall = 0 ;
 
@@ -42,6 +43,7 @@ public class CardWalls : MonoBehaviour
         }
 
         this.mStartWallPreseverCnt = 0 ;
+        this.mStartWallIdx = 0 ;
 
         this.mCurWallIdx = 0 ;
         this.mMoIdxOfCurWall = 0 ;
@@ -65,6 +67,7 @@ public class CardWalls : MonoBehaviour
 
         int StartWallIdx = nbankeIdx + nDiceValue - 1 ;
         StartWallIdx = StartWallIdx % 4 ;
+        this.mStartWallIdx = StartWallIdx ;
         this.mStartWallPreseverCnt = ( nDiceValue % 6 + 1 ) * 2 ;
         
         this.mCurWallIdx = StartWallIdx ;
@@ -106,16 +109,17 @@ public class CardWalls : MonoBehaviour
         if ( reverGroupIdx < persvCnt )
         {
             int nNormalIdx = persvCnt - 1 - reverGroupIdx ;
-            this.mWalls[this.mCurWallIdx].showWallCard(nNormalIdx * 2,nCardNum);
+            this.mWalls[this.mStartWallIdx].showWallCard(nNormalIdx * 2,nCardNum);
+            Debug.LogWarning("showWallCardByGroupIdx wallIdx = " + this.mStartWallIdx + " normalIdx =" + nNormalIdx );
             return ;
         }
 
         // locate it last wall ;
-        var lastWallIdx  =  ( 4 + this.mCurWallIdx - 1 ) % 4 ;
+        var lastWallIdx  =  ( 4 + this.mStartWallIdx - 1 ) % 4 ;
         var gcnt = this.mWalls[lastWallIdx].mWallTotalCnt / 2 ; 
         reverGroupIdx -= persvCnt ;
         int normalIdx = gcnt - 1 - reverGroupIdx ;
-        Debug.LogWarning("gcnt = " + gcnt + " nomral idx " + normalIdx + " persvCnt " + persvCnt + " rever groupidx " + reverGroupIdx );
+        Debug.LogWarning("gcnt = " + gcnt + " nomral idx " + normalIdx + " lastWallIdx " + lastWallIdx + " rever groupidx " + reverGroupIdx );
         this.mWalls[lastWallIdx].showWallCard(normalIdx * 2,nCardNum);
     }
     public Vector3 moCardFromWall( bool isGang )

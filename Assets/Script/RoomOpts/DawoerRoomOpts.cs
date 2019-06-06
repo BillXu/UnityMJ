@@ -59,9 +59,9 @@ public class DawoerRoomOpts : IRoomOpts
 
         set
         {
-            //this.mOpts["seatCnt"] = value ;
-            Debug.LogWarning("temp test set seat = 2");
-            this.mOpts["seatCnt"] = 2 ;
+            this.mOpts["seatCnt"] = value ;
+            //Debug.LogWarning("temp test set seat = 2");
+            //this.mOpts["seatCnt"] = 2 ;
         }
     }
     public ePayRoomCardType payType
