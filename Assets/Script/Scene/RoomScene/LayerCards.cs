@@ -41,11 +41,35 @@ public class LayerCards : MonoBehaviour
                 else
                 {
                     var ePosDir = getDirection(value,idx) ;
-                    this.mPlayerCards[idx].makeOtherPlayerCard(ePosDir);
+                    this.mPlayerCards[idx].makeOtherPlayerCard(ePosDir,value );
                 }
             }
 
             this.mCameraParent.transform.DOLocalRotate( new Vector3(0,value * -90,0),0.3f);
+            switch ( value )
+            {
+                case 0 :
+                {
+                    GameObject.Find("Main Camera").transform.localPosition = new Vector3(0,201f,-165.8f);
+                }
+                break;
+                case 1:
+                {
+                    GameObject.Find("Main Camera").transform.localPosition = new Vector3(0,208f,-173.1f);
+                }
+                break;
+                case 2 :
+                {
+                    GameObject.Find("Main Camera").transform.localPosition = new Vector3(0,201.2f,-167.6f);
+                }
+                break ;
+                case 3 :
+                {
+                    GameObject.Find("Main Camera").transform.localPosition = new Vector3(0,206f,-171f);
+                }
+                break ;
+            }
+            
             this._selfIdx = value ;
         }
 
@@ -250,4 +274,60 @@ public class LayerCards : MonoBehaviour
         }
         return eArrowDirect.eDirect_Righ ;
     }
+
+
+    /// test func
+    public int testSelfIdx = 0 ;
+    public void TestFunc_0()
+    {
+        this.mWalls.shuffle(136,1,1) ;
+    }
+
+    public void TestFunc_1()
+    {
+        this.clear();
+        this.selfIdx = (++testSelfIdx) % 4;
+    }
+
+    public void TestFunc_2()
+    {
+        List<int> vCards = new List<int>();
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,1) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,1) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,1) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,2) );
+
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,3) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,3) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,4) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,4) );
+
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,5) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,5) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,6) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,6) );
+
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,7) );
+        vCards.Add( MJCard.makeCardNum( eMJCardType.eCT_Wan,7) );
+        this.mPlayerCards[this.selfIdx].onDistribute(vCards,vCards.Count);
+
+        int nCnt = 12 ;
+        vCards.Clear();
+        while ( nCnt-- > 0 )
+        {
+            vCards.Add(0);
+        }
+        this.mPlayerCards[(this.selfIdx + 1 ) % 4].onDistribute(vCards,vCards.Count);
+        this.mPlayerCards[(this.selfIdx + 2 ) % 4].onDistribute(vCards,vCards.Count);
+        this.mPlayerCards[(this.selfIdx + 3 ) % 4].onDistribute(vCards,vCards.Count);
+    }
+    public void TestFunc_3()
+    {
+        this.mPlayerCards[(this.selfIdx + 1 ) % 4].onMingGang(MJCard.makeCardNum( eMJCardType.eCT_Tong,9),eArrowDirect.eDirect_Opposite,MJCard.makeCardNum( eMJCardType.eCT_Wan,7),Vector3.zero);
+        this.mPlayerCards[this.selfIdx].onMingGang(MJCard.makeCardNum( eMJCardType.eCT_Wan,1),eArrowDirect.eDirect_Opposite,MJCard.makeCardNum( eMJCardType.eCT_Wan,7),Vector3.zero);
+        this.mPlayerCards[(this.selfIdx + 2 ) % 4].onMingGang(MJCard.makeCardNum( eMJCardType.eCT_Tiao,9),eArrowDirect.eDirect_Opposite,MJCard.makeCardNum( eMJCardType.eCT_Wan,7),Vector3.zero);
+        this.mPlayerCards[(this.selfIdx + 3 ) % 4].onMingGang(MJCard.makeCardNum( eMJCardType.eCT_Tong,7),eArrowDirect.eDirect_Opposite,MJCard.makeCardNum( eMJCardType.eCT_Wan,7),Vector3.zero);
+    }
+
+
 }

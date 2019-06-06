@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System ;
 public class CardWall : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -11,7 +11,7 @@ public class CardWall : MonoBehaviour
     public int mWallTotalCnt = 0 ;
     void Start()
     {
-
+        
     }
 
     public float wallHeight
@@ -69,6 +69,7 @@ public class CardWall : MonoBehaviour
             p.transform.localPosition = new Vector3( startX -  pairIdx * p.world_x_Size,0,0 );
             this.mCards.Add(p);
         }
+        updateChildScale();
     }
 
     // public void refresh( int totalCnt , int nFrontCnt, int nBackCnt )
@@ -143,6 +144,7 @@ public class CardWall : MonoBehaviour
         this.mCards[idx] = card ;
         card.transform.localPosition = pos ;
         Debug.LogWarning("show wall card = idx " + idx + " cardnum =" + cardNum );
+        updateChildScale();
         return true ;
     }
 
@@ -150,5 +152,14 @@ public class CardWall : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void updateChildScale()
+    {
+        for (int i = 0; i < this.transform.childCount; i++)
+        {
+            var p = this.transform.GetChild(i);
+            p.localScale = new Vector3(p.localScale.x / Math.Abs(p.localScale.x),p.localScale.y / Math.Abs(p.localScale.y),p.localScale.z / Math.Abs(p.localScale.z));
+        }
     }
 }

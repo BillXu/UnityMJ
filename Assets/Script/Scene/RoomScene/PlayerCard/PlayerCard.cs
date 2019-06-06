@@ -30,11 +30,36 @@ public class PlayerCard : MonoBehaviour
             ot.mMJFactory = null;   
         }
 
-        var roateX = GameObject.Find("Main Camera").transform.localRotation.eulerAngles.x - 4 ;
-        self.transform.localEulerAngles = new Vector3(roateX,0,0) ;
+        //var roateX = GameObject.Find("Main Camera").transform.localRotation.eulerAngles.x - 4 ;
+        self.transform.localEulerAngles = new Vector3(42,0,0) ;
         var pos = self.transform.localPosition;
-        pos.y = 78.65f;
-        pos.z = -84.1f;
+        switch ( selfIdx )
+        {
+            case 0 :
+            {
+                pos.y = 76.9f;
+                pos.z = -86f;
+            }
+            break;
+            case 1:
+            {
+                pos.y = 74.7f;
+                pos.z = -87.3f;
+            }
+            break;
+            case 2 :
+            {
+                pos.y = 75.4f;
+                pos.z = -86.9f;
+            }
+            break ;
+            case 3 :
+            {
+                pos.y = 75.2f;
+                pos.z = -86.9f;
+            }
+            break ;
+        }
         self.transform.localPosition = pos;
 
         var posMing = this.mHoldMing.transform.localPosition;
@@ -43,7 +68,7 @@ public class PlayerCard : MonoBehaviour
         this.mHoldMing.transform.localPosition = posMing;
     }
 
-    public void makeOtherPlayerCard( eArrowDirect ePosDir )
+    public void makeOtherPlayerCard( eArrowDirect ePosDir , int selfIdx )
     {
         CardHoldAnOther other = this.mHoldAnTransform.gameObject.GetComponent<CardHoldAnOther>();
         if ( other == null )
@@ -67,7 +92,86 @@ public class PlayerCard : MonoBehaviour
         other.transform.localEulerAngles = Vector3.zero ;
         var pos = other.transform.localPosition;
         pos.y = 1.4f;
-        pos.z = eArrowDirect.eDirect_Opposite == ePosDir ? -33.8f : -38.7f;
+        switch ( selfIdx )
+        {
+            case 0 :
+            {
+                switch ( ePosDir )
+                {
+                    case eArrowDirect.eDirect_Left:
+                    case eArrowDirect.eDirect_Righ:
+                    {
+                        pos.z = -38f;
+                    }
+                    break;
+                    case eArrowDirect.eDirect_Opposite:
+                    {
+                        pos.z = -34.8f;
+                    }
+                    break ;
+                }
+                
+            }
+            break;
+            case 1:
+            {
+                switch ( ePosDir )
+                {
+                    case eArrowDirect.eDirect_Left:
+                    {
+                        pos.z = -35.7f;
+                    }
+                    break;
+                    case eArrowDirect.eDirect_Opposite:
+                    {
+                        pos.z = -35.5f;
+                    }
+                    break ;
+                    case eArrowDirect.eDirect_Righ:
+                    {
+                        pos.z = -36.9f;
+                    }
+                    break ;
+                }
+            }
+            break;
+            case 2 :
+            {
+                switch ( ePosDir )
+                {
+                    case eArrowDirect.eDirect_Righ:
+                    case eArrowDirect.eDirect_Left:
+                    {
+                        pos.z = -38.1f;
+                    }
+                    break;
+                    case eArrowDirect.eDirect_Opposite:
+                    {
+                        pos.z = -33.4f;
+                    }
+                    break ;
+                }
+            }
+            break ;
+            case 3 :
+            {
+                switch ( ePosDir )
+                {
+                    case eArrowDirect.eDirect_Opposite:
+                    {
+                        pos.z = -35.5f;
+                    }
+                    break ;
+                    case eArrowDirect.eDirect_Left:
+                    case eArrowDirect.eDirect_Righ:
+                    {
+                        pos.z = -36.7f;
+                    }
+                    break ;
+                }
+            }
+            break ;
+        }
         other.transform.localPosition = pos;
         
         var posMing = this.mHoldMing.transform.localPosition;

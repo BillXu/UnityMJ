@@ -21,7 +21,8 @@ public class MJFactory : MonoBehaviour
         while ( cnt-- > 0  ) // clone left ;
         {
             var unknwon = createMJCardObject(eMJCardType.eCT_Tong,1) ;
-            this.recycleUnknownCard(unknwon);
+            this.recycleCard(unknwon);
+            //this.recycleUnknownCard(unknwon);
         }
 
         // create normal cards ; , wan tong tiao ;
@@ -115,6 +116,8 @@ public class MJFactory : MonoBehaviour
         if ( this.vChacerCards.ContainsKey(num) == false || this.vChacerCards[num] == null )
         {
             Debug.LogError("do not have card num = " + num + " type =" + MJCard.parseCardType(num) + " value = " + MJCard.parseCardValue(num) );
+            var unknwon = this.createMJCardObject(eMJCardType.eCT_Tong,1);
+            this.recycleCard(unknwon);
             return getUnknownCard(parent);
         }
 
@@ -122,6 +125,8 @@ public class MJFactory : MonoBehaviour
         if ( v.Count == 0 )
         {
             Debug.LogError("why do not have this card ? , more than 4 = " + num);
+            var unknwon = this.createMJCardObject(eMJCardType.eCT_Tong,1);
+            this.recycleCard(unknwon);
             return getUnknownCard(parent);
         }
 
@@ -129,6 +134,7 @@ public class MJFactory : MonoBehaviour
         v.RemoveAt(0);
         tmp.transform.SetParent(parent);
         tmp.gameObject.SetActive(true);
+        tmp.transform.localScale = new Vector3(-1,-1,-1);
         return tmp ;
     }
 
@@ -139,23 +145,25 @@ public class MJFactory : MonoBehaviour
             Debug.LogWarning( "do not have mj card compoent" );
             return ;
         }
-        card.gameObject.SetActive(false);
-        card.transform.SetParent(this.transform);
-        this.vUnknownCards.Add(card);
+        recycleCard(card);
+        // card.gameObject.SetActive(false);
+        // card.transform.SetParent(this.transform);
+        // this.vUnknownCards.Add(card);
     }
     public MJCard getUnknownCard( Transform parent )
     {
-        if ( this.vUnknownCards.Count == 0 )
-        {
-            Debug.LogError("it is impossile , why unknown card is null ?");
-            return null ;
-        }
+        return getCard(MJCard.makeCardNum(eMJCardType.eCT_Tong,1),parent);
+        // if ( this.vUnknownCards.Count == 0 )
+        // {
+        //     Debug.LogError("it is impossile , why unknown card is null ?");
+        //     return null ;
+        // }
 
-        var tmp = this.vUnknownCards[0] ;
-        this.vUnknownCards.RemoveAt(0);
-        tmp.transform.SetParent(parent);
-        tmp.gameObject.SetActive(true);
-        return tmp ;
+        // var tmp = this.vUnknownCards[0] ;
+        // this.vUnknownCards.RemoveAt(0);
+        // tmp.transform.SetParent(parent);
+        // tmp.gameObject.SetActive(true);
+        // return tmp ;
     }
     MJCard createMJCardObject(eMJCardType type , int value )
     {
