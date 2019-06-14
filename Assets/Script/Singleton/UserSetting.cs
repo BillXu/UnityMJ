@@ -87,7 +87,11 @@ public class UserSetting : SingletonBehaviour<UserSetting>
     private void doSave()
     {
         Debug.LogWarning("current do not save use stttings");
+#if UNITY_IPHONE  
+       //platform="IPHONE平台";  
+#elif UNITY_ANDROID  
         return ;
+#endif
         if ( this.mJsContent == null )
         {
             PlayerPrefs.DeleteKey("userSetting") ;
