@@ -21,6 +21,7 @@ public class LoginSceneData : NetBehaviour
         }
 
         EventDispatcher.getInstance().registerEventHandle(PlayerBaseData.EVENT_RECIEVED_BASE_DATA,this.loginEvent ) ;
+        EventDispatcher.getInstance().registerEventHandle(WechatManager.EVENT_RECIEVED_WECHAT_INFO,this.recivedWechatInfoEvent ) ;
     }
     protected override void onConnectResult(bool isSucess)
     {
@@ -151,5 +152,22 @@ public class LoginSceneData : NetBehaviour
         }
         return false ;
     }
+    protected bool recivedWechatInfoEvent( EventArg arg )
+    {
+        //{ isOk : 1 ,"openid":"ol23Kw11oXU051_Y5Ajkj_L5uOxc","nickname":"技术支持","sex":2,"language":"zh_CN","city":"","province":"Shanghai","country":"CN","headimgurl":"http:\/\/thirdwx.qlogo.cn\/mmopen\/vi_32\/ucIOqQI5mIQfH6Q0fFFONslMFrBibcXCziaQTXmEPjI21JogQibDTibNS6nHa6FgyfNBUTFKPYv7Q4n6aCbeR53xkg\/132","privilege":[],"unionid":"orLF31uNbrRRzsfVXZ54ATq1k694"}
+        var js = ((EventWithObject<JSONObject>)arg).argObject;
+        if ( ((int)js["isOk"].Number) == 0 )
+        {
+            Prompt.promptText("获取微信信息失败！");
+            return false;
+        }
+        this.mCurAccount = js["unionid"].Str;
+        this.mCurHeadIcon = js["headimgurl"].Str ;
+        this.mCurNickName = js["nickname"].Str;
+        this.mCurPwd = "1" ;
+        this.mSex = (eSex)((int)js["sex"].Number - 1) ;
 
+        this.doLogin();
+        return true ;
+    }
 }

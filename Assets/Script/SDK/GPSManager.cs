@@ -5,7 +5,7 @@ using Boomlagoon.JSON ;
 
 public class GPSManager : SingletonBehaviour<GPSManager>
 {
-    static string EVENT_GPS_RESULT = "EVENT_GPS_RESULT" ; // { code : 2 , longitude : 23 , latitude : 2 , address : "" }
+    public static string EVENT_GPS_RESULT = "EVENT_GPS_RESULT" ; // { code : 2 , longitude : 23 , latitude : 2 , address : "" }
     
     static string SDK_GPS_REQUEST_GPSINFO = "SDK_GPS_REQUEST_GPSINFO" ; // { isNeedAddress : 1 } 
     static string SDK_GPS_CACULATE_DISTANCE = "SDK_GPS_CACULATE_DISTANCE" ; // { A_longitude : 23, A_latitude : 23 ,B_longitude : 23, B_latitude : 23 }

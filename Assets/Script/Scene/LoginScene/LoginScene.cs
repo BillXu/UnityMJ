@@ -17,6 +17,8 @@ public class LoginScene : MonoBehaviour
             Prompt.promptText("正在登录中...");
             return ;
         }
+
+        WechatManager.getInstance().reqAuthor();
     }
 
     public void clickVistor_0()

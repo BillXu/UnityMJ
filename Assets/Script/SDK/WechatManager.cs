@@ -17,8 +17,8 @@ public class WechatManager : SingletonBehaviour<WechatManager>
  
     static string EVENT_WECHAT_CODE = "EVENT_WECHAT_CODE" ; // { errorCode : 0 , code : "" } 
     static string EVENT_SHARE_RESULT = "EVENT_SHARE_RESULT" ; // { isOk : 0 , actFlag : "" } 
-    static string EVENT_RECIEVED_WECHAT_INFO = "EVENT_RECIEVED_WECHAT_INFO" ; //{ isOK : 1 ,"openid":"ol23Kw11oXU051_Y5Ajkj_L5uOxc","nickname":"技术支持","sex":2,"language":"zh_CN","city":"","province":"Shanghai","country":"CN","headimgurl":"http:\/\/thirdwx.qlogo.cn\/mmopen\/vi_32\/ucIOqQI5mIQfH6Q0fFFONslMFrBibcXCziaQTXmEPjI21JogQibDTibNS6nHa6FgyfNBUTFKPYv7Q4n6aCbeR53xkg\/132","privilege":[],"unionid":"orLF31uNbrRRzsfVXZ54ATq1k694"}
-    static string EVENT_WECHAT_SHARE_RESULT = "EVENT_WECHAT_SHARE_RESULT"; // { isOk : 0 , actionTag : "" }
+    public static string EVENT_RECIEVED_WECHAT_INFO = "EVENT_RECIEVED_WECHAT_INFO" ; //{ isOK : 1 ,"openid":"ol23Kw11oXU051_Y5Ajkj_L5uOxc","nickname":"技术支持","sex":2,"language":"zh_CN","city":"","province":"Shanghai","country":"CN","headimgurl":"http:\/\/thirdwx.qlogo.cn\/mmopen\/vi_32\/ucIOqQI5mIQfH6Q0fFFONslMFrBibcXCziaQTXmEPjI21JogQibDTibNS6nHa6FgyfNBUTFKPYv7Q4n6aCbeR53xkg\/132","privilege":[],"unionid":"orLF31uNbrRRzsfVXZ54ATq1k694"}
+    public static string EVENT_WECHAT_SHARE_RESULT = "EVENT_WECHAT_SHARE_RESULT"; // { isOk : 0 , actionTag : "" }
 
     static string SDK_WECHAT_INIT = "SDK_WECHAT_INIT" ; // { appID : "dsjfa" }
     static string SDK_WECHAT_AUTHOR = "SDK_WECHAT_AUTHOR" ; // {} 

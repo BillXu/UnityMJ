@@ -16,6 +16,7 @@ public class ClientPlayerData : SingletonBehaviour<ClientPlayerData>
         this.vPlayerDatas[typeof(PlayerBaseData).Name] = new PlayerBaseData();
         this.vPlayerDatas[typeof(PlayerRecorder).Name] = new PlayerRecorder();
         EventDispatcher.getInstance().registerEventHandle(Network.EVENT_MSG,this.onMsgEvent);
+        EventDispatcher.getInstance().registerEventHandle(GPSManager.EVENT_GPS_RESULT,this.onGPSResultEvent );
     }
 
     bool onMsgEvent( EventArg e )
@@ -23,6 +24,29 @@ public class ClientPlayerData : SingletonBehaviour<ClientPlayerData>
         var emsg = (EventMsg)e;
         return onMsg(emsg.msgID,emsg.msgData) ;
     }
+
+    bool onGPSResultEvent( EventArg e )
+    {
+        var js = ((EventWithObject<JSONObject>)e).argObject ;
+        var code = (int)js["code"].Number;
+        if ( code != 0 )
+        {
+            Prompt.promptText("获取位置信息失败code = " + code );
+            return true ;
+        }
+
+        var baseData = getComponentData<PlayerBaseData>();
+        baseData.GPS_J = js["longitude"].Number ;
+        baseData.GPS_W = js["latitude"].Number ;
+        // tell svr ;
+        var jsMsg = new JSONObject();
+        jsMsg["J"] = baseData.GPS_J ;
+        jsMsg["W"] = baseData.GPS_W ;
+        Network.getInstance().sendMsg(jsMsg,eMsgType.MSG_PLAYER_UPDATE_GPS,eMsgPort.ID_MSG_PORT_DATA,getSelfUID()) ;
+        Debug.Log("get gps location = ");
+        return true ;
+    }
+
     bool onMsg( eMsgType msgID , JSONObject jsMsg )
     {
         switch(msgID)
@@ -42,6 +66,7 @@ public class ClientPlayerData : SingletonBehaviour<ClientPlayerData>
                 }                
                 this.getComponentData<PlayerRecorder>().init(baseData.uid);
                 // dispatch event ;
+                GPSManager.getInstance().requestGPS();
                 EventDispatcher.getInstance().dispatch(PlayerBaseData.EVENT_RECIEVED_BASE_DATA);
             }
             break ;
