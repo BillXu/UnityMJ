@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Boomlagoon.JSON ;
 using UnityEngine.UI ;
-
+using UnityEngine.EventSystems ;
 public class LayerDlg : MonoBehaviour
 {
     public GameObject mBtnInviteFirends;
@@ -16,6 +16,9 @@ public class LayerDlg : MonoBehaviour
     public DlgResultSingle mDlgResultSingle ;
     public DlgDismissRoom mDlgDismissRoom ;
     public DlgResultTotal mDlgResultTotal ;
+    public DlgVoiceRecording mDlgVoiceRecording ;
+
+    public DlgEmojiText mDlgEmojiText ;
 
     public void refresh( RoomData data )
     {
@@ -190,5 +193,46 @@ public class LayerDlg : MonoBehaviour
             this.mDlgDismissRoom.onRecivedPlayerBrifeData(infoData);
         }
         
+    }
+
+    // button Voice 
+    public void onButtonVoiceDown( BaseEventData eventData )
+    {
+        // show dlg ;
+        if ( VoiceManager.getInstance().canStartRecorder() == false )
+        {
+            Prompt.promptDlg("系统正常处理语音，稍等一下");
+            return ;
+        }
+
+        this.mDlgVoiceRecording.showDlg();
+        VoiceManager.getInstance().startRecord();
+    }
+
+    public void onButtonVoiceResult( bool isCanncel )
+    {
+        if ( this.mDlgVoiceRecording.isShow() == false )
+        {
+            return ;
+        }
+        // close dlg ;
+        this.mDlgVoiceRecording.closeDlg();
+        VoiceManager.getInstance().stopRecord( isCanncel == false ) ;
+    }
+
+    public void onDlgVoiceRecordingTimeOut()
+    {
+        VoiceManager.getInstance().stopRecord(true) ;
+        Prompt.promptDlg("录语超过时长自动结束并发送了");
+    }
+
+    public void showDlgEmojiText()
+    {
+        this.mDlgEmojiText.showDlg(null,0,null);
+    }
+
+    public void onDlgEmojiText( eChatMsgType type , int idx )
+    {
+        this.mScene.mRoomData.sendPlayerChat(type, idx.ToString() ) ;
     }
 }

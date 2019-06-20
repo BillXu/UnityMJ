@@ -17,7 +17,13 @@ public class RoomData : NetBehaviour
         mPlayers.Add(null);
         mPlayers.Add(null);
         this.registerEvent(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA);
-        this.reqRoomInfo(ClientPlayerData.getInstance().getComponentData<PlayerBaseData>().stayInRoomID) ;
+        this.registerEvent(VoiceManager.EVENT_UPLOAD_FINISH);
+        this.registerEvent(VoiceManager.EVENT_PLAY_BEGIN);
+        this.registerEvent(VoiceManager.EVENT_PLAY_FINISH);
+        if ( ClientPlayerData.getInstance() != null )
+        {
+            this.reqRoomInfo(ClientPlayerData.getInstance().getComponentData<PlayerBaseData>().stayInRoomID) ;
+        }
     }
     protected override bool onEvent(EventArg arg)
     {
@@ -29,8 +35,30 @@ public class RoomData : NetBehaviour
             {
                 this.mSceneDelegate.onRecivedPlayerBrifeData(info);
             }
-            
+            return true;    
         }
+
+        if ( VoiceManager.EVENT_UPLOAD_FINISH == arg.type )
+        {
+            var eventObj = (EventWithObject<string>)arg ;
+            this.sendPlayerChat(eChatMsgType.eChatMsg_Voice,eventObj.argObject );
+            return true ;
+        }
+
+        if ( VoiceManager.EVENT_PLAY_BEGIN == arg.type )
+        {
+            var eventObj = (EventWithObject<int>)arg ;
+            this.mSceneDelegate.onPlayerChatMsg(eventObj.argObject,eChatMsgType.eChatMsg_Voice,"begin") ;
+            return true ;
+        }
+
+        if ( VoiceManager.EVENT_PLAY_FINISH == arg.type )
+        {
+            var eventObj = (EventWithObject<int>)arg ;
+            this.mSceneDelegate.onPlayerChatMsg(eventObj.argObject,eChatMsgType.eChatMsg_Voice,"end") ;
+            return true ;
+        }
+
         return base.onEvent(arg);
     }
     protected override bool onMsg( eMsgType nMsgID , JSONObject msg )
@@ -275,7 +303,15 @@ public class RoomData : NetBehaviour
             break;
             case eMsgType.MSG_ROOM_CHAT_MSG:
             {
-                this.mSceneDelegate.onPlayerChatMsg((int)msg["playerIdx"].Number,(eChatMsgType)msg["type"].Number,msg["content"].Str) ;
+                var type = (eChatMsgType)msg["type"].Number ;
+                var content = msg["content"].Str ;
+                var idx = (int)msg["playerIdx"].Number ;
+                if ( eChatMsgType.eChatMsg_Voice == type )
+                {
+                    VoiceManager.getInstance().playVoice(content,idx ) ;
+                    break ;
+                }
+                this.mSceneDelegate.onPlayerChatMsg(idx,type,content) ;
             }
             break ;
         }
@@ -668,5 +704,19 @@ public class RoomData : NetBehaviour
             cnt += item.getGangCnt();
         }
         return cnt ;
+    }
+
+    public void sendPlayerChat( eChatMsgType type , string strContent )
+    {
+        if ( getSelfIdx() == -1 )
+        {
+            Prompt.promptText( "您没有坐下，不能发言。" );
+            return ;
+        }
+
+        var msg = new JSONObject();
+        msg["type"] = (int)type ;
+        msg["content"] = strContent ;
+        this.sendRoomMsg( msg,eMsgType.MSG_PLAYER_CHAT_MSG ) ;
     }
 }

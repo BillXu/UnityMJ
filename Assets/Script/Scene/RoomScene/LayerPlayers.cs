@@ -164,4 +164,9 @@ public class LayerPlayers : MonoBehaviour
         }
         this.bankIdx = this.mScene.mRoomData.mBaseData.bankerIdx ;
     }
+
+    public void onPlayerChatMsg( int playerIdx , eChatMsgType type , string strContent )
+    {
+        this.mPlayers[playerIdx].onPlayerChatMsg(type,strContent);
+    }
 }

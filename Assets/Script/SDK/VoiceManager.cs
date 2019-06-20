@@ -27,7 +27,7 @@ public class VoiceManager : SingletonBehaviour<VoiceManager>
     private string TEMP_PATH = "" ;
 
     public static string EVENT_PLAY_BEGIN = "EVENT_PLAY_BEGIN"; // int userTag = 0 ;
-    public static string EVENT_PLAY_FINISH = "EVENT_PLAY_FINISH"; // { code : 2 , fileName : "" }
+    public static string EVENT_PLAY_FINISH = "EVENT_PLAY_FINISH"; // int userTag = 0 ;
     public static string EVENT_UPLOAD_FINISH = "EVENT_UPLOAD_FINISH"; // string fileID ;
 
     IGCloudVoice mVoiceEngine = null;

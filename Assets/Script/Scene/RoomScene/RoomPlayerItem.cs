@@ -7,6 +7,7 @@ public class RoomPlayerItem : MonoBehaviour
 {
     public Text mChip ;
     public PlayerInfoItem mItem;
+    public RoomPlayerChat mRecievedChat ;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,5 +24,10 @@ public class RoomPlayerItem : MonoBehaviour
     {
         this.mChip.text = "" + nChips ;
         this.mItem.playerUID = nUID ;
+    }
+
+    public void onPlayerChatMsg( eChatMsgType type , string strContent )
+    {
+        this.mRecievedChat.onPlayerChatMsg(type,strContent);
     }
 }

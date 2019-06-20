@@ -83,7 +83,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
 
     public void onPlayerChatMsg( int playerIdx , eChatMsgType type , string strContent )
     {
-
+        this.mLayerPlayers.onPlayerChatMsg(playerIdx,type,strContent );
     }
     public void onPlayerStandUp( int idx )
     {
