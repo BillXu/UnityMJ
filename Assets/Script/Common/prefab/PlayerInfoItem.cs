@@ -29,6 +29,11 @@ public class PlayerInfoItem : MonoBehaviour
         }
     }
 
+    public void clear()
+    {
+        this.onPlayerItemInfo( null) ;
+    }
+
     private void Awake() {
         mID.text = "0" ;
     }
@@ -40,14 +45,14 @@ public class PlayerInfoItem : MonoBehaviour
 
     public void onPlayerItemInfo( PlayerInfoData data )
     {
-        if ( data.uid != this.playerUID && this.playerUID != 0 )
+        if ( data != null && data.uid != this.playerUID && this.playerUID != 0 )
         {
             return ;
         }
-        this.mID.text = data.uid.ToString();
-        this.mName.text = data.name ;
-        this.mHeadIcon.url = data.headUrl ;
-        var isMale = data.gender == eSex.eSex_Male ;
+        this.mID.text = data == null ? "0" : data.uid.ToString();
+        this.mName.text = data == null ? "" : data.name ;
+        this.mHeadIcon.url = data == null ? "" : data.headUrl ;
+        var isMale = data == null ? false : (data.gender == eSex.eSex_Male) ;
         this.mMaleIcon.SetActive(isMale)  ;
         this.mFemalIcon.SetActive(!isMale);
     }

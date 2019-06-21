@@ -19,6 +19,7 @@ public class LayerDlg : MonoBehaviour
     public DlgVoiceRecording mDlgVoiceRecording ;
 
     public DlgEmojiText mDlgEmojiText ;
+    public DlgLocation mDlgLocation ;
 
     public void refresh( RoomData data )
     {
@@ -43,10 +44,11 @@ public class LayerDlg : MonoBehaviour
         this.mDlgResultSingle.close();
         this.mDlgEatGangOpts.close();
         this.mDlgAct.close();
+        this.mDlgLocation.closeDlg();
     }
     public void onClickLoaction()
     {
-        Prompt.promptText( "Loaction" );
+        this.mDlgLocation.showDlg(null,this.mScene.mRoomData,null );
     }
 
     public void onClickCopyRoomNum()
@@ -192,9 +194,20 @@ public class LayerDlg : MonoBehaviour
         {
             this.mDlgDismissRoom.onRecivedPlayerBrifeData(infoData);
         }
+
+        if ( this.mDlgLocation.isShowDlg() )
+        {
+            this.mDlgLocation.refresh( this.mScene.mRoomData );
+        }
         
     }
-
+    public void onPlayerSitDown(RoomPlayerData p )
+    {
+        if ( this.mDlgLocation.isShowDlg() )
+        {
+            this.mDlgLocation.refresh( this.mScene.mRoomData );
+        }
+    }
     // button Voice 
     public void onButtonVoiceDown( BaseEventData eventData )
     {

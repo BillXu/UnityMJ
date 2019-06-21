@@ -71,6 +71,7 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
             this.mDeskTimer.selfIdx = p.idx ;
         }
         this.mLayerPlayers.onPlayerSitDown(p);
+        this.mLayerDlg.onPlayerSitDown(p);
     }
     public void onMJActError( RoomPlayerData p )
     {
