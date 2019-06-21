@@ -29,6 +29,10 @@ public class PlayerInfoItem : MonoBehaviour
         }
     }
 
+    private void Awake() {
+        mID.text = "0" ;
+    }
+
     public void onClickHeadIcon()
     {
         Debug.Log("click head icon");
@@ -36,7 +40,7 @@ public class PlayerInfoItem : MonoBehaviour
 
     public void onPlayerItemInfo( PlayerInfoData data )
     {
-        if ( data.uid != this.playerUID )
+        if ( data.uid != this.playerUID && this.playerUID != 0 )
         {
             return ;
         }

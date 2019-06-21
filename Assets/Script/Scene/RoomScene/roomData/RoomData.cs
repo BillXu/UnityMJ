@@ -35,7 +35,7 @@ public class RoomData : NetBehaviour
             {
                 this.mSceneDelegate.onRecivedPlayerBrifeData(info);
             }
-            return true;    
+            return false;    
         }
 
         if ( VoiceManager.EVENT_UPLOAD_FINISH == arg.type )

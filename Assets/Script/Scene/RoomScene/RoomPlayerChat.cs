@@ -13,11 +13,12 @@ public class RoomPlayerChat : MonoBehaviour
     public UnityEngine.Transform mEmojiNode = null;
     public Text mChatText ;
     public GameObject mChatTextNode ;
-
+    public Vector3 mChatTextNodePos ;
     public Dictionary<string,UnityArmatureComponent> mEmojis = new Dictionary<string, UnityArmatureComponent>();
     void Start()
     {
         this.mEmojiNode.gameObject.SetActive(true);
+        this.mChatTextNodePos = this.mChatTextNode.transform.localPosition;
     }
 
     // Update is called once per frame
@@ -89,8 +90,16 @@ public class RoomPlayerChat : MonoBehaviour
             case 6: content = "见到你们，我真高兴！" ; break;
             case 7: content = "能不能有点追求,点炮就胡" ; break;
         }
+
+        // unity text bg image update maybe delay , so we need some tricks ;
         this.mChatTextNode.SetActive(true);
+        this.mChatTextNode.transform.localPosition = new Vector3(-1000,0,0);
         this.mChatText.text = content ;
+        yield return new WaitForEndOfFrame();
+        this.mChatTextNode.SetActive(false);
+        yield return new WaitForEndOfFrame();
+        this.mChatTextNode.SetActive(true);
+        this.mChatTextNode.transform.localPosition = this.mChatTextNodePos;
         yield return new WaitForSeconds(2.5f);
         this.mChatTextNode.SetActive(false);
     }
