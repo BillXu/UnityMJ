@@ -43,6 +43,10 @@ public class LayerPlayers : MonoBehaviour
                 this.mInitPlayerPos.Add( this.mPlayers[i].transform.localPosition );
                 this.mInitEffectPos.Add( this.mEffectActResults[i].transform.localPosition );
                 this.mBankIconPosInUse.Add( this.mPlayers[i].transform.TransformPoint(this.mBankIconLocalPosPerPlayer) ) ;
+                
+                var p = new PlayerInfoItem.ClickInfoItemEvent();
+                p.AddListener(this.onClickPlayerPhoto);
+                this.mPlayers[i].setClickCallBack(p);
             }
         }   
     }
@@ -168,5 +172,10 @@ public class LayerPlayers : MonoBehaviour
     public void onPlayerChatMsg( int playerIdx , eChatMsgType type , string strContent )
     {
         this.mPlayers[playerIdx].onPlayerChatMsg(type,strContent);
+    }
+
+    public void onClickPlayerPhoto( int nPlayerID )
+    {
+        this.mScene.showDlgPlayerInfo(nPlayerID);
     }
 }

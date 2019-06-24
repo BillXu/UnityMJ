@@ -88,6 +88,10 @@ public class Prompt : SingletonBehaviour<Prompt>
 
     public static void promptText( string text, float nDisplayTime = 2.0f )
     {
+        if ( Prompt.getInstance() == null )
+        {
+            return ;
+        }
         Prompt.getInstance().showPromptText(text,nDisplayTime);
     }
 

@@ -20,6 +20,7 @@ public class LayerDlg : MonoBehaviour
 
     public DlgEmojiText mDlgEmojiText ;
     public DlgLocation mDlgLocation ;
+    public DlgPlayerInfo mDlgPlayerInfo ;
 
     public void refresh( RoomData data )
     {
@@ -247,5 +248,28 @@ public class LayerDlg : MonoBehaviour
     public void onDlgEmojiText( eChatMsgType type , int idx )
     {
         this.mScene.mRoomData.sendPlayerChat(type, idx.ToString() ) ;
+    }
+
+    public void showDlgPlayerInfo( RoomPlayerData data )
+    {
+        this.mDlgPlayerInfo.showDlg(null,data,null ) ;
+    }
+
+    public void onDlgPlayerInfoResult( int playerUID , int itemIdx ) // -1 means replay voice 
+    {
+        if ( itemIdx == -1 )
+        {
+            this.mScene.mRoomData.replayLastVoice( playerUID );
+            return ;
+        }
+
+        var p = this.mScene.mRoomData.getPlayerDataByUID(playerUID);
+        if ( p == null || p.isEmpty() )
+        {
+            Prompt.promptText( "目标玩家为空" );
+            return ;
+        }
+
+        this.mScene.mRoomData.sendPlayerInteractEmoji( p.idx,itemIdx);
     }
 }

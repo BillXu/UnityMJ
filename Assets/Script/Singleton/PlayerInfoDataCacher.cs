@@ -97,6 +97,19 @@ public class PlayerInfoData {
             this.playerBrifeDataMsg["W"] = value ;
         }
     }
+
+    public string address
+    {
+         get
+        {
+            return this.playerBrifeDataMsg["address"].Str ;
+        }
+        
+        set 
+        {
+            this.playerBrifeDataMsg["address"] = value ;
+        }       
+    }
 }
 
 public class PlayerInfoDataCacher : SingletonBehaviour<PlayerInfoDataCacher>

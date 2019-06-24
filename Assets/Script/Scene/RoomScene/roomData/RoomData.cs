@@ -502,6 +502,18 @@ public class RoomData : NetBehaviour
         }
         return -1 ;
     }
+
+    public RoomPlayerData getPlayerDataByUID( int uid )
+    {
+        foreach (var item in this.mPlayers )
+        {
+            if ( item != null && item.isEmpty() == false && item.nUID == uid )
+            {
+                return item ;
+            }
+        }
+        return null ;
+    }
     void onPlayerChoseDoActAboutOtherCard( eMJActType act )
     {
         if ( act != eMJActType.eMJAct_Chi )
@@ -718,5 +730,24 @@ public class RoomData : NetBehaviour
         msg["type"] = (int)type ;
         msg["content"] = strContent ;
         this.sendRoomMsg( msg,eMsgType.MSG_PLAYER_CHAT_MSG ) ;
+    }
+
+    public void sendPlayerInteractEmoji( int targetIdx , int emojiIdx )
+    {
+        if ( getSelfIdx() == -1 )
+        {
+            Prompt.promptText( "您没有坐下，不能发言。" );
+            return ;
+        }
+
+        var msg = new JSONObject();
+        msg["targetIdx"] = targetIdx ;
+        msg["emoji"] = emojiIdx ;
+        this.sendRoomMsg( msg,eMsgType.MSG_PLAYER_CHAT_MSG ) ;
+    }
+
+    public void replayLastVoice( int playerUID )
+    {
+        VoiceManager.getInstance().replayCacheVoice(playerUID);
     }
 }

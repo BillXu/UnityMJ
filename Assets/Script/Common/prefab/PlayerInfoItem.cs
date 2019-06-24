@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events ;
+using UnityEngine.EventSystems ;
+using System ;
 public class PlayerInfoItem : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -29,6 +31,9 @@ public class PlayerInfoItem : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public class ClickInfoItemEvent : UnityEvent<int>{} ;
+    public ClickInfoItemEvent onClickItem = null ;
     public void clear()
     {
         this.onPlayerItemInfo( null) ;
@@ -36,12 +41,21 @@ public class PlayerInfoItem : MonoBehaviour
 
     private void Awake() {
         mID.text = "0" ;
+
+        var eventTargetObj = this.mHeadIcon.gameObject ;
+        if ( eventTargetObj.GetComponent<EventTrigger>() == null )
+        {
+            var trige = eventTargetObj.AddComponent<EventTrigger>();
+            trige.triggers = new List<EventTrigger.Entry>();
+            var eng = new EventTrigger.Entry();
+            eng.eventID = EventTriggerType.PointerClick;
+            var evntAct = new EventTrigger.TriggerEvent();
+            evntAct.AddListener((BaseEventData a)=>{ Debug.Log("click head icon"); if ( this.onClickItem != null ){ this.onClickItem.Invoke(this.playerUID);} });
+            eng.callback = evntAct;
+            trige.triggers.Add(eng);
+        }
     }
 
-    public void onClickHeadIcon()
-    {
-        Debug.Log("click head icon");
-    }
 
     public void onPlayerItemInfo( PlayerInfoData data )
     {
@@ -71,7 +85,6 @@ public class PlayerInfoItem : MonoBehaviour
         EventDispatcher.getInstance().removeEventHandle(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA,this.onEvent);
         return false ;
     }
-
     private void OnDestroy() {
         EventDispatcher.getInstance().removeEventHandle(PlayerInfoDataCacher.EVENT_RECIEVED_PLAYER_INFO_DATA,this.onEvent);
     }

@@ -38,6 +38,7 @@ public class VoiceManager : SingletonBehaviour<VoiceManager>
     List<VoiceFile> mWaitDownloadFiles = new List<VoiceFile>();
     List<VoiceFile> mWaitPlayFiles = new List<VoiceFile>();
     List<VoiceFile> mFilePool = new List<VoiceFile>();
+    Dictionary<int,VoiceFile> mCacherLastVoice = new Dictionary<int, VoiceFile>();
     public bool init( string playerTag )
     {
         if ( this.isInit )
@@ -155,16 +156,8 @@ public class VoiceManager : SingletonBehaviour<VoiceManager>
                 if ( this.mWaitDownloadFiles.Count > 0 )
                 {
                     var p = this.mWaitDownloadFiles[0] ;
-                    this.mWaitPlayFiles.Add(p);
+                    this.playerFile(p);
                     this.mWaitDownloadFiles.RemoveAt(0);
-                    if ( this.isHaveStateFlag( eVoiceMgrState.Playing) == false )
-                    {
-                        if ( !this.doPlayFile(p) )
-                        {
-                            this.mFilePool.Add(p);
-                            this.mWaitPlayFiles.Remove(p);
-                        }
-                    }
                 }
                 else
                 {
@@ -224,7 +217,12 @@ public class VoiceManager : SingletonBehaviour<VoiceManager>
                 var first = this.mWaitPlayFiles[0];
                 EventDispatcher.getInstance().dispatch(VoiceManager.EVENT_PLAY_FINISH,first.userTag);
                 this.mWaitPlayFiles.RemoveAt(0);
-                this.mFilePool.Add(first);
+                if ( this.mCacherLastVoice.ContainsKey(first.userTag) )
+                {
+                    this.mFilePool.Add(this.mCacherLastVoice[first.userTag]);
+                    this.mCacherLastVoice.Remove(first.userTag);
+                }
+                this.mCacherLastVoice.Add(first.userTag,first);
             }
             clearStateFlag(eVoiceMgrState.Playing);
 
@@ -391,6 +389,8 @@ public class VoiceManager : SingletonBehaviour<VoiceManager>
         return true ;
     }
 
+
+
     bool doPlayFile( VoiceFile sfile )
     {
         if ( this.isInit == false )
@@ -415,6 +415,38 @@ public class VoiceManager : SingletonBehaviour<VoiceManager>
        this.addStateFlag(eVoiceMgrState.Playing);
        EventDispatcher.getInstance().dispatch(VoiceManager.EVENT_PLAY_BEGIN,sfile.userTag);
        return true ;
+    }
+    
+    void playerFile( VoiceFile file )
+    {
+        this.mWaitPlayFiles.Add(file);
+        if ( this.isHaveStateFlag( eVoiceMgrState.Playing ) == false )
+        {
+            while ( this.mWaitPlayFiles.Count > 0 )
+            {
+                Debug.Log("go on play voice file " + this.mWaitPlayFiles[0].userTag );
+                if ( !this.doPlayFile(this.mWaitPlayFiles[0]) )
+                {
+                    this.mFilePool.Add(this.mWaitPlayFiles[0]);
+                    this.mWaitPlayFiles.RemoveAt(0);
+                    continue ;
+                }
+                break ;
+            }
+        } 
+    }
+
+    public void replayCacheVoice( int nUserTag )
+    {
+        if ( this.mCacherLastVoice.ContainsKey(nUserTag) == false )
+        {
+            Prompt.promptText( "无数据播放或正在等待播放" );
+            return ;
+        }
+
+        var file = this.mCacherLastVoice[nUserTag] ;
+        this.playerFile(file);
+        this.mCacherLastVoice.Remove(nUserTag);
     }
     private bool downloadFile( string fileID, string fileFullPath )
     {

@@ -30,4 +30,9 @@ public class RoomPlayerItem : MonoBehaviour
     {
         this.mRecievedChat.onPlayerChatMsg(type,strContent);
     }
+
+    public void setClickCallBack( PlayerInfoItem.ClickInfoItemEvent callBack )
+    {
+        this.mItem.onClickItem = callBack ;
+    }
 }

@@ -250,4 +250,16 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
  
         this.mLayerPlayers.refresh(this.mRoomData);
     }
+
+    public void showDlgPlayerInfo( int playerID )
+    {
+        var data = this.mRoomData.getPlayerDataByUID(playerID);
+        if ( data == null )
+        {
+            Prompt.promptText( "目标玩家为空，id = " + playerID );
+            return ;
+        }
+
+        this.mLayerDlg.showDlgPlayerInfo(data);
+    }
 }
