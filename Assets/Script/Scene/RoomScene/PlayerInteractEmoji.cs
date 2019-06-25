@@ -28,7 +28,7 @@ public class PlayerInteractEmoji : MonoBehaviour
             var ani = this.getAni( "item" + emojiIdx);
             ani.gameObject.SetActive(true);
             ani.transform.position = startPos;
-            ani.animation.Play("item"+emojiIdx);
+            ani.animation.Play("item"+emojiIdx,1);
             //ani.animation.GotoAndStopByFrame("item"+emojiIdx,2);
             var move = ani.transform.DOMove(targetPos,0.3f) ;
             //DOTween.Sequence().Append(move).AppendCallback( ()=>{ ani.animation.Play("item"+emojiIdx);} );
@@ -38,12 +38,12 @@ public class PlayerInteractEmoji : MonoBehaviour
             var ani = this.getAni( "item" + emojiIdx);
             ani.gameObject.SetActive(true);
             ani.transform.position = startPos;
-            ani.animation.Play("item" + emojiIdx);
+            ani.animation.Play("item" + emojiIdx,1);
 
             var aniTarget = this.getAni( "item7_bow" );
             aniTarget.gameObject.SetActive(true);
             aniTarget.transform.position = targetPos;
-            aniTarget.animation.Play( "item7_bow" );
+            aniTarget.animation.Play( "item7_bow",1 );
         }
     }
 
@@ -75,6 +75,7 @@ public class PlayerInteractEmoji : MonoBehaviour
         drag.transform.parent = this.transform ;
         drag.transform.localPosition = Vector3.zero;
         drag.gameObject.SetActive(false);
+        drag.gameObject.transform.localScale = new Vector3(0.65f,0.65f,1);
 
         drag.AddDBEventListener(DragonBones.EventObject.COMPLETE,( string type, DragonBones.EventObject eventObject )=>{ this.onPlayComplete(drag) ;}) ;
         return drag ;
