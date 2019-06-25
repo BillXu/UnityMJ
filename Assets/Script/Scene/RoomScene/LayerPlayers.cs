@@ -10,6 +10,7 @@ public class LayerPlayers : MonoBehaviour
     public List<RoomPlayerItem> mPlayers ;
     public List<EffectPlayerActResult> mEffectActResults;
     public Transform mBankIcon = null ;
+    public PlayerInteractEmoji mInteractEmoji = null ;
     
     List<Vector3> mInitPosForButtons = new List<Vector3>();
     List<Vector3> mInitPosForReadyIcons = new List<Vector3>();
@@ -177,5 +178,17 @@ public class LayerPlayers : MonoBehaviour
     public void onClickPlayerPhoto( int nPlayerID )
     {
         this.mScene.showDlgPlayerInfo(nPlayerID);
+    }
+
+    public void onShowInteractEmoji( int invokeIdx , int targetIdx , int emojiIdx )
+    {
+        this.mInteractEmoji.playInteractEmoji(this.mPlayers[invokeIdx].transform.position,this.mPlayers[targetIdx].transform.position,emojiIdx) ;
+    }
+
+    // public 
+    public int eidx = 5 ;
+    public void test()
+    {
+        this.onShowInteractEmoji(1,0,eidx);
     }
 }
