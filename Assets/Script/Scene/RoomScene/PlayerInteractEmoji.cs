@@ -39,6 +39,12 @@ public class PlayerInteractEmoji : MonoBehaviour
             ani.gameObject.SetActive(true);
             ani.transform.position = startPos;
             ani.animation.Play("item" + emojiIdx,1);
+            var dir = targetPos - startPos ;
+            dir.Normalize();
+            dir = ani.transform.InverseTransformDirection(dir);
+            var angle = Vector3.SignedAngle( Vector3.left , dir,Vector3.forward ) ;
+            Debug.Log("angle is = " + angle );
+            ani.transform.localEulerAngles = new Vector3( 0 , 0 ,angle );
 
             var aniTarget = this.getAni( "item7_bow" );
             aniTarget.gameObject.SetActive(true);
@@ -75,7 +81,7 @@ public class PlayerInteractEmoji : MonoBehaviour
         drag.transform.parent = this.transform ;
         drag.transform.localPosition = Vector3.zero;
         drag.gameObject.SetActive(false);
-        drag.gameObject.transform.localScale = new Vector3(0.65f,0.65f,1);
+        drag.gameObject.transform.localScale = new Vector3(0.7f,0.7f,1);
 
         drag.AddDBEventListener(DragonBones.EventObject.COMPLETE,( string type, DragonBones.EventObject eventObject )=>{ this.onPlayComplete(drag) ;}) ;
         return drag ;
@@ -88,7 +94,10 @@ public class PlayerInteractEmoji : MonoBehaviour
          var name = drag.name ;
          if ( this.mEmojis.ContainsKey( name) )
          {
-             this.mEmojis[name].Add(drag);
+             if ( this.mEmojis[name].Count < 100 )
+             {
+                this.mEmojis[name].Add(drag);
+             }
              drag.gameObject.SetActive(false);
              return ;
          }

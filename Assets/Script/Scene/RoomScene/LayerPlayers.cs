@@ -184,11 +184,4 @@ public class LayerPlayers : MonoBehaviour
     {
         this.mInteractEmoji.playInteractEmoji(this.mPlayers[invokeIdx].transform.position,this.mPlayers[targetIdx].transform.position,emojiIdx) ;
     }
-
-    // public 
-    public int eidx = 5 ;
-    public void test()
-    {
-        this.onShowInteractEmoji(1,0,eidx);
-    }
 }

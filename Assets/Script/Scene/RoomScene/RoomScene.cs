@@ -86,6 +86,11 @@ public class RoomScene : MonoBehaviour, IRoomDataDelegate
     {
         this.mLayerPlayers.onPlayerChatMsg(playerIdx,type,strContent );
     }
+
+    public void onInteractEmoji( int InvokeIdx , int targetIdx , int emojiIdx )
+    {
+        this.mLayerPlayers.onShowInteractEmoji( InvokeIdx,targetIdx,emojiIdx ) ;
+    }
     public void onPlayerStandUp( int idx )
     {
         this.mLayerPlayers.onPlayerStandUp(idx);

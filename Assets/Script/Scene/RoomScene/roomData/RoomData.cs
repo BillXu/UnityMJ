@@ -314,6 +314,14 @@ public class RoomData : NetBehaviour
                 this.mSceneDelegate.onPlayerChatMsg(idx,type,content) ;
             }
             break ;
+            case eMsgType.MSG_ROOM_INTERACT_EMOJI:
+            {
+                var invokerIdx = (int)msg["invokerIdx"].Number ;
+                var targetIdx = (int)msg["targetIdx"].Number ;
+                var emojiIdx = (int)msg["emoji"].Number ;
+                this.mSceneDelegate.onInteractEmoji(invokerIdx,targetIdx,emojiIdx) ;
+            }
+            break ;
         }
         return true ; 
     }
@@ -743,7 +751,7 @@ public class RoomData : NetBehaviour
         var msg = new JSONObject();
         msg["targetIdx"] = targetIdx ;
         msg["emoji"] = emojiIdx ;
-        this.sendRoomMsg( msg,eMsgType.MSG_PLAYER_CHAT_MSG ) ;
+        this.sendRoomMsg( msg,eMsgType.MSG_PLAYER_INTERACT_EMOJI ) ;
     }
 
     public void replayLastVoice( int playerUID )
